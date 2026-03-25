@@ -9,11 +9,11 @@ This plan follows a TDD approach as defined in the project workflow.
     - [x] Update `InvoiceRepository` to manage a separate Hive box for drafts.
     - [x] Add methods to retrieve, delete, and update drafts.
     - [x] Write unit tests for updated repository logic.
-- [ ] Task: Extend Invoice Provider for History and Multi-Currency
-    - [ ] Implement `history` and `drafts` lists in `InvoiceProvider`.
-    - [ ] Implement `selectedCurrency` state and toggle logic.
-    - [ ] Implement `loadDraft` logic to populate input fields.
-    - [ ] Write unit tests for new provider functionality.
+- [x] Task: Extend Invoice Provider for History and Multi-Currency 8ec6fa6
+    - [x] Implement `history` and `drafts` lists in `InvoiceProvider`.
+    - [x] Implement `selectedCurrency` state and toggle logic.
+    - [x] Implement `loadDraft` logic to populate input fields.
+    - [x] Write unit tests for new provider functionality.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Layer & Provider Extensions' (Protocol in workflow.md)
 
 ## Phase 2: Navigation & Dashboard UI
