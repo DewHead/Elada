@@ -25,7 +25,7 @@ This plan follows a TDD approach as defined in the project workflow.
     - [ ] Verify 80% coverage for `PdfService`
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: PDF Processing Logic' (Protocol in workflow.md)
 
-## Phase 3: Business Logic & State Management
+## Phase 3: Business Logic & State Management [checkpoint: a4103c2]
 
 - [x] Task: Implement Invoice Provider (State Management) (e2f4c08)
     - [ ] Write tests for `InvoiceProvider`
