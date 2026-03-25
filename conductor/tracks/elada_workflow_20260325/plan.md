@@ -31,9 +31,9 @@ This plan follows a TDD approach as defined in the project workflow.
 
 ## Phase 3: Generator Enhancements
 
-- [ ] Task: Implement Multi-Currency Selector
-    - [ ] Add a clean currency toggle/dropdown to `InvoiceScreen`.
-    - [ ] Ensure the total input and PDF preview reflect the symbol.
+- [x] Task: Implement Multi-Currency Selector 238c4cc
+    - [x] Add a clean currency toggle/dropdown to `InvoiceScreen`.
+    - [x] Ensure the total input and PDF preview reflect the symbol.
 - [ ] Task: Implement "Save as Draft" Logic
     - [ ] Connect the "Save as Draft" button to the provider.
     - [ ] Add a "Clear Form" button to reset the generator.
