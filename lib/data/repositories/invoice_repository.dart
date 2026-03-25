@@ -4,11 +4,13 @@ import 'package:elada/data/models/invoice.dart';
 class InvoiceRepository {
   final Box<Invoice> _invoiceBox;
   final Box<dynamic> _settingsBox;
+  final Box<Invoice>? _draftBox;
 
   static const String _lastInvoiceNumberKey = 'last_invoice_number';
   static const String _defaultInvoiceNumber = '9417';
 
-  InvoiceRepository(this._invoiceBox, this._settingsBox);
+  InvoiceRepository(this._invoiceBox, this._settingsBox, {Box<Invoice>? draftBox})
+      : _draftBox = draftBox;
 
   Future<void> saveInvoice(Invoice invoice) async {
     await _invoiceBox.add(invoice);
@@ -17,6 +19,28 @@ class InvoiceRepository {
 
   List<Invoice> getInvoices() {
     return _invoiceBox.values.toList();
+  }
+
+  Future<void> saveDraft(Invoice draft) async {
+    if (_draftBox != null) {
+      await _draftBox!.add(draft);
+    }
+  }
+
+  List<Invoice> getDrafts() {
+    return _draftBox?.values.toList() ?? [];
+  }
+
+  Future<void> deleteDraft(int index) async {
+    if (_draftBox != null) {
+      await _draftBox!.deleteAt(index);
+    }
+  }
+
+  Future<void> updateDraft(int index, Invoice draft) async {
+    if (_draftBox != null) {
+      await _draftBox!.putAt(index, draft);
+    }
   }
 
   String getLastInvoiceNumber() {

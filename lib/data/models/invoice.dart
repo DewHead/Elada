@@ -19,12 +19,16 @@ class Invoice extends HiveObject {
   @HiveField(4)
   final String currency;
 
+  @HiveField(5)
+  final bool isDraft;
+
   Invoice({
     required this.invoiceNumber,
     required this.description,
     required this.total,
     required this.date,
     this.currency = '€',
+    this.isDraft = false,
   });
 
   Map<String, dynamic> toJson() {
@@ -34,6 +38,7 @@ class Invoice extends HiveObject {
       'total': total,
       'date': date.toIso8601String(),
       'currency': currency,
+      'is_draft': isDraft,
     };
   }
 
@@ -44,6 +49,7 @@ class Invoice extends HiveObject {
       total: json['total'].toDouble(),
       date: DateTime.parse(json['date']),
       currency: json['currency'] ?? '€',
+      isDraft: json['is_draft'] ?? false,
     );
   }
 }
