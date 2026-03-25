@@ -34,13 +34,13 @@ This plan follows a TDD approach as defined in the project workflow.
 - [x] Task: Implement Multi-Currency Selector 238c4cc
     - [x] Add a clean currency toggle/dropdown to `InvoiceScreen`.
     - [x] Ensure the total input and PDF preview reflect the symbol.
-- [ ] Task: Implement "Save as Draft" Logic
-    - [ ] Connect the "Save as Draft" button to the provider.
-    - [ ] Add a "Clear Form" button to reset the generator.
-    - [ ] Verify persistence of drafts.
-- [ ] Task: Update PDF Service for Currency
-    - [ ] Pass the selected currency symbol to `PdfService`.
-    - [ ] (Optional) Ensure the PDF template can handle the different symbols dynamically.
+- [x] Task: Implement "Save as Draft" Logic 5f1bcc7
+    - [x] Connect the "Save as Draft" button to the provider.
+    - [x] Add a "Clear Form" button to reset the generator.
+    - [x] Verify persistence of drafts.
+- [x] Task: Update PDF Service for Currency 238c4cc
+    - [x] Pass the selected currency symbol to `PdfService`.
+    - [x] (Optional) Ensure the PDF template can handle the different symbols dynamically.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Generator Enhancements' (Protocol in workflow.md)
 
 ## Phase 4: Integration & Polishing
