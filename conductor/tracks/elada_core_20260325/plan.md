@@ -42,7 +42,7 @@ This plan follows a TDD approach as defined in the project workflow.
     - [ ] Implement Material 3 theme and basic scaffold
     - [ ] Add inputs for Description, Total, and Invoice Number
     - [ ] Implement real-time validation and auto-formatting for currency
-- [~] Task: Implement Action Buttons and Feedback
+- [x] Task: Implement Action Buttons and Feedback (d2daf52)
     - [ ] Write tests for button interactions
     - [ ] Connect "Generate PDF" button to `InvoiceProvider`
     - [ ] Implement "Save as Draft" functionality
