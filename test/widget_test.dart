@@ -19,6 +19,8 @@ void main() {
     mockPdfService = MockPdfService();
     
     when(mockRepository.getLastInvoiceNumber()).thenReturn('9417');
+    when(mockRepository.getInvoices()).thenReturn([]);
+    when(mockRepository.getDrafts()).thenReturn([]);
   });
 
   testWidgets('Initial screen shows app title', (WidgetTester tester) async {

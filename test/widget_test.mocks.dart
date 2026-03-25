@@ -53,6 +53,52 @@ class MockInvoiceRepository extends _i1.Mock implements _i2.InvoiceRepository {
       ) as List<_i4.Invoice>);
 
   @override
+  _i3.Future<void> saveDraft(_i4.Invoice? draft) => (super.noSuchMethod(
+        Invocation.method(
+          #saveDraft,
+          [draft],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  List<_i4.Invoice> getDrafts() => (super.noSuchMethod(
+        Invocation.method(
+          #getDrafts,
+          [],
+        ),
+        returnValue: <_i4.Invoice>[],
+      ) as List<_i4.Invoice>);
+
+  @override
+  _i3.Future<void> deleteDraft(int? index) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteDraft,
+          [index],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> updateDraft(
+    int? index,
+    _i4.Invoice? draft,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateDraft,
+          [
+            index,
+            draft,
+          ],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
   String getLastInvoiceNumber() => (super.noSuchMethod(
         Invocation.method(
           #getLastInvoiceNumber,
