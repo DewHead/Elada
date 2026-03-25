@@ -13,18 +13,40 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   final _descriptionController = TextEditingController();
   final _totalController = TextEditingController();
   final _invoiceNumberController = TextEditingController();
+  late InvoiceProvider _provider;
 
   @override
   void initState() {
     super.initState();
-    final provider = Provider.of<InvoiceProvider>(context, listen: false);
-    _invoiceNumberController.text = provider.invoiceNumber;
-    _descriptionController.text = provider.description;
-    _totalController.text = provider.total > 0 ? provider.total.toString() : '';
+    _provider = Provider.of<InvoiceProvider>(context, listen: false);
+    _invoiceNumberController.text = _provider.invoiceNumber;
+    _descriptionController.text = _provider.description;
+    _totalController.text = _provider.total > 0 ? _provider.total.toString() : '';
+    
+    // Listen for external updates (e.g., loading a draft)
+    _provider.addListener(_onProviderUpdate);
+  }
+
+  void _onProviderUpdate() {
+    if (!mounted) return;
+    
+    // Only update if controllers are different from provider state to avoid cursor jumping
+    if (_invoiceNumberController.text != _provider.invoiceNumber) {
+      _invoiceNumberController.text = _provider.invoiceNumber;
+    }
+    if (_descriptionController.text != _provider.description) {
+      _descriptionController.text = _provider.description;
+    }
+    final totalStr = _provider.total > 0 ? _provider.total.toString() : '';
+    if (_totalController.text != totalStr) {
+      _totalController.text = totalStr;
+    }
   }
 
   @override
   void dispose() {
+    // Remove listener using stored reference
+    _provider.removeListener(_onProviderUpdate);
     _descriptionController.dispose();
     _totalController.dispose();
     _invoiceNumberController.dispose();
@@ -109,21 +131,82 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               prefixText: '${context.watch<InvoiceProvider>().selectedCurrency} ',
             ),
             const SizedBox(height: 48),
-            ElevatedButton.icon(
-              onPressed: () => _generatePdf(context),
-              icon: const Icon(Icons.picture_as_pdf),
-              label: const Text('Generate PDF'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () => _saveDraft(context),
+                    icon: const Icon(Icons.save_as_outlined),
+                    label: const Text('Save as Draft'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
                 ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => _generatePdf(context),
+                    icon: const Icon(Icons.picture_as_pdf),
+                    label: const Text('Generate PDF'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            TextButton.icon(
+              onPressed: () => _clearForm(context),
+              icon: const Icon(Icons.clear_all),
+              label: const Text('Clear Form'),
+              style: TextButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.error,
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _clearForm(BuildContext context) {
+    final provider = context.read<InvoiceProvider>();
+    provider.updateDescription('');
+    provider.updateTotal(0.0);
+    // Keep or reset invoice number? Let's reset to next from repo
+    // For now just clear inputs
+    _descriptionController.clear();
+    _totalController.clear();
+  }
+
+  Future<void> _saveDraft(BuildContext context) async {
+    final provider = context.read<InvoiceProvider>();
+    try {
+      await provider.saveDraft();
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Draft saved successfully!'),
+          backgroundColor: Colors.blue,
+        ),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error saving draft: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Future<void> _generatePdf(BuildContext context) async {

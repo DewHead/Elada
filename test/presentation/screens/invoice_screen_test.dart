@@ -51,5 +51,11 @@ void main() {
       expect(find.text('\$'), findsOneWidget);
       expect(find.text('£'), findsOneWidget);
     });
+
+    testWidgets('should show Save as Draft button', (WidgetTester tester) async {
+      await tester.pumpWidget(createWidgetUnderTest());
+
+      expect(find.text('Save as Draft'), findsOneWidget);
+    });
   });
 }
