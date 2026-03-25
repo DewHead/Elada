@@ -16,7 +16,7 @@ This plan follows a TDD approach as defined in the project workflow.
     - [x] Write unit tests for new provider functionality.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Data Layer & Provider Extensions' (Protocol in workflow.md) ae7c9f9
 
-## Phase 2: Navigation & Dashboard UI
+## Phase 2: Navigation & Dashboard UI [checkpoint: 7246acd]
 
 - [x] Task: Implement Main Navigation Structure 4a94576
     - [x] Create `MainScreen` with `Scaffold` and `NavigationBar`.
@@ -27,7 +27,7 @@ This plan follows a TDD approach as defined in the project workflow.
     - [x] Implement the "No History" empty state.
     - [x] Implement the list of drafts with "Edit" and "Delete" actions.
     - [x] Write widget tests for the History screen.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Navigation & Dashboard UI' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Navigation & Dashboard UI' (Protocol in workflow.md) 7246acd
 
 ## Phase 3: Generator Enhancements
 
