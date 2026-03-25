@@ -18,10 +18,10 @@ This plan follows a TDD approach as defined in the project workflow.
 
 ## Phase 2: Navigation & Dashboard UI
 
-- [ ] Task: Implement Main Navigation Structure
-    - [ ] Create `MainScreen` with `Scaffold` and `NavigationBar`.
-    - [ ] Move `InvoiceScreen` to become a tab in `MainScreen`.
-    - [ ] Create a placeholder `HistoryScreen`.
+- [x] Task: Implement Main Navigation Structure 4a94576
+    - [x] Create `MainScreen` with `Scaffold` and `NavigationBar`.
+    - [x] Move `InvoiceScreen` to become a tab in `MainScreen`.
+    - [x] Create a placeholder `HistoryScreen`.
 - [ ] Task: Implement History & Drafts List UI
     - [ ] Design and implement clean ListTiles/Cards for invoice history.
     - [ ] Implement the "No History" empty state.
