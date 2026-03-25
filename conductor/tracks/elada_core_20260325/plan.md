@@ -4,7 +4,7 @@ This plan follows a TDD approach as defined in the project workflow.
 
 ## Phase 1: Project Scaffolding & Data Layer
 
-- [~] Task: Initialize Flutter project and add core dependencies
+- [x] Task: Initialize Flutter project and add core dependencies (4fe7cac)
     - [ ] Run `flutter create .`
     - [ ] Add `syncfusion_flutter_pdf`, `hive`, `hive_flutter`, `provider`, and `path_provider` to `pubspec.yaml`
     - [ ] Initialize `hive` in `main.dart`
