@@ -17,7 +17,7 @@ This plan follows a TDD approach as defined in the project workflow.
 
 ## Phase 2: PDF Processing Logic
 
-- [ ] Task: Implement PDF Service for Template Manipulation
+- [~] Task: Implement PDF Service for Template Manipulation
     - [ ] Write tests for `PdfService` (mocking the PDF library if necessary)
     - [ ] Implement logic to load the asset template
     - [ ] Implement field mapping and injection for `description`, `total`, and `invoiceNumber`
