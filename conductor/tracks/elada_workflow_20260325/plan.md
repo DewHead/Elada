@@ -2,7 +2,7 @@
 
 This plan follows a TDD approach as defined in the project workflow.
 
-## Phase 1: Data Layer & Provider Extensions
+## Phase 1: Data Layer & Provider Extensions [checkpoint: ae7c9f9]
 
 - [x] Task: Update Invoice Model and Repository for Drafts & Currency bcb7c02
     - [x] Update `Invoice` model to include a `isDraft` flag if needed, or create a separate `Draft` model.
@@ -14,7 +14,7 @@ This plan follows a TDD approach as defined in the project workflow.
     - [x] Implement `selectedCurrency` state and toggle logic.
     - [x] Implement `loadDraft` logic to populate input fields.
     - [x] Write unit tests for new provider functionality.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Data Layer & Provider Extensions' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Data Layer & Provider Extensions' (Protocol in workflow.md) ae7c9f9
 
 ## Phase 2: Navigation & Dashboard UI
 
