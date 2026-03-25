@@ -27,7 +27,7 @@ This plan follows a TDD approach as defined in the project workflow.
 
 ## Phase 3: Business Logic & State Management
 
-- [ ] Task: Implement Invoice Provider (State Management)
+- [~] Task: Implement Invoice Provider (State Management)
     - [ ] Write tests for `InvoiceProvider`
     - [ ] Implement state for current invoice inputs (description, total, number)
     - [ ] Implement logic for smart incrementing of invoice numbers
