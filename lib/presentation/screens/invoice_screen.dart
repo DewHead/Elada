@@ -43,14 +43,30 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const SizedBox(height: 16),
+            Icon(
+              Icons.receipt_long_rounded,
+              size: 80,
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+            ),
+            const SizedBox(height: 24),
             Text(
               'Generate New Invoice',
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
+                    letterSpacing: -0.5,
                   ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 8),
+            Text(
+              'Fill in the details for your professional invoice',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 48),
             _buildInputField(
               controller: _invoiceNumberController,
               label: 'Invoice Number',
