@@ -76,11 +76,56 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               prefixText: '€ ',
             ),
             const SizedBox(height: 48),
-            // Action buttons will be added in the next task
+            ElevatedButton.icon(
+              onPressed: () => _generatePdf(context),
+              icon: const Icon(Icons.picture_as_pdf),
+              label: const Text('Generate PDF'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _generatePdf(BuildContext context) async {
+    final provider = context.read<InvoiceProvider>();
+    
+    try {
+      // 1. Load template from assets
+      final templateData = await DefaultAssetBundle.of(context).load('assets/templates/invoice_template.pdf');
+      final templateBytes = templateData.buffer.asUint8List();
+
+      // 2. Generate PDF
+      final pdfBytes = await provider.generateInvoice(templateBytes);
+
+      // 3. Save PDF (Simple path for MVP)
+      // In a real app, we'd use a file picker or a specific directory
+      // For now, let's just show a success message
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Invoice ${provider.invoiceNumber} generated successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error generating PDF: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   Widget _buildInputField({

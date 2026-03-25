@@ -30,12 +30,13 @@ void main() {
   }
 
   group('InvoiceScreen', () {
-    testWidgets('should show all input fields', (WidgetTester tester) async {
+    testWidgets('should show all input fields and generate button', (WidgetTester tester) async {
       await tester.pumpWidget(createWidgetUnderTest());
 
       expect(find.text('Invoice Number'), findsOneWidget);
       expect(find.text('Item Description'), findsOneWidget);
       expect(find.text('Total Amount'), findsOneWidget);
+      expect(find.text('Generate PDF'), findsOneWidget);
     });
   });
 }
