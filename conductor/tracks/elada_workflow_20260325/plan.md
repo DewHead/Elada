@@ -4,11 +4,11 @@ This plan follows a TDD approach as defined in the project workflow.
 
 ## Phase 1: Data Layer & Provider Extensions
 
-- [ ] Task: Update Invoice Model and Repository for Drafts & Currency
-    - [ ] Update `Invoice` model to include a `isDraft` flag if needed, or create a separate `Draft` model.
-    - [ ] Update `InvoiceRepository` to manage a separate Hive box for drafts.
-    - [ ] Add methods to retrieve, delete, and update drafts.
-    - [ ] Write unit tests for updated repository logic.
+- [x] Task: Update Invoice Model and Repository for Drafts & Currency bcb7c02
+    - [x] Update `Invoice` model to include a `isDraft` flag if needed, or create a separate `Draft` model.
+    - [x] Update `InvoiceRepository` to manage a separate Hive box for drafts.
+    - [x] Add methods to retrieve, delete, and update drafts.
+    - [x] Write unit tests for updated repository logic.
 - [ ] Task: Extend Invoice Provider for History and Multi-Currency
     - [ ] Implement `history` and `drafts` lists in `InvoiceProvider`.
     - [ ] Implement `selectedCurrency` state and toggle logic.
