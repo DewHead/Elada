@@ -5,7 +5,7 @@ import 'package:elada/data/models/invoice.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/domain/services/pdf_service.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
-import 'package:elada/presentation/screens/invoice_screen.dart';
+import 'package:elada/presentation/screens/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,9 +16,10 @@ void main() async {
   }
 
   final invoiceBox = await Hive.openBox<Invoice>('invoices');
+  final draftsBox = await Hive.openBox<Invoice>('drafts');
   final settingsBox = await Hive.openBox('settings');
   
-  final invoiceRepository = InvoiceRepository(invoiceBox, settingsBox);
+  final invoiceRepository = InvoiceRepository(invoiceBox, settingsBox, draftBox: draftsBox);
   final pdfService = PdfService();
 
   runApp(
@@ -96,7 +97,7 @@ class EladaApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const InvoiceScreen(),
+      home: const MainScreen(),
     );
   }
 }
