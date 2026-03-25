@@ -15,7 +15,7 @@ This plan follows a TDD approach as defined in the project workflow.
     - [ ] Verify 80% coverage for the data layer
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Project Scaffolding & Data Layer' (Protocol in workflow.md)
 
-## Phase 2: PDF Processing Logic
+## Phase 2: PDF Processing Logic [checkpoint: b5d2b6a]
 
 - [x] Task: Implement PDF Service for Template Manipulation (e67def6)
     - [ ] Write tests for `PdfService` (mocking the PDF library if necessary)
