@@ -8,7 +8,7 @@ This plan follows a TDD approach as defined in the project workflow.
     - [ ] Run `flutter create .`
     - [ ] Add `syncfusion_flutter_pdf`, `hive`, `hive_flutter`, `provider`, and `path_provider` to `pubspec.yaml`
     - [ ] Initialize `hive` in `main.dart`
-- [~] Task: Implement Invoice Model and Local Storage (Hive)
+- [x] Task: Implement Invoice Model and Local Storage (Hive) (22aa7c3)
     - [ ] Write tests for `Invoice` model and `InvoiceRepository`
     - [ ] Implement `Invoice` model with JSON serialization
     - [ ] Implement `InvoiceRepository` using `hive` to store the last invoice number and basic history
