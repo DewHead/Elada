@@ -2,7 +2,7 @@
 
 This plan follows a TDD approach as defined in the project workflow.
 
-## Phase 1: Project Scaffolding & Data Layer
+## Phase 1: Project Scaffolding & Data Layer [checkpoint: 527b1bc]
 
 - [x] Task: Initialize Flutter project and add core dependencies (4fe7cac)
     - [ ] Run `flutter create .`
