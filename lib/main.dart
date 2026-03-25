@@ -66,7 +66,7 @@ class EladaApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             elevation: 2,
-            shadowColor: Colors.deepPurple.withOpacity(0.3),
+            shadowColor: Colors.deepPurple.withAlpha(77), // ~0.3 opacity
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),

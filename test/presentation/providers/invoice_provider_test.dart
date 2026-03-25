@@ -5,7 +5,6 @@ import 'package:mockito/mockito.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/domain/services/pdf_service.dart';
-import 'package:elada/data/models/invoice.dart';
 
 @GenerateMocks([InvoiceRepository, PdfService])
 import 'invoice_provider_test.mocks.dart';

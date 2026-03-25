@@ -47,7 +47,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             Icon(
               Icons.receipt_long_rounded,
               size: 80,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+              color: Theme.of(context).colorScheme.primary.withAlpha(204), // ~0.8 opacity
             ),
             const SizedBox(height: 24),
             Text(
@@ -118,29 +118,26 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       final templateBytes = templateData.buffer.asUint8List();
 
       // 2. Generate PDF
-      final pdfBytes = await provider.generateInvoice(templateBytes);
+      await provider.generateInvoice(templateBytes);
 
       // 3. Save PDF (Simple path for MVP)
-      // In a real app, we'd use a file picker or a specific directory
-      // For now, let's just show a success message
+      if (!context.mounted) return;
       
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Invoice ${provider.invoiceNumber} generated successfully!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Invoice ${provider.invoiceNumber} generated successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error generating PDF: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      if (!context.mounted) return;
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error generating PDF: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -164,7 +161,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
           borderRadius: BorderRadius.circular(12),
         ),
         filled: true,
-        fillColor: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+        fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withAlpha(77), // ~0.3 opacity
       ),
     );
   }

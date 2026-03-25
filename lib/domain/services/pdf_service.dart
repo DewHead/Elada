@@ -40,11 +40,9 @@ class PdfService {
 
       if (foundField is PdfTextBoxField) {
         foundField.text = value;
-      } else {
-        print('Field $fieldName not found or not a text box');
       }
-    } catch (e) {
-      print('Error filling field $fieldName: $e');
+    } catch (_) {
+      // Silently fail for MVP or use proper logging
     }
   }
 }
