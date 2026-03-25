@@ -19,6 +19,8 @@ void main() {
     when(mockProvider.description).thenReturn('');
     when(mockProvider.total).thenReturn(0.0);
     when(mockProvider.selectedCurrency).thenReturn('€');
+    when(mockProvider.history).thenReturn([]);
+    when(mockProvider.drafts).thenReturn([]);
   });
 
   Widget createWidgetUnderTest() {
