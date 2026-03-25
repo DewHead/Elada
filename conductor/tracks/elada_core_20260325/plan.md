@@ -37,7 +37,7 @@ This plan follows a TDD approach as defined in the project workflow.
 
 ## Phase 4: Minimalist UI Implementation
 
-- [ ] Task: Create Basic Layout and Input Fields
+- [~] Task: Create Basic Layout and Input Fields
     - [ ] Write widget tests for the main screen
     - [ ] Implement Material 3 theme and basic scaffold
     - [ ] Add inputs for Description, Total, and Invoice Number
