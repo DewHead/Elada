@@ -35,7 +35,7 @@ This plan follows a TDD approach as defined in the project workflow.
     - [ ] Verify 80% coverage for `InvoiceProvider`
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Business Logic & State Management' (Protocol in workflow.md)
 
-## Phase 4: Minimalist UI Implementation
+## Phase 4: Minimalist UI Implementation [checkpoint: ef2e33f]
 
 - [x] Task: Create Basic Layout and Input Fields (8e79818)
     - [ ] Write widget tests for the main screen
