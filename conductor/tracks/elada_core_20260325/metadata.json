@@ -1,8 +1,0 @@
-{
-  "track_id": "elada_core_20260325",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-03-25T20:30:00Z",
-  "updated_at": "2026-03-25T20:30:00Z",
-  "description": "Build the core functionality for the Elada invoice generator, including PDF template parsing, dynamic field injection (Description, Total, Balance Due), and automatic invoice numbering with a minimalist single-page UI."
-}
