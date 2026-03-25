@@ -67,6 +67,23 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 48),
+            Text(
+              'Currency',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            const SizedBox(height: 8),
+            SegmentedButton<String>(
+              segments: const [
+                ButtonSegment(value: '€', label: Text('€')),
+                ButtonSegment(value: '\$', label: Text('\$')),
+                ButtonSegment(value: '£', label: Text('£')),
+              ],
+              selected: {context.watch<InvoiceProvider>().selectedCurrency},
+              onSelectionChanged: (Set<String> newSelection) {
+                context.read<InvoiceProvider>().updateCurrency(newSelection.first);
+              },
+            ),
+            const SizedBox(height: 16),
             _buildInputField(
               controller: _invoiceNumberController,
               label: 'Invoice Number',
@@ -89,7 +106,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 context.read<InvoiceProvider>().updateTotal(doubleValue);
               },
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              prefixText: '€ ',
+              prefixText: '${context.watch<InvoiceProvider>().selectedCurrency} ',
             ),
             const SizedBox(height: 48),
             ElevatedButton.icon(

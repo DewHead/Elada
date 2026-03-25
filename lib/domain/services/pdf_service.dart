@@ -7,6 +7,7 @@ class PdfService {
     required double total,
     required String invoiceNumber,
     required Uint8List templateBytes,
+    String currency = '€',
   }) async {
     // Load the PDF document
     final PdfDocument document = PdfDocument(inputBytes: templateBytes);
@@ -17,8 +18,10 @@ class PdfService {
     // Map and fill fields
     _tryFillField(form, 'INVOICE NO.', invoiceNumber);
     _tryFillField(form, 'Description', description);
-    _tryFillField(form, 'Total', total.toStringAsFixed(2));
-    _tryFillField(form, 'Balance Due', total.toStringAsFixed(2));
+    
+    final formattedTotal = '$currency ${total.toStringAsFixed(2)}';
+    _tryFillField(form, 'Total', formattedTotal);
+    _tryFillField(form, 'Balance Due', formattedTotal);
 
     // Save the document as bytes
     final List<int> bytes = await document.save();

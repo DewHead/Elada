@@ -39,5 +39,17 @@ void main() {
       expect(find.text('Total Amount'), findsOneWidget);
       expect(find.text('Generate PDF'), findsOneWidget);
     });
+
+    testWidgets('should show currency selector with options', (WidgetTester tester) async {
+      await tester.pumpWidget(createWidgetUnderTest());
+
+      expect(find.text('Currency'), findsOneWidget);
+      expect(find.text('€'), findsOneWidget);
+      
+      // Tap currency selector (SegmentedButton or similar)
+      // For now just check if they exist or are selectable
+      expect(find.text('\$'), findsOneWidget);
+      expect(find.text('£'), findsOneWidget);
+    });
   });
 }

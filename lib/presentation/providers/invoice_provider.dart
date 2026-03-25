@@ -94,6 +94,7 @@ class InvoiceProvider with ChangeNotifier {
       total: _total,
       invoiceNumber: _invoiceNumber,
       templateBytes: templateBytes,
+      currency: _selectedCurrency,
     );
 
     // Save history
