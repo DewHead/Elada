@@ -22,11 +22,11 @@ This plan follows a TDD approach as defined in the project workflow.
     - [x] Create `MainScreen` with `Scaffold` and `NavigationBar`.
     - [x] Move `InvoiceScreen` to become a tab in `MainScreen`.
     - [x] Create a placeholder `HistoryScreen`.
-- [ ] Task: Implement History & Drafts List UI
-    - [ ] Design and implement clean ListTiles/Cards for invoice history.
-    - [ ] Implement the "No History" empty state.
-    - [ ] Implement the list of drafts with "Edit" and "Delete" actions.
-    - [ ] Write widget tests for the History screen.
+- [x] Task: Implement History & Drafts List UI d0e0d7f
+    - [x] Design and implement clean ListTiles/Cards for invoice history.
+    - [x] Implement the "No History" empty state.
+    - [x] Implement the list of drafts with "Edit" and "Delete" actions.
+    - [x] Write widget tests for the History screen.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Navigation & Dashboard UI' (Protocol in workflow.md)
 
 ## Phase 3: Generator Enhancements
