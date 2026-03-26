@@ -12,7 +12,7 @@ This track implements a dynamic naming convention for exported PDF invoices, ens
     - [x] Write unit tests for `FilenameService.generateFileName(Invoice invoice)` covering various numbering and date formats.
     - [x] Implement `FilenameService` with the logic: `[InvoiceNumber]_[InvoiceDate].pdf` (where date uses hyphens).
     - [x] Implement sanitization for illegal filesystem characters in the `InvoiceNumber`.
-- [ ] Task: Conductor - User Manual Verification 'Domain & Logic' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Domain & Logic' (Protocol in workflow.md) [c1f2694]
 
 ## Phase 2: Validation & UI Integration
 - [ ] Task: Add `Date` editor to the UI.
