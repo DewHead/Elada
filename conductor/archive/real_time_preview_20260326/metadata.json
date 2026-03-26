@@ -1,0 +1,8 @@
+{
+  "track_id": "real_time_preview_20260326",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-03-26T12:00:00Z",
+  "updated_at": "2026-03-26T12:00:00Z",
+  "description": "Implement a real-time PDF preview of the invoice as fields are being edited. This feature will use the `syncfusion_flutter_pdfviewer` package to provide immediate feedback to the user, with a responsive side-by-side layout for desktop and a toggleable view for mobile."
+}
