@@ -241,28 +241,47 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 label: const Text('Save as Draft'),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.outline.withAlpha(128),
+                  ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: ElevatedButton.icon(
-                onPressed: () => _generatePdf(context),
-                icon: const Icon(Icons.picture_as_pdf),
-                label: const Text('Generate PDF'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context).colorScheme.primary.withAlpha(77),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ElevatedButton.icon(
+                  onPressed: () => _generatePdf(context),
+                  icon: const Icon(Icons.picture_as_pdf),
+                  label: const Text('Generate PDF'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    elevation: 0,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
                 ),
               ),
             ),
           ],
         ),
+
         const SizedBox(height: 16),
         TextButton.icon(
           onPressed: () => _clearForm(context),
@@ -356,7 +375,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         labelText: label,
         prefixText: prefixText,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
         filled: true,
         fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withAlpha(77), // ~0.3 opacity
