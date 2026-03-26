@@ -43,7 +43,7 @@ This plan follows a TDD approach as defined in the project workflow.
     - [x] (Optional) Ensure the PDF template can handle the different symbols dynamically.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Generator Enhancements' (Protocol in workflow.md) 287257a
 
-## Phase 4: Integration & Polishing
+## Phase 4: Integration & Polishing [checkpoint: 032b7b1]
 
 - [x] Task: Final Integration & Regression Testing 11be0fa
     - [x] Ensure full end-to-end flow: Draft -> Load -> Generate -> History.
@@ -51,4 +51,4 @@ This plan follows a TDD approach as defined in the project workflow.
 - [x] Task: Mobile Polish & Performance 98fccb5
     - [x] Refine list scrolling performance.
     - [x] Add subtle entrance animations for list items.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Integration & Polishing' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Integration & Polishing' (Protocol in workflow.md) 032b7b1
