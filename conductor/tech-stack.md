@@ -5,6 +5,7 @@
 
 ## PDF Processing & Manipulation
 - **syncfusion_flutter_pdf:** A robust, professional-grade library used for precise modification of the invoice PDF template, including field injection and document generation.
+- **syncfusion_flutter_pdfviewer:** Used to provide high-performance, in-memory PDF previews within the application.
 
 ## Data Persistence & Storage
 - **hive:** A lightweight, high-performance NoSQL database for Flutter, used to store invoice history, draft states, and the current invoice number locally.

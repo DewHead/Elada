@@ -18,6 +18,7 @@ A system to manage and generate invoices based on a template PDF (YONIK KOSHER L
 - **Dashboard & History:** A centralized hub to view all previously generated invoices and manage ongoing drafts.
 - **Draft Management:** Full CRUD support for invoice drafts, allowing users to save progress and resume editing at any time.
 - **Multi-Currency Support:** Ability to generate invoices in multiple currencies (€, $, £), with automatic formatting and persistence.
+- **Real-time PDF Preview:** A live, debounced visual representation of the invoice as fields are updated, with a responsive side-by-side layout for desktop and toggleable view for mobile.
 - **Main Navigation:** Modern, intuitive navigation to switch seamlessly between the Generator and the Dashboard.
 
 ## Visual Identity
