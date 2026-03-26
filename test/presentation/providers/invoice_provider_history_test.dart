@@ -107,5 +107,14 @@ void main() {
       provider.updateCurrency('£');
       expect(provider.selectedCurrency, '£');
     });
+
+    test('should delete draft and refresh list', () async {
+      when(mockRepository.getDrafts()).thenReturn([]);
+
+      await provider.deleteDraft(0);
+
+      verify(mockRepository.deleteDraft(0)).called(1);
+      expect(provider.drafts.length, 0);
+    });
   });
 }

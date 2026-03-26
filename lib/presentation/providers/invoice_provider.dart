@@ -88,6 +88,11 @@ class InvoiceProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteDraft(int index) async {
+    await _repository.deleteDraft(index);
+    _loadHistoryAndDrafts();
+  }
+
   Future<Uint8List> generateInvoice(Uint8List templateBytes) async {
     final bytes = await _pdfService.generateInvoice(
       description: _description,
