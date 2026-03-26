@@ -39,6 +39,7 @@ dependencies:
   hive_flutter: ^1.1.0
   provider: ^6.1.5+1
   path_provider: ^2.1.5
+  syncfusion_flutter_pdfviewer: ^33.1.45
 
 dev_dependencies:
   flutter_test:
