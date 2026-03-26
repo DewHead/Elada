@@ -29,7 +29,7 @@ This plan follows a TDD approach as defined in the project workflow.
     - [x] Write widget tests for the History screen.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Navigation & Dashboard UI' (Protocol in workflow.md) 7246acd
 
-## Phase 3: Generator Enhancements
+## Phase 3: Generator Enhancements [checkpoint: 287257a]
 
 - [x] Task: Implement Multi-Currency Selector 238c4cc
     - [x] Add a clean currency toggle/dropdown to `InvoiceScreen`.
@@ -41,7 +41,7 @@ This plan follows a TDD approach as defined in the project workflow.
 - [x] Task: Update PDF Service for Currency 238c4cc
     - [x] Pass the selected currency symbol to `PdfService`.
     - [x] (Optional) Ensure the PDF template can handle the different symbols dynamically.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Generator Enhancements' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Generator Enhancements' (Protocol in workflow.md) 287257a
 
 ## Phase 4: Integration & Polishing
 
