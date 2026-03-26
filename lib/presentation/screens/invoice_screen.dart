@@ -181,10 +181,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     final provider = context.read<InvoiceProvider>();
     provider.updateDescription('');
     provider.updateTotal(0.0);
-    // Keep or reset invoice number? Let's reset to next from repo
-    // For now just clear inputs
     _descriptionController.clear();
     _totalController.clear();
+    _invoiceNumberController.text = provider.invoiceNumber;
   }
 
   Future<void> _saveDraft(BuildContext context) async {

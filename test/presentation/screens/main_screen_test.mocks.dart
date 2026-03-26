@@ -149,6 +149,16 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       );
 
   @override
+  _i5.Future<void> deleteDraft(int? index) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteDraft,
+          [index],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
   _i5.Future<_i6.Uint8List> generateInvoice(_i6.Uint8List? templateBytes) =>
       (super.noSuchMethod(
         Invocation.method(
