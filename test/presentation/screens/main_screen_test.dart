@@ -16,6 +16,7 @@ void main() {
     mockProvider = MockInvoiceProvider();
     
     when(mockProvider.invoiceNumber).thenReturn('9418');
+    when(mockProvider.date).thenReturn(DateTime(2026, 3, 26));
     when(mockProvider.description).thenReturn('');
     when(mockProvider.total).thenReturn(0.0);
     when(mockProvider.selectedCurrency).thenReturn('€');

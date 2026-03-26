@@ -15,9 +15,9 @@ This track implements a dynamic naming convention for exported PDF invoices, ens
 - [x] Task: Conductor - User Manual Verification 'Domain & Logic' (Protocol in workflow.md) [c1f2694]
 
 ## Phase 2: Validation & UI Integration
-- [ ] Task: Add `Date` editor to the UI.
-    - [ ] Integrate a Date picker or text input for the "Invoice Date" in `InvoiceScreen`.
-    - [ ] Ensure the field is integrated with `InvoiceProvider` for real-time preview updates.
+- [x] Task: Add `Date` editor to the UI. [f8f2694]
+    - [x] Integrate a Date picker or text input for the "Invoice Date" in `InvoiceScreen`.
+    - [x] Ensure the field is integrated with `InvoiceProvider` for real-time preview updates.
 - [ ] Task: Implement Export Validation and dynamic saving logic.
     - [ ] Implement a `FileExportService` to save the PDF to the user's Downloads directory (using `path_provider`).
     - [ ] Update the "Generate PDF" button in `InvoiceScreen` to:

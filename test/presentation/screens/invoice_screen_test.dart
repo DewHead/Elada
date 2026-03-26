@@ -18,6 +18,7 @@ void main() {
     when(mockProvider.description).thenReturn('');
     when(mockProvider.total).thenReturn(0.0);
     when(mockProvider.invoiceNumber).thenReturn('9418');
+    when(mockProvider.date).thenReturn(DateTime(2026, 3, 26));
     when(mockProvider.selectedCurrency).thenReturn('€');
   });
 
@@ -35,6 +36,7 @@ void main() {
       await tester.pumpWidget(createWidgetUnderTest());
 
       expect(find.text('Invoice Number'), findsOneWidget);
+      expect(find.text('Invoice Date'), findsOneWidget);
       expect(find.text('Item Description'), findsOneWidget);
       expect(find.text('Total Amount'), findsOneWidget);
       expect(find.text('Generate PDF'), findsOneWidget);

@@ -14,6 +14,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   final _descriptionController = TextEditingController();
   final _totalController = TextEditingController();
   final _invoiceNumberController = TextEditingController();
+  final _dateController = TextEditingController();
   late InvoiceProvider _provider;
 
   @override
@@ -23,6 +24,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     _invoiceNumberController.text = _provider.invoiceNumber;
     _descriptionController.text = _provider.description;
     _totalController.text = _provider.total > 0 ? _provider.total.toString() : '';
+    _updateDateController();
     
     // Listen for external updates (e.g., loading a draft)
     _provider.addListener(_onProviderUpdate);
@@ -53,6 +55,15 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     if (_totalController.text != totalStr) {
       _totalController.text = totalStr;
     }
+    _updateDateController();
+  }
+
+  void _updateDateController() {
+    final date = _provider.date;
+    final formattedDate = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+    if (_dateController.text != formattedDate) {
+      _dateController.text = formattedDate;
+    }
   }
 
   @override
@@ -62,6 +73,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     _descriptionController.dispose();
     _totalController.dispose();
     _invoiceNumberController.dispose();
+    _dateController.dispose();
     super.dispose();
   }
 
@@ -215,6 +227,15 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         ),
         const SizedBox(height: 16),
         _buildInputField(
+          controller: _dateController,
+          label: 'Invoice Date',
+          onChanged: (_) {},
+          readOnly: true,
+          onTap: () => _selectDate(context),
+          prefixIcon: const Icon(Icons.calendar_today_outlined),
+        ),
+        const SizedBox(height: 16),
+        _buildInputField(
           controller: _descriptionController,
           label: 'Item Description',
           onChanged: (val) => context.read<InvoiceProvider>().updateDescription(val),
@@ -299,9 +320,24 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     final provider = context.read<InvoiceProvider>();
     provider.updateDescription('');
     provider.updateTotal(0.0);
+    provider.updateDate(DateTime.now());
     _descriptionController.clear();
     _totalController.clear();
     _invoiceNumberController.text = provider.invoiceNumber;
+    _updateDateController();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final provider = context.read<InvoiceProvider>();
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: provider.date,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != provider.date) {
+      provider.updateDate(picked);
+    }
   }
 
   Future<void> _saveDraft(BuildContext context) async {
@@ -365,15 +401,21 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     TextInputType keyboardType = TextInputType.text,
     int maxLines = 1,
     String? prefixText,
+    bool readOnly = false,
+    VoidCallback? onTap,
+    Widget? prefixIcon,
   }) {
     return TextField(
       controller: controller,
       onChanged: onChanged,
       keyboardType: keyboardType,
       maxLines: maxLines,
+      readOnly: readOnly,
+      onTap: onTap,
       decoration: InputDecoration(
         labelText: label,
         prefixText: prefixText,
+        prefixIcon: prefixIcon,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
         ),
