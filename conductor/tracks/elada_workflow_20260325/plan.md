@@ -45,10 +45,10 @@ This plan follows a TDD approach as defined in the project workflow.
 
 ## Phase 4: Integration & Polishing
 
-- [ ] Task: Final Integration & Regression Testing
-    - [ ] Ensure full end-to-end flow: Draft -> Load -> Generate -> History.
-    - [ ] Run full test suite and verify >80% coverage.
-- [ ] Task: Mobile Polish & Performance
-    - [ ] Refine list scrolling performance.
-    - [ ] Add subtle entrance animations for list items.
+- [x] Task: Final Integration & Regression Testing 11be0fa
+    - [x] Ensure full end-to-end flow: Draft -> Load -> Generate -> History.
+    - [x] Run full test suite and verify >80% coverage.
+- [x] Task: Mobile Polish & Performance 98fccb5
+    - [x] Refine list scrolling performance.
+    - [x] Add subtle entrance animations for list items.
 - [ ] Task: Conductor - User Manual Verification 'Phase 4: Integration & Polishing' (Protocol in workflow.md)
