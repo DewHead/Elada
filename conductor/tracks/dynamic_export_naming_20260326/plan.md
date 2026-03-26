@@ -8,10 +8,10 @@ This track implements a dynamic naming convention for exported PDF invoices, ens
     - [x] Add `date` property and `updateDate(DateTime date)` method to `InvoiceProvider`.
     - [x] Update `PdfService.generateInvoice` to accept and fill the "Date" field in the PDF template.
     - [x] Update `InvoiceProvider.generatePreview` and `generateInvoice` to use the current `date` property.
-- [ ] Task: Implement `FilenameService` for dynamic naming.
-    - [ ] Write unit tests for `FilenameService.generateFileName(Invoice invoice)` covering various numbering and date formats.
-    - [ ] Implement `FilenameService` with the logic: `[InvoiceNumber]_[InvoiceDate].pdf` (where date uses hyphens).
-    - [ ] Implement sanitization for illegal filesystem characters in the `InvoiceNumber`.
+- [x] Task: Implement `FilenameService` for dynamic naming. [d8f2694]
+    - [x] Write unit tests for `FilenameService.generateFileName(Invoice invoice)` covering various numbering and date formats.
+    - [x] Implement `FilenameService` with the logic: `[InvoiceNumber]_[InvoiceDate].pdf` (where date uses hyphens).
+    - [x] Implement sanitization for illegal filesystem characters in the `InvoiceNumber`.
 - [ ] Task: Conductor - User Manual Verification 'Domain & Logic' (Protocol in workflow.md)
 
 ## Phase 2: Validation & UI Integration
