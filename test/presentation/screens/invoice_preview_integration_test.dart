@@ -59,6 +59,7 @@ void main() {
         total: anyNamed('total'),
         invoiceNumber: anyNamed('invoiceNumber'),
         templateBytes: anyNamed('templateBytes'),
+        date: anyNamed('date'),
         currency: anyNamed('currency'),
       )).thenAnswer((_) async => previewBytes);
 

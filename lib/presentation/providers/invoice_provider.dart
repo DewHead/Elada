@@ -12,6 +12,7 @@ class InvoiceProvider with ChangeNotifier {
   String _description = '';
   double _total = 0.0;
   String _invoiceNumber = '';
+  DateTime _date = DateTime.now();
   String _selectedCurrency = '€';
   List<Invoice> _history = [];
   List<Invoice> _drafts = [];
@@ -29,6 +30,7 @@ class InvoiceProvider with ChangeNotifier {
   String get description => _description;
   double get total => _total;
   String get invoiceNumber => _invoiceNumber;
+  DateTime get date => _date;
   String get selectedCurrency => _selectedCurrency;
   List<Invoice> get history => _history;
   List<Invoice> get drafts => _drafts;
@@ -70,6 +72,12 @@ class InvoiceProvider with ChangeNotifier {
     _generatePreview();
   }
 
+  void updateDate(DateTime value) {
+    _date = value;
+    notifyListeners();
+    _generatePreview();
+  }
+
   void updateCurrency(String value) {
     _selectedCurrency = value;
     notifyListeners();
@@ -90,6 +98,7 @@ class InvoiceProvider with ChangeNotifier {
           total: _total,
           invoiceNumber: _invoiceNumber,
           templateBytes: _templateBytes!,
+          date: _date,
           currency: _selectedCurrency,
         );
       } catch (e) {
@@ -123,7 +132,7 @@ class InvoiceProvider with ChangeNotifier {
       invoiceNumber: _invoiceNumber,
       description: _description,
       total: _total,
-      date: DateTime.now(),
+      date: _date,
       currency: _selectedCurrency,
       isDraft: true,
     );
@@ -135,6 +144,7 @@ class InvoiceProvider with ChangeNotifier {
     _invoiceNumber = draft.invoiceNumber;
     _description = draft.description;
     _total = draft.total;
+    _date = draft.date;
     _selectedCurrency = draft.currency;
     notifyListeners();
     _generatePreview();
@@ -151,6 +161,7 @@ class InvoiceProvider with ChangeNotifier {
       total: _total,
       invoiceNumber: _invoiceNumber,
       templateBytes: templateBytes,
+      date: _date,
       currency: _selectedCurrency,
     );
 
@@ -159,7 +170,7 @@ class InvoiceProvider with ChangeNotifier {
       invoiceNumber: _invoiceNumber,
       description: _description,
       total: _total,
-      date: DateTime.now(),
+      date: _date,
       currency: _selectedCurrency,
     );
     await _repository.saveInvoice(invoice);

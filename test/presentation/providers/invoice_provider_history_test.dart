@@ -48,12 +48,14 @@ void main() {
 
     test('should save and refresh history after generation', () async {
       final templateBytes = Uint8List(10);
+      final pdfBytes = Uint8List(20);
       when(mockPdfService.generateInvoice(
         description: anyNamed('description'),
         total: anyNamed('total'),
         invoiceNumber: anyNamed('invoiceNumber'),
         templateBytes: anyNamed('templateBytes'),
-      )).thenAnswer((_) async => Uint8List(10));
+        date: anyNamed('date'),
+      )).thenAnswer((_) async => pdfBytes);
 
       final invoice = Invoice(invoiceNumber: '9418', description: 'Test', total: 100, date: DateTime.now());
       when(mockRepository.getInvoices()).thenReturn([invoice]);

@@ -57,6 +57,7 @@ void main() {
         total: anyNamed('total'),
         invoiceNumber: anyNamed('invoiceNumber'),
         templateBytes: anyNamed('templateBytes'),
+        date: anyNamed('date'),
       )).thenAnswer((_) async => pdfBytes);
 
       provider.updateDescription('Work');

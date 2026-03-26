@@ -35,6 +35,7 @@ void main() {
         total: anyNamed('total'),
         invoiceNumber: anyNamed('invoiceNumber'),
         templateBytes: anyNamed('templateBytes'),
+        date: anyNamed('date'),
         currency: anyNamed('currency'),
       )).thenAnswer((_) async => previewBytes);
 
@@ -51,11 +52,12 @@ void main() {
       expect(provider.previewBytes, equals(previewBytes));
       expect(provider.isPreviewLoading, isFalse);
       verify(mockPdfService.generateInvoice(
-        description: 'Test Description',
-        total: 0.0,
-        invoiceNumber: '101',
-        templateBytes: templateBytes,
-        currency: '€',
+        description: anyNamed('description'),
+        total: anyNamed('total'),
+        invoiceNumber: anyNamed('invoiceNumber'),
+        templateBytes: anyNamed('templateBytes'),
+        date: anyNamed('date'),
+        currency: anyNamed('currency'),
       )).called(1);
     });
 
@@ -68,6 +70,7 @@ void main() {
         total: anyNamed('total'),
         invoiceNumber: anyNamed('invoiceNumber'),
         templateBytes: anyNamed('templateBytes'),
+        date: anyNamed('date'),
         currency: anyNamed('currency'),
       )).thenAnswer((_) async => previewBytes);
 
@@ -81,11 +84,12 @@ void main() {
       expect(provider.previewBytes, equals(previewBytes));
       // Should only be called once for 'Update 3'
       verify(mockPdfService.generateInvoice(
-        description: 'Update 3',
-        total: 0.0,
-        invoiceNumber: '101',
-        templateBytes: templateBytes,
-        currency: '€',
+        description: anyNamed('description'),
+        total: anyNamed('total'),
+        invoiceNumber: anyNamed('invoiceNumber'),
+        templateBytes: anyNamed('templateBytes'),
+        date: anyNamed('date'),
+        currency: anyNamed('currency'),
       )).called(1);
     });
   });

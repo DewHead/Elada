@@ -138,6 +138,7 @@ class MockPdfService extends _i1.Mock implements _i6.PdfService {
     required double? total,
     required String? invoiceNumber,
     required _i7.Uint8List? templateBytes,
+    required DateTime? date,
     String? currency = r'€',
   }) =>
       (super.noSuchMethod(
@@ -149,6 +150,7 @@ class MockPdfService extends _i1.Mock implements _i6.PdfService {
             #total: total,
             #invoiceNumber: invoiceNumber,
             #templateBytes: templateBytes,
+            #date: date,
             #currency: currency,
           },
         ),

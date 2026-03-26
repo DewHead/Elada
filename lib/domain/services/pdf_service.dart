@@ -7,6 +7,7 @@ class PdfService {
     required double total,
     required String invoiceNumber,
     required Uint8List templateBytes,
+    required DateTime date,
     String currency = '€',
   }) async {
     // Load the PDF document
@@ -18,6 +19,10 @@ class PdfService {
     // Map and fill fields
     _tryFillField(form, 'INVOICE NO.', invoiceNumber);
     _tryFillField(form, 'Description', description);
+    
+    // Format date as DD/MM/YYYY for the PDF content
+    final formattedDate = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+    _tryFillField(form, 'Date', formattedDate);
     
     final formattedTotal = '$currency ${total.toStringAsFixed(2)}';
     _tryFillField(form, 'Total', formattedTotal);

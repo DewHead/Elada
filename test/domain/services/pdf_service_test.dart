@@ -27,6 +27,7 @@ void main() {
         total: 1500.0,
         invoiceNumber: '9418',
         templateBytes: templateBytes,
+        date: DateTime(2026, 3, 26),
       );
 
       expect(result, isNotNull);
