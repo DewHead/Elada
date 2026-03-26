@@ -2,7 +2,7 @@
 
 This track implements a dynamic naming convention for exported PDF invoices, ensuring filenames are derived from the invoice's number and date.
 
-## Phase 1: Domain & Logic (TDD)
+## Phase 1: Domain & Logic (TDD) [checkpoint: 91ea861]
 - [x] Task: Update `InvoiceProvider` and `PdfService` to support an editable `date` field. [20f2694]
     - [x] Write unit tests for `InvoiceProvider` and `PdfService` ensuring they handle the `date` field correctly.
     - [x] Add `date` property and `updateDate(DateTime date)` method to `InvoiceProvider`.
