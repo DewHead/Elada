@@ -112,6 +112,12 @@ class InvoiceProvider with ChangeNotifier {
     return (intVal + 1).toString();
   }
 
+  @override
+  void dispose() {
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
   Future<void> saveDraft() async {
     final draft = Invoice(
       invoiceNumber: _invoiceNumber,

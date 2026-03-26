@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
+import 'package:elada/presentation/widgets/invoice_preview.dart';
 
 class InvoiceScreen extends StatefulWidget {
   const InvoiceScreen({super.key});
@@ -25,6 +26,17 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     
     // Listen for external updates (e.g., loading a draft)
     _provider.addListener(_onProviderUpdate);
+
+    // Load template for previews
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        final templateData = await DefaultAssetBundle.of(context).load('assets/templates/invoice_template.pdf');
+        final templateBytes = templateData.buffer.asUint8List();
+        _provider.updateTemplateBytes(templateBytes);
+      } catch (e) {
+        // Handle template loading error
+      }
+    });
   }
 
   void _onProviderUpdate() {
@@ -60,120 +72,207 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         title: const Text('Elada Invoice'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 16),
-            Icon(
-              Icons.receipt_long_rounded,
-              size: 80,
-              color: Theme.of(context).colorScheme.primary.withAlpha(204), // ~0.8 opacity
-            ),
-            const SizedBox(height: 24),
-            Text(
-              'Generate New Invoice',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -0.5,
-                  ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Fill in the details for your professional invoice',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 48),
-            Text(
-              'Currency',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            const SizedBox(height: 8),
-            SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: '€', label: Text('€')),
-                ButtonSegment(value: '\$', label: Text('\$')),
-                ButtonSegment(value: '£', label: Text('£')),
-              ],
-              selected: {context.watch<InvoiceProvider>().selectedCurrency},
-              onSelectionChanged: (Set<String> newSelection) {
-                context.read<InvoiceProvider>().updateCurrency(newSelection.first);
-              },
-            ),
-            const SizedBox(height: 16),
-            _buildInputField(
-              controller: _invoiceNumberController,
-              label: 'Invoice Number',
-              onChanged: (val) => context.read<InvoiceProvider>().updateInvoiceNumber(val),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 16),
-            _buildInputField(
-              controller: _descriptionController,
-              label: 'Item Description',
-              onChanged: (val) => context.read<InvoiceProvider>().updateDescription(val),
-              maxLines: 3,
-            ),
-            const SizedBox(height: 16),
-            _buildInputField(
-              controller: _totalController,
-              label: 'Total Amount',
-              onChanged: (val) {
-                final doubleValue = double.tryParse(val) ?? 0.0;
-                context.read<InvoiceProvider>().updateTotal(doubleValue);
-              },
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              prefixText: '${context.watch<InvoiceProvider>().selectedCurrency} ',
-            ),
-            const SizedBox(height: 48),
-            Row(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth > 800) {
+            // Desktop Side-by-Side
+            return Row(
               children: [
                 Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () => _saveDraft(context),
-                    icon: const Icon(Icons.save_as_outlined),
-                    label: const Text('Save as Draft'),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                  flex: 2,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24.0),
+                    child: _buildForm(context),
                   ),
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () => _generatePdf(context),
-                    icon: const Icon(Icons.picture_as_pdf),
-                    label: const Text('Generate PDF'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
+                const VerticalDivider(width: 1),
+                const Expanded(
+                  flex: 3,
+                  child: Padding(
+                    padding: EdgeInsets.all(24.0),
+                    child: InvoicePreview(),
                   ),
                 ),
               ],
+            );
+          } else {
+            // Mobile view with FAB for preview
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  padding: const EdgeInsets.all(24.0),
+                  child: _buildForm(context),
+                ),
+                Positioned(
+                  bottom: 24,
+                  right: 24,
+                  child: FloatingActionButton.extended(
+                    onPressed: () => _showPreviewModal(context),
+                    icon: const Icon(Icons.visibility_outlined),
+                    label: const Text('Preview'),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  void _showPreviewModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.9,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        expand: false,
+        builder: (context, scrollController) => Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Invoice Preview',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 16),
-            TextButton.icon(
-              onPressed: () => _clearForm(context),
-              icon: const Icon(Icons.clear_all),
-              label: const Text('Clear Form'),
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.error,
+            const Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: InvoicePreview(),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildForm(BuildContext context) {
+    final provider = context.watch<InvoiceProvider>();
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: 16),
+        Icon(
+          Icons.receipt_long_rounded,
+          size: 80,
+          color: Theme.of(context).colorScheme.primary.withAlpha(204), // ~0.8 opacity
+        ),
+        const SizedBox(height: 24),
+        Text(
+          'Generate New Invoice',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                letterSpacing: -0.5,
+              ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Fill in the details for your professional invoice',
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 48),
+        Text(
+          'Currency',
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+        const SizedBox(height: 8),
+        SegmentedButton<String>(
+          segments: const [
+            ButtonSegment(value: '€', label: Text('€')),
+            ButtonSegment(value: '\$', label: Text('\$')),
+            ButtonSegment(value: '£', label: Text('£')),
+          ],
+          selected: {provider.selectedCurrency},
+          onSelectionChanged: (Set<String> newSelection) {
+            context.read<InvoiceProvider>().updateCurrency(newSelection.first);
+          },
+        ),
+        const SizedBox(height: 16),
+        _buildInputField(
+          controller: _invoiceNumberController,
+          label: 'Invoice Number',
+          onChanged: (val) => context.read<InvoiceProvider>().updateInvoiceNumber(val),
+          keyboardType: TextInputType.number,
+        ),
+        const SizedBox(height: 16),
+        _buildInputField(
+          controller: _descriptionController,
+          label: 'Item Description',
+          onChanged: (val) => context.read<InvoiceProvider>().updateDescription(val),
+          maxLines: 3,
+        ),
+        const SizedBox(height: 16),
+        _buildInputField(
+          controller: _totalController,
+          label: 'Total Amount',
+          onChanged: (val) {
+            final doubleValue = double.tryParse(val) ?? 0.0;
+            context.read<InvoiceProvider>().updateTotal(doubleValue);
+          },
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          prefixText: '${provider.selectedCurrency} ',
+        ),
+        const SizedBox(height: 48),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                onPressed: () => _saveDraft(context),
+                icon: const Icon(Icons.save_as_outlined),
+                label: const Text('Save as Draft'),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () => _generatePdf(context),
+                icon: const Icon(Icons.picture_as_pdf),
+                label: const Text('Generate PDF'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        TextButton.icon(
+          onPressed: () => _clearForm(context),
+          icon: const Icon(Icons.clear_all),
+          label: const Text('Clear Form'),
+          style: TextButton.styleFrom(
+            foregroundColor: Theme.of(context).colorScheme.error,
+          ),
+        ),
+      ],
     );
   }
 
