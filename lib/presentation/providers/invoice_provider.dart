@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/domain/services/pdf_service.dart';
@@ -14,6 +16,11 @@ class InvoiceProvider with ChangeNotifier {
   List<Invoice> _history = [];
   List<Invoice> _drafts = [];
 
+  Uint8List? _templateBytes;
+  Uint8List? _previewBytes;
+  bool _isPreviewLoading = false;
+  Timer? _debounceTimer;
+
   InvoiceProvider(this._repository, this._pdfService) {
     _initInvoiceNumber();
     _loadHistoryAndDrafts();
@@ -26,6 +33,9 @@ class InvoiceProvider with ChangeNotifier {
   List<Invoice> get history => _history;
   List<Invoice> get drafts => _drafts;
 
+  Uint8List? get previewBytes => _previewBytes;
+  bool get isPreviewLoading => _isPreviewLoading;
+
   void _initInvoiceNumber() {
     final lastNumber = _repository.getLastInvoiceNumber();
     _invoiceNumber = _incrementStringNumber(lastNumber);
@@ -37,29 +47,64 @@ class InvoiceProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateTemplateBytes(Uint8List bytes) {
+    _templateBytes = bytes;
+    _generatePreview();
+  }
+
   void updateDescription(String value) {
     _description = value;
     notifyListeners();
+    _generatePreview();
   }
 
   void updateTotal(double value) {
     _total = value;
     notifyListeners();
+    _generatePreview();
   }
 
   void updateInvoiceNumber(String value) {
     _invoiceNumber = value;
     notifyListeners();
+    _generatePreview();
   }
 
   void updateCurrency(String value) {
     _selectedCurrency = value;
     notifyListeners();
+    _generatePreview();
+  }
+
+  void _generatePreview() {
+    if (_templateBytes == null) return;
+
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+      _isPreviewLoading = true;
+      notifyListeners();
+
+      try {
+        _previewBytes = await _pdfService.generateInvoice(
+          description: _description,
+          total: _total,
+          invoiceNumber: _invoiceNumber,
+          templateBytes: _templateBytes!,
+          currency: _selectedCurrency,
+        );
+      } catch (e) {
+        // Log error
+      } finally {
+        _isPreviewLoading = false;
+        notifyListeners();
+      }
+    });
   }
 
   void incrementInvoiceNumber() {
     _invoiceNumber = _incrementStringNumber(_invoiceNumber);
     notifyListeners();
+    _generatePreview();
   }
 
   String _incrementStringNumber(String number) {
@@ -86,6 +131,7 @@ class InvoiceProvider with ChangeNotifier {
     _total = draft.total;
     _selectedCurrency = draft.currency;
     notifyListeners();
+    _generatePreview();
   }
 
   Future<void> deleteDraft(int index) async {
