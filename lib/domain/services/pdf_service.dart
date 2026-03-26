@@ -16,17 +16,17 @@ class PdfService {
     // Get the form from the PDF document
     final PdfForm form = document.form;
 
-    // Map and fill fields
-    _tryFillField(form, 'INVOICE NO.', invoiceNumber);
-    _tryFillField(form, 'Description', description);
+    // Map and fill fields (Try multiple possible names for robustness)
+    _tryFillField(form, ['INVOICE NO.', 'Invoice No.', 'Invoice Number', 'Number'], invoiceNumber);
+    _tryFillField(form, ['Description', 'Item Description', 'Details'], description);
     
     // Format date as DD/MM/YYYY for the PDF content
     final formattedDate = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
-    _tryFillField(form, 'Date', formattedDate);
+    _tryFillField(form, ['Date', 'Invoice Date', 'Issued Date'], formattedDate);
     
     final formattedTotal = '$currency ${total.toStringAsFixed(2)}';
-    _tryFillField(form, 'Total', formattedTotal);
-    _tryFillField(form, 'Balance Due', formattedTotal);
+    _tryFillField(form, ['Total', 'Amount', 'Invoice Total'], formattedTotal);
+    _tryFillField(form, ['Balance Due', 'Balance'], formattedTotal);
 
     // Save the document as bytes
     final List<int> bytes = await document.save();
@@ -35,14 +35,33 @@ class PdfService {
     return Uint8List.fromList(bytes);
   }
 
-  void _tryFillField(PdfForm form, String fieldName, String value) {
+  void _tryFillField(PdfForm form, List<String> fieldNames, String value) {
     try {
-      // Find field by name
       PdfField? foundField;
-      for (int i = 0; i < form.fields.count; i++) {
-        if (form.fields[i].name == fieldName) {
-          foundField = form.fields[i];
-          break;
+      
+      // Try to find by exact name first
+      for (final name in fieldNames) {
+        for (int i = 0; i < form.fields.count; i++) {
+          if (form.fields[i].name == name) {
+            foundField = form.fields[i];
+            break;
+          }
+        }
+        if (foundField != null) break;
+      }
+
+      // If not found, try case-insensitive partial match
+      if (foundField == null) {
+        for (final name in fieldNames) {
+          final lowerName = name.toLowerCase();
+          for (int i = 0; i < form.fields.count; i++) {
+            final fieldName = form.fields[i].name?.toLowerCase() ?? '';
+            if (fieldName == lowerName || fieldName.contains(lowerName)) {
+              foundField = form.fields[i];
+              break;
+            }
+          }
+          if (foundField != null) break;
         }
       }
 
