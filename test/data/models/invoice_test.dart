@@ -16,8 +16,19 @@ void main() {
       expect(invoice.invoiceNumber, '9418');
       expect(invoice.description, 'Test Description');
       expect(invoice.total, 1500.0);
-      expect(invoice.date, date);
+      expect(invoice.effectiveDate, date);
       expect(invoice.currency, '€');
+    });
+
+    test('should handle null date gracefully', () {
+      final invoice = Invoice(
+        invoiceNumber: '9418',
+        description: 'Test',
+        total: 100.0,
+      );
+
+      expect(invoice.date, isNotNull); // Constructor defaults it
+      expect(invoice.effectiveDate, isNotNull);
     });
 
     test('should convert to and from JSON', () {
@@ -41,7 +52,7 @@ void main() {
       expect(fromJson.invoiceNumber, invoice.invoiceNumber);
       expect(fromJson.description, invoice.description);
       expect(fromJson.total, invoice.total);
-      expect(fromJson.date, invoice.date);
+      expect(fromJson.effectiveDate, invoice.effectiveDate);
       expect(fromJson.currency, invoice.currency);
     });
   });

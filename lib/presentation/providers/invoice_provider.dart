@@ -153,7 +153,7 @@ class InvoiceProvider with ChangeNotifier {
     _invoiceNumber = draft.invoiceNumber;
     _description = draft.description;
     _total = draft.total;
-    _date = draft.date;
+    _date = draft.effectiveDate;
     _selectedCurrency = draft.currency;
     notifyListeners();
     _generatePreview();

@@ -5,6 +5,8 @@ import 'package:elada/domain/services/file_export_service.dart';
 import 'package:path/path.dart' as p;
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('FileExportService', () {
     late FileExportService fileExportService;
     late Directory tempDir;

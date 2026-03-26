@@ -14,7 +14,7 @@ class FilenameService {
       number = number.replaceAll(illegalChars, '-');
     }
 
-    final date = invoice.date;
+    final date = invoice.effectiveDate;
     final day = date.day.toString().padLeft(2, '0');
     final month = date.month.toString().padLeft(2, '0');
     final year = date.year;

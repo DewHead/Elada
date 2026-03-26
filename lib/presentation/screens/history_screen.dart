@@ -129,7 +129,7 @@ class HistoryScreen extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
-          '#${invoice.invoiceNumber} • ${DateFormat('MMM dd, yyyy').format(invoice.date)}',
+          '#${invoice.invoiceNumber} • ${DateFormat('MMM dd, yyyy').format(invoice.effectiveDate)}',
         ),
         trailing: Text(
           '${invoice.currency} ${invoice.total.toStringAsFixed(2)}',

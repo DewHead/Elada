@@ -20,9 +20,9 @@ class InvoiceAdapter extends TypeAdapter<Invoice> {
       invoiceNumber: fields[0] as String,
       description: fields[1] as String,
       total: fields[2] as double,
-      date: fields[3] as DateTime,
-      currency: fields[4] as String,
-      isDraft: fields[5] as bool,
+      date: fields[3] as DateTime?,
+      currency: fields[4] == null ? '€' : fields[4] as String,
+      isDraft: fields[5] == null ? false : fields[5] as bool,
     );
   }
 

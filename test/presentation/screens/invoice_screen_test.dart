@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,12 @@ void main() {
     when(mockProvider.invoiceNumber).thenReturn('9418');
     when(mockProvider.date).thenReturn(DateTime(2026, 3, 26));
     when(mockProvider.selectedCurrency).thenReturn('€');
+    when(mockProvider.previewBytes).thenReturn(null);
+    when(mockProvider.isPreviewLoading).thenReturn(false);
+    
+    // Add dummy listener handling
+    when(mockProvider.addListener(any)).thenReturn(null);
+    when(mockProvider.removeListener(any)).thenReturn(null);
   });
 
   Widget createWidgetUnderTest() {
@@ -47,9 +54,6 @@ void main() {
 
       expect(find.text('Currency'), findsOneWidget);
       expect(find.text('€'), findsOneWidget);
-      
-      // Tap currency selector (SegmentedButton or similar)
-      // For now just check if they exist or are selectable
       expect(find.text('\$'), findsOneWidget);
       expect(find.text('£'), findsOneWidget);
     });
@@ -58,6 +62,51 @@ void main() {
       await tester.pumpWidget(createWidgetUnderTest());
 
       expect(find.text('Save as Draft'), findsOneWidget);
+    });
+
+    testWidgets('should trigger PDF generation when Generate PDF is tapped', (WidgetTester tester) async {
+      // Set a larger screen size to ensure button is visible
+      tester.view.physicalSize = const Size(1200, 1200);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      when(mockProvider.generateAndSaveInvoice(any)).thenAnswer((_) async => '/path/to/invoice.pdf');
+
+      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pump(); // Ensure init complete
+
+      await tester.tap(find.text('Generate PDF'));
+      await tester.pumpAndSettle();
+
+      verify(mockProvider.generateAndSaveInvoice(any)).called(1);
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(find.textContaining('Invoice saved to: /path/to/invoice.pdf'), findsOneWidget);
+    });
+
+    testWidgets('should show error when Generate PDF is tapped with empty invoice number', (WidgetTester tester) async {
+      when(mockProvider.invoiceNumber).thenReturn('');
+
+      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.tap(find.text('Generate PDF'));
+      await tester.pump();
+
+      expect(find.text('Please enter an Invoice Number'), findsOneWidget);
+      verifyNever(mockProvider.generateAndSaveInvoice(any));
+    });
+
+    testWidgets('should show date picker when Invoice Date is tapped', (WidgetTester tester) async {
+      tester.view.physicalSize = const Size(1200, 1200);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+
+      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pump();
+      
+      await tester.tap(find.text('Invoice Date'));
+      await tester.pumpAndSettle();
+
+      // Should find the DatePicker (Material 3)
+      expect(find.byType(DatePickerDialog), findsOneWidget);
     });
   });
 }
