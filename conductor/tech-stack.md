@@ -12,6 +12,9 @@
 ## State Management
 - **provider:** A clean and well-documented solution for managing the application's state, ensuring a responsive and predictable user experience.
 
+## Formatting & Localization
+- **intl:** Used for professional date formatting and potential future localization needs.
+
 ## UI & Styling
 - **Material 3:** Google's latest design system, providing a modern, sleek, and highly customizable set of UI components that align with "bleeding edge" design standards.
 - **Custom Theming:** Leveraging Flutter's `ThemeData` to implement a minimalist, high-end aesthetic with premium visual effects (subtle shadows, elegant transitions).

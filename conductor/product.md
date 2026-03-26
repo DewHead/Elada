@@ -15,10 +15,10 @@ A system to manage and generate invoices based on a template PDF (YONIK KOSHER L
 - **Dynamic Field Injection:** Directly modify the "Description", "Total", and "Balance Due" fields via a clean user interface.
 - **Smart Invoice Numbering:** Automatically track and increment the "INVOICE NO." while allowing for manual overrides when necessary.
 - **PDF Generation Engine:** Generate and save a new, high-quality PDF file upon modification.
-- **Workflow Management:**
-    - **Draft Mode:** Support for saving partially completed invoices to be finalized later.
-    - **Invoicing History:** A persistent log to track previously generated invoices and their details.
-    - **Multi-Currency Support:** Flexibility to adjust currency symbols (e.g., €, $, £) while keeping totals synchronized.
+- **Dashboard & History:** A centralized hub to view all previously generated invoices and manage ongoing drafts.
+- **Draft Management:** Full CRUD support for invoice drafts, allowing users to save progress and resume editing at any time.
+- **Multi-Currency Support:** Ability to generate invoices in multiple currencies (€, $, £), with automatic formatting and persistence.
+- **Main Navigation:** Modern, intuitive navigation to switch seamlessly between the Generator and the Dashboard.
 
 ## Visual Identity
 - **Minimalist Aesthetic:** A "less is more" design philosophy featuring generous white space, refined typography, and a clean, uncluttered interface to ensure a premium feel and ease of use.
