@@ -8,6 +8,8 @@ import 'dart:typed_data' as _i7;
 
 import 'package:elada/data/models/invoice.dart' as _i4;
 import 'package:elada/data/repositories/invoice_repository.dart' as _i2;
+import 'package:elada/domain/services/file_export_service.dart' as _i9;
+import 'package:elada/domain/services/filename_service.dart' as _i8;
 import 'package:elada/domain/services/pdf_service.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i5;
@@ -156,4 +158,82 @@ class MockPdfService extends _i1.Mock implements _i6.PdfService {
         ),
         returnValue: _i3.Future<_i7.Uint8List>.value(_i7.Uint8List(0)),
       ) as _i3.Future<_i7.Uint8List>);
+}
+
+/// A class which mocks [FilenameService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFilenameService extends _i1.Mock implements _i8.FilenameService {
+  MockFilenameService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  String generateFileName(_i4.Invoice? invoice) => (super.noSuchMethod(
+        Invocation.method(
+          #generateFileName,
+          [invoice],
+        ),
+        returnValue: _i5.dummyValue<String>(
+          this,
+          Invocation.method(
+            #generateFileName,
+            [invoice],
+          ),
+        ),
+      ) as String);
+}
+
+/// A class which mocks [FileExportService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFileExportService extends _i1.Mock implements _i9.FileExportService {
+  MockFileExportService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.Future<String> saveFile({
+    required _i7.Uint8List? bytes,
+    required String? fileName,
+    String? directoryPath,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveFile,
+          [],
+          {
+            #bytes: bytes,
+            #fileName: fileName,
+            #directoryPath: directoryPath,
+          },
+        ),
+        returnValue: _i3.Future<String>.value(_i5.dummyValue<String>(
+          this,
+          Invocation.method(
+            #saveFile,
+            [],
+            {
+              #bytes: bytes,
+              #fileName: fileName,
+              #directoryPath: directoryPath,
+            },
+          ),
+        )),
+      ) as _i3.Future<String>);
+
+  @override
+  _i3.Future<String> getDownloadsDirectoryPath() => (super.noSuchMethod(
+        Invocation.method(
+          #getDownloadsDirectoryPath,
+          [],
+        ),
+        returnValue: _i3.Future<String>.value(_i5.dummyValue<String>(
+          this,
+          Invocation.method(
+            #getDownloadsDirectoryPath,
+            [],
+          ),
+        )),
+      ) as _i3.Future<String>);
 }

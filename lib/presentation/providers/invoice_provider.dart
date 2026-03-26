@@ -3,11 +3,15 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/domain/services/pdf_service.dart';
+import 'package:elada/domain/services/filename_service.dart';
+import 'package:elada/domain/services/file_export_service.dart';
 import 'package:elada/data/models/invoice.dart';
 
 class InvoiceProvider with ChangeNotifier {
   final InvoiceRepository _repository;
   final PdfService _pdfService;
+  final FilenameService _filenameService;
+  final FileExportService _fileExportService;
 
   String _description = '';
   double _total = 0.0;
@@ -22,7 +26,12 @@ class InvoiceProvider with ChangeNotifier {
   bool _isPreviewLoading = false;
   Timer? _debounceTimer;
 
-  InvoiceProvider(this._repository, this._pdfService) {
+  InvoiceProvider(
+    this._repository,
+    this._pdfService,
+    this._filenameService,
+    this._fileExportService,
+  ) {
     _initInvoiceNumber();
     _loadHistoryAndDrafts();
   }
@@ -155,7 +164,10 @@ class InvoiceProvider with ChangeNotifier {
     _loadHistoryAndDrafts();
   }
 
-  Future<Uint8List> generateInvoice(Uint8List templateBytes) async {
+  /// Generates the invoice and saves it to the device's downloads folder.
+  /// Returns the path to the saved file.
+  Future<String> generateAndSaveInvoice(Uint8List templateBytes) async {
+    // 1. Generate bytes
     final bytes = await _pdfService.generateInvoice(
       description: _description,
       total: _total,
@@ -165,7 +177,7 @@ class InvoiceProvider with ChangeNotifier {
       currency: _selectedCurrency,
     );
 
-    // Save history
+    // 2. Create Invoice object for history
     final invoice = Invoice(
       invoiceNumber: _invoiceNumber,
       description: _description,
@@ -173,9 +185,32 @@ class InvoiceProvider with ChangeNotifier {
       date: _date,
       currency: _selectedCurrency,
     );
+
+    // 3. Generate Filename
+    final fileName = _filenameService.generateFileName(invoice);
+
+    // 4. Save to filesystem
+    final savedPath = await _fileExportService.saveFile(
+      bytes: bytes,
+      fileName: fileName,
+    );
+
+    // 5. Save history
     await _repository.saveInvoice(invoice);
     _loadHistoryAndDrafts();
 
-    return bytes;
+    return savedPath;
+  }
+  
+  @Deprecated('Use generateAndSaveInvoice instead')
+  Future<Uint8List> generateInvoice(Uint8List templateBytes) async {
+     return await _pdfService.generateInvoice(
+      description: _description,
+      total: _total,
+      invoiceNumber: _invoiceNumber,
+      templateBytes: templateBytes,
+      date: _date,
+      currency: _selectedCurrency,
+    );
   }
 }

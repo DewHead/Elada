@@ -5,24 +5,35 @@ import 'package:mockito/mockito.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/domain/services/pdf_service.dart';
+import 'package:elada/domain/services/filename_service.dart';
+import 'package:elada/domain/services/file_export_service.dart';
 
-@GenerateMocks([InvoiceRepository, PdfService])
+@GenerateMocks([InvoiceRepository, PdfService, FilenameService, FileExportService])
 import 'invoice_provider_test.mocks.dart';
 
 void main() {
   late InvoiceProvider provider;
   late MockInvoiceRepository mockRepository;
   late MockPdfService mockPdfService;
+  late MockFilenameService mockFilenameService;
+  late MockFileExportService mockFileExportService;
 
   setUp(() {
     mockRepository = MockInvoiceRepository();
     mockPdfService = MockPdfService();
+    mockFilenameService = MockFilenameService();
+    mockFileExportService = MockFileExportService();
     
     when(mockRepository.getLastInvoiceNumber()).thenReturn('9417');
     when(mockRepository.getInvoices()).thenReturn([]);
     when(mockRepository.getDrafts()).thenReturn([]);
     
-    provider = InvoiceProvider(mockRepository, mockPdfService);
+    provider = InvoiceProvider(
+      mockRepository,
+      mockPdfService,
+      mockFilenameService,
+      mockFileExportService,
+    );
   });
 
   group('InvoiceProvider', () {
@@ -58,14 +69,21 @@ void main() {
         invoiceNumber: anyNamed('invoiceNumber'),
         templateBytes: anyNamed('templateBytes'),
         date: anyNamed('date'),
+        currency: anyNamed('currency'),
       )).thenAnswer((_) async => pdfBytes);
+      
+      when(mockFilenameService.generateFileName(any)).thenReturn('9418_26-03-2026.pdf');
+      when(mockFileExportService.saveFile(
+        bytes: anyNamed('bytes'),
+        fileName: anyNamed('fileName'),
+      )).thenAnswer((_) async => 'path/to/9418_26-03-2026.pdf');
 
       provider.updateDescription('Work');
       provider.updateTotal(500.0);
       
-      final result = await provider.generateInvoice(templateBytes);
+      final result = await provider.generateAndSaveInvoice(templateBytes);
 
-      expect(result, pdfBytes);
+      expect(result, 'path/to/9418_26-03-2026.pdf');
       verify(mockRepository.saveInvoice(any)).called(1);
     });
   });

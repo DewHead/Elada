@@ -4,25 +4,36 @@ import 'package:mockito/mockito.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/domain/services/pdf_service.dart';
+import 'package:elada/domain/services/filename_service.dart';
+import 'package:elada/domain/services/file_export_service.dart';
 import 'package:mockito/annotations.dart';
 
-@GenerateMocks([InvoiceRepository, PdfService])
+@GenerateMocks([InvoiceRepository, PdfService, FilenameService, FileExportService])
 import 'invoice_preview_test.mocks.dart';
 
 void main() {
   late InvoiceProvider provider;
   late MockInvoiceRepository mockRepository;
   late MockPdfService mockPdfService;
+  late MockFilenameService mockFilenameService;
+  late MockFileExportService mockFileExportService;
 
   setUp(() {
     mockRepository = MockInvoiceRepository();
     mockPdfService = MockPdfService();
+    mockFilenameService = MockFilenameService();
+    mockFileExportService = MockFileExportService();
 
     when(mockRepository.getLastInvoiceNumber()).thenReturn('100');
     when(mockRepository.getInvoices()).thenReturn([]);
     when(mockRepository.getDrafts()).thenReturn([]);
 
-    provider = InvoiceProvider(mockRepository, mockPdfService);
+    provider = InvoiceProvider(
+      mockRepository,
+      mockPdfService,
+      mockFilenameService,
+      mockFileExportService,
+    );
   });
 
   group('InvoiceProvider Preview Logic', () {

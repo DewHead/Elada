@@ -211,6 +211,22 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       ) as _i6.Future<void>);
 
   @override
+  _i6.Future<String> generateAndSaveInvoice(_i5.Uint8List? templateBytes) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #generateAndSaveInvoice,
+          [templateBytes],
+        ),
+        returnValue: _i6.Future<String>.value(_i3.dummyValue<String>(
+          this,
+          Invocation.method(
+            #generateAndSaveInvoice,
+            [templateBytes],
+          ),
+        )),
+      ) as _i6.Future<String>);
+
+  @override
   _i6.Future<_i5.Uint8List> generateInvoice(_i5.Uint8List? templateBytes) =>
       (super.noSuchMethod(
         Invocation.method(

@@ -18,9 +18,9 @@ This track implements a dynamic naming convention for exported PDF invoices, ens
 - [x] Task: Add `Date` editor to the UI. [f8f2694]
     - [x] Integrate a Date picker or text input for the "Invoice Date" in `InvoiceScreen`.
     - [x] Ensure the field is integrated with `InvoiceProvider` for real-time preview updates.
-- [ ] Task: Implement Export Validation and dynamic saving logic.
-    - [ ] Implement a `FileExportService` to save the PDF to the user's Downloads directory (using `path_provider`).
-    - [ ] Update the "Generate PDF" button in `InvoiceScreen` to:
+- [x] Task: Implement Export Validation and dynamic saving logic. [a1a8d1b]
+    - [x] Implement a `FileExportService` to save the PDF to the user's Downloads directory (using `path_provider`).
+    - [x] Update the "Generate PDF" button in `InvoiceScreen` to:
         1.  Validate that `InvoiceNumber` and `Date` are not empty.
         2.  Show a snackbar/dialog error if validation fails.
         3.  Generate the PDF bytes.

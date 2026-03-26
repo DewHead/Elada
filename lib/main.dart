@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:elada/data/models/invoice.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/domain/services/pdf_service.dart';
+import 'package:elada/domain/services/filename_service.dart';
+import 'package:elada/domain/services/file_export_service.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
 import 'package:elada/presentation/screens/main_screen.dart';
 
@@ -21,12 +23,19 @@ void main() async {
   
   final invoiceRepository = InvoiceRepository(invoiceBox, settingsBox, draftBox: draftsBox);
   final pdfService = PdfService();
+  final filenameService = FilenameService();
+  final fileExportService = FileExportService();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => InvoiceProvider(invoiceRepository, pdfService),
+          create: (_) => InvoiceProvider(
+            invoiceRepository,
+            pdfService,
+            filenameService,
+            fileExportService,
+          ),
         ),
       ],
       child: const EladaApp(),

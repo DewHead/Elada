@@ -365,21 +365,38 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   Future<void> _generatePdf(BuildContext context) async {
     final provider = context.read<InvoiceProvider>();
     
+    // Validation
+    if (provider.invoiceNumber.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter an Invoice Number'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
     try {
       // 1. Load template from assets
       final templateData = await DefaultAssetBundle.of(context).load('assets/templates/invoice_template.pdf');
       final templateBytes = templateData.buffer.asUint8List();
 
-      // 2. Generate PDF
-      await provider.generateInvoice(templateBytes);
+      // 2. Generate and Save PDF
+      final savedPath = await provider.generateAndSaveInvoice(templateBytes);
 
-      // 3. Save PDF (Simple path for MVP)
+      // 3. Success message
       if (!context.mounted) return;
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Invoice ${provider.invoiceNumber} generated successfully!'),
+          content: Text('Invoice saved to: $savedPath'),
           backgroundColor: Colors.green,
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'OK',
+            textColor: Colors.white,
+            onPressed: () {},
+          ),
         ),
       );
     } catch (e) {

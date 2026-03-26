@@ -6,17 +6,23 @@ import 'package:elada/main.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/domain/services/pdf_service.dart';
+import 'package:elada/domain/services/filename_service.dart';
+import 'package:elada/domain/services/file_export_service.dart';
 
-@GenerateMocks([InvoiceRepository, PdfService])
+@GenerateMocks([InvoiceRepository, PdfService, FilenameService, FileExportService])
 import 'widget_test.mocks.dart';
 
 void main() {
   late MockInvoiceRepository mockRepository;
   late MockPdfService mockPdfService;
+  late MockFilenameService mockFilenameService;
+  late MockFileExportService mockFileExportService;
 
   setUp(() {
     mockRepository = MockInvoiceRepository();
     mockPdfService = MockPdfService();
+    mockFilenameService = MockFilenameService();
+    mockFileExportService = MockFileExportService();
     
     when(mockRepository.getLastInvoiceNumber()).thenReturn('9417');
     when(mockRepository.getInvoices()).thenReturn([]);
@@ -29,7 +35,12 @@ void main() {
       MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (_) => InvoiceProvider(mockRepository, mockPdfService),
+            create: (_) => InvoiceProvider(
+              mockRepository,
+              mockPdfService,
+              mockFilenameService,
+              mockFileExportService,
+            ),
           ),
         ],
         child: const EladaApp(),
