@@ -44,18 +44,20 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   void _onProviderUpdate() {
     if (!mounted) return;
     
-    // Only update if controllers are different from provider state to avoid cursor jumping
-    if (_invoiceNumberController.text != _provider.invoiceNumber) {
-      _invoiceNumberController.text = _provider.invoiceNumber;
-    }
-    if (_descriptionController.text != _provider.description) {
-      _descriptionController.text = _provider.description;
-    }
-    final totalStr = _provider.total > 0 ? _provider.total.toString() : '';
-    if (_totalController.text != totalStr) {
-      _totalController.text = totalStr;
-    }
-    _updateDateController();
+    setState(() {
+      // Only update if controllers are different from provider state to avoid cursor jumping
+      if (_invoiceNumberController.text != _provider.invoiceNumber) {
+        _invoiceNumberController.text = _provider.invoiceNumber;
+      }
+      if (_descriptionController.text != _provider.description) {
+        _descriptionController.text = _provider.description;
+      }
+      final totalStr = _provider.total > 0 ? _provider.total.toString() : '';
+      if (_totalController.text != totalStr) {
+        _totalController.text = totalStr;
+      }
+      _updateDateController();
+    });
   }
 
   void _updateDateController() {
