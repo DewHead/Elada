@@ -25,22 +25,52 @@ class HistoryScreen extends StatelessWidget {
             return _buildEmptyState(context);
           }
 
-          return ListView(
-            padding: const EdgeInsets.all(16.0),
-            children: [
-              if (drafts.isNotEmpty) ...[
-                _buildSectionHeader(context, 'Drafts'),
-                ...drafts.asMap().entries.map((entry) => _buildDraftItem(context, provider, entry.value, entry.key)),
-                const SizedBox(height: 24),
+          return RepaintBoundary(
+            child: ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                if (drafts.isNotEmpty) ...[
+                  _buildSectionHeader(context, 'Drafts'),
+                  ...drafts.asMap().entries.map((entry) {
+                    return _buildAnimatedItem(
+                      index: entry.key,
+                      child: _buildDraftItem(context, provider, entry.value, entry.key),
+                    );
+                  }),
+                  const SizedBox(height: 24),
+                ],
+                if (history.isNotEmpty) ...[
+                  _buildSectionHeader(context, 'Generated Invoices'),
+                  ...history.asMap().entries.map((entry) {
+                    return _buildAnimatedItem(
+                      index: drafts.length + entry.key,
+                      child: _buildHistoryItem(context, entry.value),
+                    );
+                  }),
+                ],
               ],
-              if (history.isNotEmpty) ...[
-                _buildSectionHeader(context, 'Generated Invoices'),
-                ...history.map((invoice) => _buildHistoryItem(context, invoice)),
-              ],
-            ],
+            ),
           );
         },
       ),
+    );
+  }
+
+  Widget _buildAnimatedItem({required int index, required Widget child}) {
+    return TweenAnimationBuilder<double>(
+      duration: Duration(milliseconds: 300 + (index * 50).clamp(0, 500)),
+      tween: Tween(begin: 0.0, end: 1.0),
+      curve: Curves.easeOut,
+      builder: (context, value, child) {
+        return Opacity(
+          opacity: value,
+          child: Transform.translate(
+            offset: Offset(0, 20 * (1 - value)),
+            child: child,
+          ),
+        );
+      },
+      child: child,
     );
   }
 
