@@ -1,7 +1,7 @@
 # Product Definition - Elada
 
 ## Initial Concept
-A system to manage and generate invoices based on a template PDF (YONIK KOSHER LIFESTYLE LTD).
+A system to manage and programmatically generate professional invoices based on the YONIK KOSHER LIFESTYLE LTD visual identity.
 
 ## Target Users
 - **Individual Freelancers:** Users who need a standardized, professional invoice template they can quickly reuse with updated details for each client or project.
@@ -14,7 +14,7 @@ A system to manage and generate invoices based on a template PDF (YONIK KOSHER L
 ## Key Features
 - **Dynamic Field Injection:** Directly modify the "Description", "Total", "Balance Due", and "Invoice Date" fields via a clean user interface.
 - **Smart Invoice Numbering:** Automatically track and increment the "INVOICE NO." while allowing for manual overrides when necessary.
-- **PDF Generation Engine:** Generate and save a new, high-quality PDF file upon modification.
+- **PDF Generation Engine:** A programmatic "PDF-from-Code" engine that draws high-quality, pixel-perfect invoices from scratch upon modification.
 - **Dashboard & History:** A centralized hub to view all previously generated invoices and manage ongoing drafts, including metadata like the specific date assigned to each invoice.
 - **Dynamic Export Naming:** Automatically generates descriptive filenames for exported PDFs using the `[InvoiceNumber]_[InvoiceDate].pdf` pattern, ensuring filesystem compatibility through automatic sanitization.
 - **Draft Management:** Full CRUD support for invoice drafts, allowing users to save progress and resume editing at any time.

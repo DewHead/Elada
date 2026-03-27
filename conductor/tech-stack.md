@@ -4,7 +4,7 @@
 - **Flutter:** The primary framework for building a high-performance, visually stunning, and mobile-friendly user interface across desktop, web, and mobile platforms from a single codebase.
 
 ## PDF Processing & Manipulation
-- **syncfusion_flutter_pdf:** A robust, professional-grade library used for precise modification of the invoice PDF template, including field injection and document generation.
+- **syncfusion_flutter_pdf:** A robust, professional-grade library used for programmatic "PDF-from-Code" generation, utilizing drawing commands to create pixel-perfect documents.
 - **syncfusion_flutter_pdfviewer:** Used to provide high-performance, in-memory PDF previews within the application.
 
 ## Data Persistence & Storage
