@@ -41,10 +41,10 @@ Assemble the components into a functional service and replace the legacy injecti
 - [x] Task: Verify that the Real-time Preview correctly renders the output from the new code-based generator. 3def11a (Final reliability fix: 987e084)
 - [x] Task: Conductor - User Manual Verification 'Generator Assembly & Integration' (Protocol in workflow.md) 987e084
 
-## Phase 4: Validation & Cleanup
+## Phase 4: Validation & Cleanup [checkpoint: 09eb8cd]
 Ensure pixel-perfection and remove legacy artifacts.
 
-- [x] Task: Perform a side-by-side visual audit of the generated PDF vs. the original template. 987e084
-- [x] Task: Verify that file naming and history saving still work as expected. 987e084
-- [x] Task: Remove the legacy `invoice_template.pdf` asset and related code. 393cb00 (Final cleanup: latest)
-- [~] Task: Conductor - User Manual Verification 'Final Validation & Cleanup' (Protocol in workflow.md)
+- [x] Task: Perform a side-by-side visual audit of the generated PDF vs. the original template. 09eb8cd
+- [x] Task: Verify that file naming and history saving still work as expected. 09eb8cd
+- [x] Task: Remove the legacy `invoice_template.pdf` asset and related code. 09eb8cd
+- [x] Task: Conductor - User Manual Verification 'Final Validation & Cleanup' (Protocol in workflow.md) 09eb8cd
