@@ -12,7 +12,7 @@ Establish the precise visual parameters and create the basic building blocks for
 - [x] Task: Implement programmatic drawing for the header and footer blue bars. 3823a48
     - [x] Write unit tests to verify bar positioning and color.
     - [x] Implement drawing logic using `PdfGraphics`.
-- [ ] Task: Conductor - User Manual Verification 'Research & Component Foundation' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Research & Component Foundation' (Protocol in workflow.md)
 
 ## Phase 2: Drawing Engine Components (TDD)
 Implement the core layout sections as isolated, testable components.
