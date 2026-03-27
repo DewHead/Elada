@@ -31,15 +31,15 @@ Implement the core layout sections as isolated, testable components.
     - [x] Implement `InvoiceTotals` drawing logic.
 - [x] Task: Conductor - User Manual Verification 'Drawing Engine Components' (Protocol in workflow.md) 3eefa27
 
-## Phase 3: Generator Assembly & Integration
+## Phase 3: Generator Assembly & Integration [checkpoint: 987e084]
 Assemble the components into a functional service and replace the legacy injection logic.
 
 - [x] Task: Create the `PdfCodeGenerator` service to orchestrate the drawing components. 4a7a8ed
     - [x] Write integration tests for the full PDF generation flow.
     - [x] Implement `PdfCodeGenerator`.
 - [x] Task: Swap the current template-based PDF service for the new `PdfCodeGenerator` in the application logic. 81f7fd0
-- [x] Task: Verify that the Real-time Preview correctly renders the output from the new code-based generator. 3def11a (Final reliability fix: 3def11a -> latest)
-- [~] Task: Conductor - User Manual Verification 'Generator Assembly & Integration' (Protocol in workflow.md)
+- [x] Task: Verify that the Real-time Preview correctly renders the output from the new code-based generator. 3def11a (Final reliability fix: 987e084)
+- [x] Task: Conductor - User Manual Verification 'Generator Assembly & Integration' (Protocol in workflow.md) 987e084
 
 ## Phase 4: Validation & Cleanup
 Ensure pixel-perfection and remove legacy artifacts.
