@@ -3,8 +3,8 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i6;
-import 'dart:typed_data' as _i5;
+import 'dart:async' as _i5;
+import 'dart:typed_data' as _i6;
 import 'dart:ui' as _i7;
 
 import 'package:elada/data/models/invoice.dart' as _i4;
@@ -128,15 +128,6 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       ) as bool);
 
   @override
-  void updateTemplateBytes(_i5.Uint8List? bytes) => super.noSuchMethod(
-        Invocation.method(
-          #updateTemplateBytes,
-          [bytes],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
   void updateDescription(String? value) => super.noSuchMethod(
         Invocation.method(
           #updateDescription,
@@ -218,14 +209,14 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       );
 
   @override
-  _i6.Future<void> saveDraft() => (super.noSuchMethod(
+  _i5.Future<void> saveDraft() => (super.noSuchMethod(
         Invocation.method(
           #saveDraft,
           [],
         ),
-        returnValue: _i6.Future<void>.value(),
-        returnValueForMissingStub: _i6.Future<void>.value(),
-      ) as _i6.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 
   @override
   void loadDraft(_i4.Invoice? draft) => super.noSuchMethod(
@@ -237,40 +228,38 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       );
 
   @override
-  _i6.Future<void> deleteDraft(int? index) => (super.noSuchMethod(
+  _i5.Future<void> deleteDraft(int? index) => (super.noSuchMethod(
         Invocation.method(
           #deleteDraft,
           [index],
         ),
-        returnValue: _i6.Future<void>.value(),
-        returnValueForMissingStub: _i6.Future<void>.value(),
-      ) as _i6.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 
   @override
-  _i6.Future<String> generateAndSaveInvoice(_i5.Uint8List? templateBytes) =>
-      (super.noSuchMethod(
+  _i5.Future<String> generateAndSaveInvoice() => (super.noSuchMethod(
         Invocation.method(
           #generateAndSaveInvoice,
-          [templateBytes],
+          [],
         ),
-        returnValue: _i6.Future<String>.value(_i3.dummyValue<String>(
+        returnValue: _i5.Future<String>.value(_i3.dummyValue<String>(
           this,
           Invocation.method(
             #generateAndSaveInvoice,
-            [templateBytes],
+            [],
           ),
         )),
-      ) as _i6.Future<String>);
+      ) as _i5.Future<String>);
 
   @override
-  _i6.Future<_i5.Uint8List> generateInvoice(_i5.Uint8List? templateBytes) =>
-      (super.noSuchMethod(
+  _i5.Future<_i6.Uint8List> generateInvoice() => (super.noSuchMethod(
         Invocation.method(
           #generateInvoice,
-          [templateBytes],
+          [],
         ),
-        returnValue: _i6.Future<_i5.Uint8List>.value(_i5.Uint8List(0)),
-      ) as _i6.Future<_i5.Uint8List>);
+        returnValue: _i5.Future<_i6.Uint8List>.value(_i6.Uint8List(0)),
+      ) as _i5.Future<_i6.Uint8List>);
 
   @override
   void addListener(_i7.VoidCallback? listener) => super.noSuchMethod(

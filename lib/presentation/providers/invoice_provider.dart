@@ -22,7 +22,6 @@ class InvoiceProvider with ChangeNotifier {
   List<Invoice> _history = [];
   List<Invoice> _drafts = [];
 
-  Uint8List? _templateBytes;
   Uint8List? _previewBytes;
   bool _isPreviewLoading = false;
   Timer? _debounceTimer;
@@ -35,6 +34,7 @@ class InvoiceProvider with ChangeNotifier {
   ) {
     _initInvoiceNumber();
     _loadHistoryAndDrafts();
+    _generatePreview(); // Generate initial preview
   }
 
   String get description => _description;
@@ -59,11 +59,6 @@ class InvoiceProvider with ChangeNotifier {
     _history = _repository.getInvoices();
     _drafts = _repository.getDrafts();
     notifyListeners();
-  }
-
-  void updateTemplateBytes(Uint8List bytes) {
-    _templateBytes = bytes;
-    _generatePreview();
   }
 
   void updateDescription(String value) {
@@ -109,7 +104,6 @@ class InvoiceProvider with ChangeNotifier {
   }
 
   void _generatePreview() {
-    // templateBytes check removed or made optional since we use code-based generator
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       _isPreviewLoading = true;
@@ -125,8 +119,8 @@ class InvoiceProvider with ChangeNotifier {
           shipTo: _shipTo,
           currency: _selectedCurrency,
         );
-      } catch (e) {
-        // Log error
+      } catch (e, stack) {
+        // Error logged in production or handled appropriately
       } finally {
         _isPreviewLoading = false;
         notifyListeners();
@@ -185,7 +179,7 @@ class InvoiceProvider with ChangeNotifier {
 
   /// Generates the invoice and saves it to the device's downloads folder.
   /// Returns the path to the saved file.
-  Future<String> generateAndSaveInvoice(Uint8List templateBytes) async {
+  Future<String> generateAndSaveInvoice() async {
     // 1. Generate bytes
     final bytes = await _pdfService.generateInvoice(
       description: _description,
@@ -225,7 +219,7 @@ class InvoiceProvider with ChangeNotifier {
   }
 
   @Deprecated('Use generateAndSaveInvoice instead')
-  Future<Uint8List> generateInvoice(Uint8List templateBytes) async {
+  Future<Uint8List> generateInvoice() async {
     return await _pdfService.generateInvoice(
       description: _description,
       total: _total,

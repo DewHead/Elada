@@ -34,19 +34,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
     // Listen for external updates (e.g., loading a draft)
     _provider.addListener(_onProviderUpdate);
-
-    // Load template for previews
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        final templateData = await DefaultAssetBundle.of(
-          context,
-        ).load('assets/templates/invoice_template.pdf');
-        final templateBytes = templateData.buffer.asUint8List();
-        _provider.updateTemplateBytes(templateBytes);
-      } catch (e) {
-        // Handle template loading error
-      }
-    });
   }
 
   void _onProviderUpdate() {
@@ -420,16 +407,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     }
 
     try {
-      // 1. Load template from assets
-      final templateData = await DefaultAssetBundle.of(
-        context,
-      ).load('assets/templates/invoice_template.pdf');
-      final templateBytes = templateData.buffer.asUint8List();
+      // 1. Generate and Save PDF
+      final savedPath = await provider.generateAndSaveInvoice();
 
-      // 2. Generate and Save PDF
-      final savedPath = await provider.generateAndSaveInvoice(templateBytes);
-
-      // 3. Success message
+      // 2. Success message
       if (!context.mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(

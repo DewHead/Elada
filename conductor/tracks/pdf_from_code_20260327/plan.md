@@ -39,7 +39,7 @@ Assemble the components into a functional service and replace the legacy injecti
     - [x] Implement `PdfCodeGenerator`.
 - [x] Task: Swap the current template-based PDF service for the new `PdfCodeGenerator` in the application logic. 81f7fd0
 - [x] Task: Verify that the Real-time Preview correctly renders the output from the new code-based generator. 81f7fd0
-- [ ] Task: Conductor - User Manual Verification 'Generator Assembly & Integration' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Generator Assembly & Integration' (Protocol in workflow.md)
 
 ## Phase 4: Validation & Cleanup
 Ensure pixel-perfection and remove legacy artifacts.

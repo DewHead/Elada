@@ -82,7 +82,7 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
 
       when(
-        mockProvider.generateAndSaveInvoice(any),
+        mockProvider.generateAndSaveInvoice(),
       ).thenAnswer((_) async => '/path/to/invoice.pdf');
 
       await tester.pumpWidget(createWidgetUnderTest());
@@ -91,7 +91,7 @@ void main() {
       await tester.tap(find.text('Generate PDF'));
       await tester.pumpAndSettle();
 
-      verify(mockProvider.generateAndSaveInvoice(any)).called(1);
+      verify(mockProvider.generateAndSaveInvoice()).called(1);
       expect(find.byType(SnackBar), findsOneWidget);
       expect(
         find.textContaining('Invoice saved to: /path/to/invoice.pdf'),
@@ -109,7 +109,7 @@ void main() {
         await tester.pump();
 
         expect(find.text('Please enter an Invoice Number'), findsOneWidget);
-        verifyNever(mockProvider.generateAndSaveInvoice(any));
+        verifyNever(mockProvider.generateAndSaveInvoice());
       },
     );
 

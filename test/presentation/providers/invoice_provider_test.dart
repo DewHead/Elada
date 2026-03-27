@@ -92,7 +92,7 @@ void main() {
       provider.updateDescription('Work');
       provider.updateTotal(500.0);
 
-      final result = await provider.generateAndSaveInvoice(templateBytes);
+      final result = await provider.generateAndSaveInvoice();
 
       expect(result, 'path/to/9418_26-03-2026.pdf');
       verify(mockRepository.saveInvoice(any)).called(1);

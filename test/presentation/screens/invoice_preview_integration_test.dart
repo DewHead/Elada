@@ -68,8 +68,7 @@ void main() {
       // Should find InvoicePreview widget
       expect(find.text('Enter details to see preview'), findsOneWidget);
 
-      // Add template and some details
-      final templateBytes = Uint8List(10);
+      // Add some details
       final previewBytes = Uint8List(20);
 
       when(
@@ -77,13 +76,14 @@ void main() {
           description: anyNamed('description'),
           total: anyNamed('total'),
           invoiceNumber: anyNamed('invoiceNumber'),
-          templateBytes: anyNamed('templateBytes'),
           date: anyNamed('date'),
+          billTo: anyNamed('billTo'),
+          shipTo: anyNamed('shipTo'),
           currency: anyNamed('currency'),
+          templateBytes: anyNamed('templateBytes'),
         ),
       ).thenAnswer((_) async => previewBytes);
 
-      provider.updateTemplateBytes(templateBytes);
       provider.updateDescription('Test');
 
       // Wait for debounce and any other internal timers

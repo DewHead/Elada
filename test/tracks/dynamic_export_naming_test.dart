@@ -110,7 +110,7 @@ void main() {
       provider.updateInvoiceNumber('123');
       provider.updateDate(DateTime(2026, 3, 26));
 
-      final result = await provider.generateAndSaveInvoice(templateBytes);
+      final result = await provider.generateAndSaveInvoice();
 
       expect(result, '/downloads/123_26-03-2026.pdf');
       verify(
