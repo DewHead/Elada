@@ -29,7 +29,7 @@ Implement the core layout sections as isolated, testable components.
 - [x] Task: Implement the `InvoiceTotals` component (Subtotal, VAT, Balance Due). 5b4fdcf
     - [x] Write unit tests for totals alignment and labeling.
     - [x] Implement `InvoiceTotals` drawing logic.
-- [ ] Task: Conductor - User Manual Verification 'Drawing Engine Components' (Protocol in workflow.md)
+- [~] Task: Conductor - User Manual Verification 'Drawing Engine Components' (Protocol in workflow.md)
 
 ## Phase 3: Generator Assembly & Integration
 Assemble the components into a functional service and replace the legacy injection logic.
