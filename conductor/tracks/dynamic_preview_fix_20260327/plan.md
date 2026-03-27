@@ -7,13 +7,13 @@ This plan addresses the static PDF preview issue and adds end-to-end (E2E) integ
 - [x] Task: Create initial E2E test structure in `integration_test/pdf_preview_e2e_test.dart`. 75b9ea9
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Environment Setup & Foundation' (Protocol in workflow.md) 2f7711c
 
-## Phase 2: InvoiceProvider Fix (TDD)
+## Phase 2: InvoiceProvider Fix (TDD) [checkpoint: 96fee4b]
 - [x] Task: Write failing unit tests in `test/presentation/providers/invoice_provider_preview_test.dart` to reproduce the static preview bug (verify that `notifyListeners` is called and `isPreviewLoading` is set correctly). 078a9b1
 - [x] Task: Implement fix in `lib/presentation/providers/invoice_provider.dart`: b418545
     - Move `_isPreviewLoading = true` and `notifyListeners()` outside the `Timer`.
     - Ensure all field update methods trigger `_generatePreview`.
 - [x] Task: Verify unit tests pass and coverage is >80% for `InvoiceProvider`. [86.6%]
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: InvoiceProvider Fix' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: InvoiceProvider Fix' (Protocol in workflow.md) 96fee4b
 
 ## Phase 3: UI & Widget Integration (TDD)
 - [ ] Task: Write failing widget tests in `test/presentation/widgets/invoice_preview_test.dart` to verify that the loading spinner appears immediately and the PDF viewer updates when `previewBytes` changes.
