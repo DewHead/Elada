@@ -26,7 +26,7 @@ class PdfService {
         shipTo: shipTo,
         currency: currency,
       );
-    } catch (e, stack) {
+    } catch (e) {
       rethrow;
     }
   }

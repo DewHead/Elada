@@ -1,10 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:mockito/annotations.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:elada/domain/services/pdf_components/invoice_totals.dart';
 import 'package:elada/domain/services/invoice_theme.dart';
-import 'dart:ui';
 
 import 'decoration_component_test.mocks.dart';
 
@@ -30,29 +27,35 @@ void main() {
       );
 
       // Verify labels are drawn
-      verify(mockGraphics.drawString(
-        argThat(contains('Subtotal')),
-        any,
-        brush: anyNamed('brush'),
-        bounds: anyNamed('bounds'),
-        format: anyNamed('format'),
-      )).called(1);
+      verify(
+        mockGraphics.drawString(
+          argThat(contains('Subtotal')),
+          any,
+          brush: anyNamed('brush'),
+          bounds: anyNamed('bounds'),
+          format: anyNamed('format'),
+        ),
+      ).called(1);
 
-      verify(mockGraphics.drawString(
-        argThat(contains('VAT')),
-        any,
-        brush: anyNamed('brush'),
-        bounds: anyNamed('bounds'),
-        format: anyNamed('format'),
-      )).called(1);
+      verify(
+        mockGraphics.drawString(
+          argThat(contains('VAT')),
+          any,
+          brush: anyNamed('brush'),
+          bounds: anyNamed('bounds'),
+          format: anyNamed('format'),
+        ),
+      ).called(1);
 
-      verify(mockGraphics.drawString(
-        argThat(contains('Balance Due')),
-        any,
-        brush: anyNamed('brush'),
-        bounds: anyNamed('bounds'),
-        format: anyNamed('format'),
-      )).called(1);
+      verify(
+        mockGraphics.drawString(
+          argThat(contains('Balance Due')),
+          any,
+          brush: anyNamed('brush'),
+          bounds: anyNamed('bounds'),
+          format: anyNamed('format'),
+        ),
+      ).called(1);
     });
   });
 }

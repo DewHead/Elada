@@ -120,7 +120,7 @@ class InvoiceProvider with ChangeNotifier {
           currency: _selectedCurrency,
         );
         _previewBytes = bytes;
-      } catch (e, stack) {
+      } catch (e) {
         // Error handling
       } finally {
         _isPreviewLoading = false;

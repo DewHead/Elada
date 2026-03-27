@@ -10,7 +10,7 @@ void main() {
       expect(theme.brandBlue.r, equals(0));
       expect(theme.brandBlue.g, equals(86));
       expect(theme.brandBlue.b, equals(150));
-      
+
       // Accent Blue: 0xFFE1F5FE -> (225, 245, 254)
       expect(theme.accentBlue.r, equals(225));
       expect(theme.accentBlue.g, equals(245));

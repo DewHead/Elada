@@ -4,7 +4,6 @@ import 'package:mockito/annotations.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:elada/domain/services/pdf_components/decoration_component.dart';
 import 'package:elada/domain/services/invoice_theme.dart';
-import 'dart:ui';
 
 import 'decoration_component_test.mocks.dart';
 
@@ -21,22 +20,32 @@ void main() {
   });
 
   group('DecorationComponent', () {
-    test('drawHeaderBar should call drawRectangle with correct bounds and color', () {
-      component.drawHeaderBar(mockGraphics);
+    test(
+      'drawHeaderBar should call drawRectangle with correct bounds and color',
+      () {
+        component.drawHeaderBar(mockGraphics);
 
-      verify(mockGraphics.drawRectangle(
-        brush: anyNamed('brush'),
-        bounds: anyNamed('bounds'),
-      )).called(1);
-    });
+        verify(
+          mockGraphics.drawRectangle(
+            brush: anyNamed('brush'),
+            bounds: anyNamed('bounds'),
+          ),
+        ).called(1);
+      },
+    );
 
-    test('drawFooterBar should call drawRectangle with correct bounds and color', () {
-      component.drawFooterBar(mockGraphics);
+    test(
+      'drawFooterBar should call drawRectangle with correct bounds and color',
+      () {
+        component.drawFooterBar(mockGraphics);
 
-      verify(mockGraphics.drawRectangle(
-        brush: anyNamed('brush'),
-        bounds: anyNamed('bounds'),
-      )).called(1);
-    });
+        verify(
+          mockGraphics.drawRectangle(
+            brush: anyNamed('brush'),
+            bounds: anyNamed('bounds'),
+          ),
+        ).called(1);
+      },
+    );
   });
 }

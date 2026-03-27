@@ -61,7 +61,7 @@ void main() {
 
       // Initially, previewBytes should be null because of debounce (except for the initial call in constructor which might have fired)
       // Actually, since I call it in constructor, it might already be loading.
-      
+
       // Wait for debounce (500ms) + some buffer
       await Future.delayed(const Duration(milliseconds: 1200));
 

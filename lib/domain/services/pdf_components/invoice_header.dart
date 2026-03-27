@@ -58,13 +58,33 @@ class InvoiceHeader {
     final formattedDate = DateFormat('dd.MM.yyyy').format(date);
 
     // Date Label & Value
-    graphics.drawString('Date:', labelFont, brush: brush, bounds: const Rect.fromLTWH(380, 139, 50, 20));
-    graphics.drawString(formattedDate, valueFont, brush: brush, bounds: const Rect.fromLTWH(427, 139, 100, 20));
+    graphics.drawString(
+      'Date:',
+      labelFont,
+      brush: brush,
+      bounds: const Rect.fromLTWH(380, 139, 50, 20),
+    );
+    graphics.drawString(
+      formattedDate,
+      valueFont,
+      brush: brush,
+      bounds: const Rect.fromLTWH(427, 139, 100, 20),
+    );
 
     // Invoice No Label & Value
-    graphics.drawString('Invoice No:', labelFont, brush: brush, bounds: const Rect.fromLTWH(380, 210, 60, 20));
-    graphics.drawString(invoiceNumber, valueFont, brush: brush, bounds: const Rect.fromLTWH(440, 210, 100, 20));
-    
+    graphics.drawString(
+      'Invoice No:',
+      labelFont,
+      brush: brush,
+      bounds: const Rect.fromLTWH(380, 210, 60, 20),
+    );
+    graphics.drawString(
+      invoiceNumber,
+      valueFont,
+      brush: brush,
+      bounds: const Rect.fromLTWH(440, 210, 100, 20),
+    );
+
     // Horizontal Separator after header
     graphics.drawLine(
       PdfPen(theme.brandBlue, width: 2),

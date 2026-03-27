@@ -1,10 +1,7 @@
-import 'dart:typed_data';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:elada/domain/services/pdf_service.dart';
 import 'package:elada/domain/services/invoice_theme.dart';
 import 'package:elada/domain/services/pdf_code_generator.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 void main() {
   group('PdfService', () {

@@ -8,7 +8,7 @@ void main() {
     test('generate should return valid PDF bytes', () async {
       final theme = InvoiceTheme();
       final generator = PdfCodeGenerator(theme);
-      
+
       final Uint8List pdfBytes = await generator.generate(
         description: 'Integration Test Service',
         total: 250.0,
@@ -19,7 +19,10 @@ void main() {
       );
 
       expect(pdfBytes, isNotEmpty);
-      expect(pdfBytes.length, greaterThan(1000)); // Basic sanity check for PDF size
+      expect(
+        pdfBytes.length,
+        greaterThan(1000),
+      ); // Basic sanity check for PDF size
     });
   });
 }

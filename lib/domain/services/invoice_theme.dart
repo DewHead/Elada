@@ -11,9 +11,17 @@ class InvoiceTheme {
 
   // Fonts
   final PdfFont defaultFont = PdfStandardFont(PdfFontFamily.helvetica, 9);
-  final PdfFont boldFont = PdfStandardFont(PdfFontFamily.helvetica, 9, style: PdfFontStyle.bold);
+  final PdfFont boldFont = PdfStandardFont(
+    PdfFontFamily.helvetica,
+    9,
+    style: PdfFontStyle.bold,
+  );
   final PdfFont smallFont = PdfStandardFont(PdfFontFamily.helvetica, 8);
-  final PdfFont titleFont = PdfStandardFont(PdfFontFamily.helvetica, 18, style: PdfFontStyle.bold);
+  final PdfFont titleFont = PdfStandardFont(
+    PdfFontFamily.helvetica,
+    18,
+    style: PdfFontStyle.bold,
+  );
 
   // Font Sizes
   final double defaultFontSize = 9.0;

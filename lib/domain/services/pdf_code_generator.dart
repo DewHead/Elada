@@ -18,11 +18,11 @@ class PdfCodeGenerator {
   final InvoiceTotals _totals;
 
   PdfCodeGenerator(this.theme)
-      : _decoration = DecorationComponent(theme),
-        _header = InvoiceHeader(theme),
-        _customerInfo = InvoiceCustomerInfo(theme),
-        _itemsTable = InvoiceItemsTable(theme),
-        _totals = InvoiceTotals(theme);
+    : _decoration = DecorationComponent(theme),
+      _header = InvoiceHeader(theme),
+      _customerInfo = InvoiceCustomerInfo(theme),
+      _itemsTable = InvoiceItemsTable(theme),
+      _totals = InvoiceTotals(theme);
 
   /// Generates the complete PDF invoice as bytes.
   Future<Uint8List> generate({
@@ -36,10 +36,11 @@ class PdfCodeGenerator {
   }) async {
     // 1. Create a new PDF document
     final PdfDocument document = PdfDocument();
-    
+
     // Set Page Settings
     document.pageSettings.size = PdfPageSize.a4;
-    document.pageSettings.margins.all = 0; // Component handle their own internal margins if needed
+    document.pageSettings.margins.all =
+        0; // Component handle their own internal margins if needed
 
     // 2. Add a page
     final PdfPage page = document.pages.add();
@@ -56,11 +57,7 @@ class PdfCodeGenerator {
         date: date,
       );
 
-      _customerInfo.draw(
-        graphics: graphics,
-        billTo: billTo,
-        shipTo: shipTo,
-      );
+      _customerInfo.draw(graphics: graphics, billTo: billTo, shipTo: shipTo);
 
       _itemsTable.draw(
         graphics: graphics,
@@ -76,7 +73,7 @@ class PdfCodeGenerator {
         total: total,
         currency: currency,
       );
-    } catch (e, stack) {
+    } catch (e) {
       rethrow;
     }
 

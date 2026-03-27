@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Fix the static PDF preview issue and add E2E testing.**
+- [~] **Track: Fix the static PDF preview issue and add E2E testing.**
 *Link: [./tracks/dynamic_preview_fix_20260327/](./tracks/dynamic_preview_fix_20260327/)*

@@ -41,13 +41,23 @@ class InvoiceCustomerInfo {
       'Ship To',
       headerFont,
       brush: brush,
-      bounds: Rect.fromLTWH(theme.margin + columnWidth, yOffset, columnWidth, 20),
+      bounds: Rect.fromLTWH(
+        theme.margin + columnWidth,
+        yOffset,
+        columnWidth,
+        20,
+      ),
     );
     graphics.drawString(
       shipTo,
       dataFont,
       brush: brush,
-      bounds: Rect.fromLTWH(theme.margin + columnWidth, yOffset + 20, columnWidth - 20, 100),
+      bounds: Rect.fromLTWH(
+        theme.margin + columnWidth,
+        yOffset + 20,
+        columnWidth - 20,
+        100,
+      ),
     );
   }
 }

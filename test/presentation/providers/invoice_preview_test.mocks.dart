@@ -36,94 +36,76 @@ class MockInvoiceRepository extends _i1.Mock implements _i2.InvoiceRepository {
   }
 
   @override
-  _i3.Future<void> saveInvoice(_i4.Invoice? invoice) => (super.noSuchMethod(
-        Invocation.method(
-          #saveInvoice,
-          [invoice],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
-
-  @override
-  List<_i4.Invoice> getInvoices() => (super.noSuchMethod(
-        Invocation.method(
-          #getInvoices,
-          [],
-        ),
-        returnValue: <_i4.Invoice>[],
-      ) as List<_i4.Invoice>);
-
-  @override
-  _i3.Future<void> saveDraft(_i4.Invoice? draft) => (super.noSuchMethod(
-        Invocation.method(
-          #saveDraft,
-          [draft],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
-
-  @override
-  List<_i4.Invoice> getDrafts() => (super.noSuchMethod(
-        Invocation.method(
-          #getDrafts,
-          [],
-        ),
-        returnValue: <_i4.Invoice>[],
-      ) as List<_i4.Invoice>);
-
-  @override
-  _i3.Future<void> deleteDraft(int? index) => (super.noSuchMethod(
-        Invocation.method(
-          #deleteDraft,
-          [index],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
-
-  @override
-  _i3.Future<void> updateDraft(
-    int? index,
-    _i4.Invoice? draft,
-  ) =>
+  _i3.Future<void> saveInvoice(_i4.Invoice? invoice) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #updateDraft,
-          [
-            index,
-            draft,
-          ],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+            Invocation.method(#saveInvoice, [invoice]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 
   @override
-  String getLastInvoiceNumber() => (super.noSuchMethod(
-        Invocation.method(
-          #getLastInvoiceNumber,
-          [],
-        ),
-        returnValue: _i5.dummyValue<String>(
-          this,
-          Invocation.method(
-            #getLastInvoiceNumber,
-            [],
-          ),
-        ),
-      ) as String);
+  List<_i4.Invoice> getInvoices() =>
+      (super.noSuchMethod(
+            Invocation.method(#getInvoices, []),
+            returnValue: <_i4.Invoice>[],
+          )
+          as List<_i4.Invoice>);
 
   @override
-  _i3.Future<void> saveLastInvoiceNumber(String? number) => (super.noSuchMethod(
-        Invocation.method(
-          #saveLastInvoiceNumber,
-          [number],
-        ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+  _i3.Future<void> saveDraft(_i4.Invoice? draft) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveDraft, [draft]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  List<_i4.Invoice> getDrafts() =>
+      (super.noSuchMethod(
+            Invocation.method(#getDrafts, []),
+            returnValue: <_i4.Invoice>[],
+          )
+          as List<_i4.Invoice>);
+
+  @override
+  _i3.Future<void> deleteDraft(int? index) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteDraft, [index]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> updateDraft(int? index, _i4.Invoice? draft) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateDraft, [index, draft]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
+
+  @override
+  String getLastInvoiceNumber() =>
+      (super.noSuchMethod(
+            Invocation.method(#getLastInvoiceNumber, []),
+            returnValue: _i5.dummyValue<String>(
+              this,
+              Invocation.method(#getLastInvoiceNumber, []),
+            ),
+          )
+          as String);
+
+  @override
+  _i3.Future<void> saveLastInvoiceNumber(String? number) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveLastInvoiceNumber, [number]),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 }
 
 /// A class which mocks [PdfService].
@@ -145,21 +127,18 @@ class MockPdfService extends _i1.Mock implements _i6.PdfService {
     String? currency = r'€',
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #generateInvoice,
-          [],
-          {
-            #description: description,
-            #total: total,
-            #invoiceNumber: invoiceNumber,
-            #date: date,
-            #billTo: billTo,
-            #shipTo: shipTo,
-            #currency: currency,
-          },
-        ),
-        returnValue: _i3.Future<_i7.Uint8List>.value(_i7.Uint8List(0)),
-      ) as _i3.Future<_i7.Uint8List>);
+            Invocation.method(#generateInvoice, [], {
+              #description: description,
+              #total: total,
+              #invoiceNumber: invoiceNumber,
+              #date: date,
+              #billTo: billTo,
+              #shipTo: shipTo,
+              #currency: currency,
+            }),
+            returnValue: _i3.Future<_i7.Uint8List>.value(_i7.Uint8List(0)),
+          )
+          as _i3.Future<_i7.Uint8List>);
 }
 
 /// A class which mocks [FilenameService].
@@ -171,19 +150,15 @@ class MockFilenameService extends _i1.Mock implements _i8.FilenameService {
   }
 
   @override
-  String generateFileName(_i4.Invoice? invoice) => (super.noSuchMethod(
-        Invocation.method(
-          #generateFileName,
-          [invoice],
-        ),
-        returnValue: _i5.dummyValue<String>(
-          this,
-          Invocation.method(
-            #generateFileName,
-            [invoice],
-          ),
-        ),
-      ) as String);
+  String generateFileName(_i4.Invoice? invoice) =>
+      (super.noSuchMethod(
+            Invocation.method(#generateFileName, [invoice]),
+            returnValue: _i5.dummyValue<String>(
+              this,
+              Invocation.method(#generateFileName, [invoice]),
+            ),
+          )
+          as String);
 }
 
 /// A class which mocks [FileExportService].
@@ -201,41 +176,34 @@ class MockFileExportService extends _i1.Mock implements _i9.FileExportService {
     String? directoryPath,
   }) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #saveFile,
-          [],
-          {
-            #bytes: bytes,
-            #fileName: fileName,
-            #directoryPath: directoryPath,
-          },
-        ),
-        returnValue: _i3.Future<String>.value(_i5.dummyValue<String>(
-          this,
-          Invocation.method(
-            #saveFile,
-            [],
-            {
+            Invocation.method(#saveFile, [], {
               #bytes: bytes,
               #fileName: fileName,
               #directoryPath: directoryPath,
-            },
-          ),
-        )),
-      ) as _i3.Future<String>);
+            }),
+            returnValue: _i3.Future<String>.value(
+              _i5.dummyValue<String>(
+                this,
+                Invocation.method(#saveFile, [], {
+                  #bytes: bytes,
+                  #fileName: fileName,
+                  #directoryPath: directoryPath,
+                }),
+              ),
+            ),
+          )
+          as _i3.Future<String>);
 
   @override
-  _i3.Future<String> getDownloadsDirectoryPath() => (super.noSuchMethod(
-        Invocation.method(
-          #getDownloadsDirectoryPath,
-          [],
-        ),
-        returnValue: _i3.Future<String>.value(_i5.dummyValue<String>(
-          this,
-          Invocation.method(
-            #getDownloadsDirectoryPath,
-            [],
-          ),
-        )),
-      ) as _i3.Future<String>);
+  _i3.Future<String> getDownloadsDirectoryPath() =>
+      (super.noSuchMethod(
+            Invocation.method(#getDownloadsDirectoryPath, []),
+            returnValue: _i3.Future<String>.value(
+              _i5.dummyValue<String>(
+                this,
+                Invocation.method(#getDownloadsDirectoryPath, []),
+              ),
+            ),
+          )
+          as _i3.Future<String>);
 }

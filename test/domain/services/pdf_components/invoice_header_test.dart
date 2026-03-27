@@ -1,10 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:mockito/annotations.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:elada/domain/services/pdf_components/invoice_header.dart';
 import 'package:elada/domain/services/invoice_theme.dart';
-import 'dart:ui';
 
 import 'decoration_component_test.mocks.dart';
 
@@ -33,14 +30,16 @@ void main() {
       // 3. "INVOICE"
       // 4. Date
       // 5. Invoice Number
-      
-      verify(mockGraphics.drawString(
-        any,
-        any,
-        brush: anyNamed('brush'),
-        bounds: anyNamed('bounds'),
-        format: anyNamed('format'),
-      )).called(greaterThanOrEqualTo(5));
+
+      verify(
+        mockGraphics.drawString(
+          any,
+          any,
+          brush: anyNamed('brush'),
+          bounds: anyNamed('bounds'),
+          format: anyNamed('format'),
+        ),
+      ).called(greaterThanOrEqualTo(5));
     });
   });
 }

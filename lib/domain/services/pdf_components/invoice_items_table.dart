@@ -25,7 +25,7 @@ class InvoiceItemsTable {
 
     const double headerHeight = 25;
     const double rowHeight = 25;
-    
+
     final List<double> columnWidths = [
       theme.contentWidth * 0.5, // Description
       theme.contentWidth * 0.1, // Qty
@@ -36,7 +36,12 @@ class InvoiceItemsTable {
     // 1. Draw Table Header
     graphics.drawRectangle(
       brush: headerBrush,
-      bounds: Rect.fromLTWH(theme.margin, yOffset, theme.contentWidth, headerHeight),
+      bounds: Rect.fromLTWH(
+        theme.margin,
+        yOffset,
+        theme.contentWidth,
+        headerHeight,
+      ),
     );
 
     final List<String> headers = ['Description', 'Qty', 'Unit Price', 'Total'];
@@ -46,8 +51,15 @@ class InvoiceItemsTable {
         headers[i],
         headerFont,
         brush: headerTextBrush,
-        bounds: Rect.fromLTWH(currentX + 5, yOffset + 5, columnWidths[i] - 10, headerHeight - 10),
-        format: i > 0 ? PdfStringFormat(alignment: PdfTextAlignment.center) : null,
+        bounds: Rect.fromLTWH(
+          currentX + 5,
+          yOffset + 5,
+          columnWidths[i] - 10,
+          headerHeight - 10,
+        ),
+        format: i > 0
+            ? PdfStringFormat(alignment: PdfTextAlignment.center)
+            : null,
       );
       currentX += columnWidths[i];
     }
@@ -65,7 +77,12 @@ class InvoiceItemsTable {
       description,
       dataFont,
       brush: brush,
-      bounds: Rect.fromLTWH(currentX + 5, rowY + 5, columnWidths[0] - 10, rowHeight - 10),
+      bounds: Rect.fromLTWH(
+        currentX + 5,
+        rowY + 5,
+        columnWidths[0] - 10,
+        rowHeight - 10,
+      ),
     );
     currentX += columnWidths[0];
 
@@ -74,7 +91,12 @@ class InvoiceItemsTable {
       '1',
       dataFont,
       brush: brush,
-      bounds: Rect.fromLTWH(currentX + 5, rowY + 5, columnWidths[1] - 10, rowHeight - 10),
+      bounds: Rect.fromLTWH(
+        currentX + 5,
+        rowY + 5,
+        columnWidths[1] - 10,
+        rowHeight - 10,
+      ),
       format: PdfStringFormat(alignment: PdfTextAlignment.center),
     );
     currentX += columnWidths[1];
@@ -85,7 +107,12 @@ class InvoiceItemsTable {
       '$currencyText ${total.toStringAsFixed(2)}',
       dataFont,
       brush: brush,
-      bounds: Rect.fromLTWH(currentX + 5, rowY + 5, columnWidths[2] - 10, rowHeight - 10),
+      bounds: Rect.fromLTWH(
+        currentX + 5,
+        rowY + 5,
+        columnWidths[2] - 10,
+        rowHeight - 10,
+      ),
       format: PdfStringFormat(alignment: PdfTextAlignment.center),
     );
     currentX += columnWidths[2];
@@ -95,19 +122,36 @@ class InvoiceItemsTable {
       '$currencyText ${total.toStringAsFixed(2)}',
       dataFont,
       brush: brush,
-      bounds: Rect.fromLTWH(currentX + 5, rowY + 5, columnWidths[3] - 10, rowHeight - 10),
+      bounds: Rect.fromLTWH(
+        currentX + 5,
+        rowY + 5,
+        columnWidths[3] - 10,
+        rowHeight - 10,
+      ),
       format: PdfStringFormat(alignment: PdfTextAlignment.center),
     );
 
     // 3. Draw Table Grid Lines (Vertical)
     currentX = theme.margin;
     final PdfPen gridPen = PdfPen(theme.grey, width: 0.5);
-    graphics.drawLine(gridPen, Offset(currentX, yOffset), Offset(currentX, rowY + rowHeight));
+    graphics.drawLine(
+      gridPen,
+      Offset(currentX, yOffset),
+      Offset(currentX, rowY + rowHeight),
+    );
     for (var width in columnWidths) {
       currentX += width;
-      graphics.drawLine(gridPen, Offset(currentX, yOffset), Offset(currentX, rowY + rowHeight));
+      graphics.drawLine(
+        gridPen,
+        Offset(currentX, yOffset),
+        Offset(currentX, rowY + rowHeight),
+      );
     }
     // Horizontal bottom line
-    graphics.drawLine(gridPen, Offset(theme.margin, rowY + rowHeight), Offset(theme.pageWidth - theme.margin, rowY + rowHeight));
+    graphics.drawLine(
+      gridPen,
+      Offset(theme.margin, rowY + rowHeight),
+      Offset(theme.pageWidth - theme.margin, rowY + rowHeight),
+    );
   }
 }

@@ -11,7 +11,6 @@ class InvoicePreview extends StatelessWidget {
     final provider = context.watch<InvoiceProvider>();
     final previewBytes = provider.previewBytes;
 
-
     if (provider.isPreviewLoading && previewBytes == null) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -55,12 +54,13 @@ class InvoicePreview extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
-          if (previewBytes != null)
-            SfPdfViewer.memory(
-              previewBytes,
-              key: ValueKey('pdf_viewer_${previewBytes.length}_${previewBytes.hashCode}'),
-              enableDoubleTapZooming: true,
+          SfPdfViewer.memory(
+            previewBytes,
+            key: ValueKey(
+              'pdf_viewer_${previewBytes.length}_${previewBytes.hashCode}',
             ),
+            enableDoubleTapZooming: true,
+          ),
           if (provider.isPreviewLoading)
             Positioned(
               top: 16,

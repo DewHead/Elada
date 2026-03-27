@@ -55,7 +55,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       }
       final currentTotal = double.tryParse(_totalController.text) ?? 0.0;
       if (currentTotal != _provider.total) {
-        _totalController.text = _provider.total > 0 ? _provider.total.toString() : '';
+        _totalController.text = _provider.total > 0
+            ? _provider.total.toString()
+            : '';
       }
       _updateDateController();
     });
@@ -241,16 +243,14 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         _buildInputField(
           controller: _billToController,
           label: 'Bill To',
-          onChanged: (val) =>
-              context.read<InvoiceProvider>().updateBillTo(val),
+          onChanged: (val) => context.read<InvoiceProvider>().updateBillTo(val),
           maxLines: 3,
         ),
         const SizedBox(height: 16),
         _buildInputField(
           controller: _shipToController,
           label: 'Ship To',
-          onChanged: (val) =>
-              context.read<InvoiceProvider>().updateShipTo(val),
+          onChanged: (val) => context.read<InvoiceProvider>().updateShipTo(val),
           maxLines: 3,
         ),
         const SizedBox(height: 16),

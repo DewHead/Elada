@@ -10,7 +10,12 @@ import 'dart:typed_data';
 
 import 'invoice_provider_preview_test.mocks.dart';
 
-@GenerateMocks([InvoiceRepository, PdfService, FilenameService, FileExportService])
+@GenerateMocks([
+  InvoiceRepository,
+  PdfService,
+  FilenameService,
+  FileExportService,
+])
 void main() {
   late InvoiceProvider provider;
   late MockInvoiceRepository mockRepository;
@@ -38,30 +43,34 @@ void main() {
 
   test('should generate preview when data changes', () async {
     final pdfBytes = Uint8List(100);
-    when(mockPdfService.generateInvoice(
-      description: anyNamed('description'),
-      total: anyNamed('total'),
-      invoiceNumber: anyNamed('invoiceNumber'),
-      date: anyNamed('date'),
-      billTo: anyNamed('billTo'),
-      shipTo: anyNamed('shipTo'),
-      currency: anyNamed('currency'),
-    )).thenAnswer((_) async => pdfBytes);
+    when(
+      mockPdfService.generateInvoice(
+        description: anyNamed('description'),
+        total: anyNamed('total'),
+        invoiceNumber: anyNamed('invoiceNumber'),
+        date: anyNamed('date'),
+        billTo: anyNamed('billTo'),
+        shipTo: anyNamed('shipTo'),
+        currency: anyNamed('currency'),
+      ),
+    ).thenAnswer((_) async => pdfBytes);
 
     provider.updateDescription('Test');
-    
+
     // Wait for debounce timer (500ms)
     await Future.delayed(const Duration(milliseconds: 600));
 
     expect(provider.previewBytes, equals(pdfBytes));
-    verify(mockPdfService.generateInvoice(
-      description: 'Test',
-      total: 0.0,
-      invoiceNumber: '9418',
-      date: anyNamed('date'),
-      billTo: '',
-      shipTo: '',
-      currency: '€',
-    )).called(1);
+    verify(
+      mockPdfService.generateInvoice(
+        description: 'Test',
+        total: 0.0,
+        invoiceNumber: '9418',
+        date: anyNamed('date'),
+        billTo: '',
+        shipTo: '',
+        currency: '€',
+      ),
+    ).called(1);
   });
 }

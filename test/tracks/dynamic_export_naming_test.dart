@@ -10,8 +10,6 @@ import 'package:elada/domain/services/file_export_service.dart';
 import 'package:elada/data/models/invoice.dart';
 import 'package:elada/domain/services/invoice_theme.dart';
 import 'package:elada/domain/services/pdf_code_generator.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
-import 'package:flutter/material.dart';
 
 @GenerateMocks([
   InvoiceRepository,
