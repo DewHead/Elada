@@ -3,7 +3,7 @@
 This plan addresses the static PDF preview issue and adds end-to-end (E2E) integration testing.
 
 ## Phase 1: Environment Setup & Foundation
-- [ ] Task: Add `integration_test` to `dev_dependencies` in `pubspec.yaml`.
+- [x] Task: Add `integration_test` to `dev_dependencies` in `pubspec.yaml`. 75fd39a
 - [ ] Task: Create initial E2E test structure in `integration_test/pdf_preview_e2e_test.dart`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Environment Setup & Foundation' (Protocol in workflow.md)
 
