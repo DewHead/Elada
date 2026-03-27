@@ -23,9 +23,9 @@ Implement the core layout sections as isolated, testable components.
 - [x] Task: Implement the `InvoiceCustomerInfo` component (Bill To / Ship To headers and data). 70391a4
     - [x] Write unit tests for customer info section layout.
     - [x] Implement `InvoiceCustomerInfo` drawing logic.
-- [~] Task: Implement the `InvoiceItemsTable` component (Fixed rows, headers: Description, Qty, Price, Total).
-    - [ ] Write unit tests for table grid drawing and text overflow handling.
-    - [ ] Implement `InvoiceItemsTable` drawing logic.
+- [x] Task: Implement the `InvoiceItemsTable` component (Fixed rows, headers: Description, Qty, Price, Total). 15b927a
+    - [x] Write unit tests for table grid drawing and text overflow handling.
+    - [x] Implement `InvoiceItemsTable` drawing logic.
 - [ ] Task: Implement the `InvoiceTotals` component (Subtotal, VAT, Balance Due).
     - [ ] Write unit tests for totals alignment and labeling.
     - [ ] Implement `InvoiceTotals` drawing logic.
