@@ -37,7 +37,7 @@ Assemble the components into a functional service and replace the legacy injecti
 - [x] Task: Create the `PdfCodeGenerator` service to orchestrate the drawing components. 4a7a8ed
     - [x] Write integration tests for the full PDF generation flow.
     - [x] Implement `PdfCodeGenerator`.
-- [ ] Task: Swap the current template-based PDF service for the new `PdfCodeGenerator` in the application logic.
+- [~] Task: Swap the current template-based PDF service for the new `PdfCodeGenerator` in the application logic.
 - [ ] Task: Verify that the Real-time Preview correctly renders the output from the new code-based generator.
 - [ ] Task: Conductor - User Manual Verification 'Generator Assembly & Integration' (Protocol in workflow.md)
 

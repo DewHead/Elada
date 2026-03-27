@@ -22,6 +22,12 @@ class Invoice extends HiveObject {
   @HiveField(5, defaultValue: false)
   final bool isDraft;
 
+  @HiveField(6, defaultValue: '')
+  final String billTo;
+
+  @HiveField(7, defaultValue: '')
+  final String shipTo;
+
   Invoice({
     required this.invoiceNumber,
     required this.description,
@@ -29,6 +35,8 @@ class Invoice extends HiveObject {
     DateTime? date,
     this.currency = '€',
     this.isDraft = false,
+    this.billTo = '',
+    this.shipTo = '',
   }) : date = date ?? DateTime.now();
 
   // Helper getter to ensure non-null date in app logic
@@ -42,17 +50,21 @@ class Invoice extends HiveObject {
       'date': effectiveDate.toIso8601String(),
       'currency': currency,
       'is_draft': isDraft,
+      'bill_to': billTo,
+      'ship_to': shipTo,
     };
   }
 
   factory Invoice.fromJson(Map<String, dynamic> json) {
     return Invoice(
-      invoiceNumber: json['invoice_number'],
-      description: json['description'],
-      total: json['total'].toDouble(),
+      invoiceNumber: json['invoice_number'] ?? '',
+      description: json['description'] ?? '',
+      total: (json['total'] ?? 0).toDouble(),
       date: DateTime.tryParse(json['date'] ?? ''),
       currency: json['currency'] ?? '€',
       isDraft: json['is_draft'] ?? false,
+      billTo: json['bill_to'] ?? '',
+      shipTo: json['ship_to'] ?? '',
     );
   }
 }

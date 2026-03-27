@@ -19,6 +19,8 @@ void main() {
     when(mockProvider.date).thenReturn(DateTime(2026, 3, 26));
     when(mockProvider.description).thenReturn('');
     when(mockProvider.total).thenReturn(0.0);
+    when(mockProvider.billTo).thenReturn('');
+    when(mockProvider.shipTo).thenReturn('');
     when(mockProvider.selectedCurrency).thenReturn('€');
     when(mockProvider.history).thenReturn([]);
     when(mockProvider.drafts).thenReturn([]);

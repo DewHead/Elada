@@ -17,6 +17,8 @@ class InvoiceProvider with ChangeNotifier {
   String _invoiceNumber = '';
   DateTime _date = DateTime.now();
   String _selectedCurrency = '€';
+  String _billTo = '';
+  String _shipTo = '';
   List<Invoice> _history = [];
   List<Invoice> _drafts = [];
 
@@ -40,6 +42,8 @@ class InvoiceProvider with ChangeNotifier {
   String get invoiceNumber => _invoiceNumber;
   DateTime get date => _date;
   String get selectedCurrency => _selectedCurrency;
+  String get billTo => _billTo;
+  String get shipTo => _shipTo;
   List<Invoice> get history => _history;
   List<Invoice> get drafts => _drafts;
 
@@ -92,9 +96,20 @@ class InvoiceProvider with ChangeNotifier {
     _generatePreview();
   }
 
-  void _generatePreview() {
-    if (_templateBytes == null) return;
+  void updateBillTo(String value) {
+    _billTo = value;
+    notifyListeners();
+    _generatePreview();
+  }
 
+  void updateShipTo(String value) {
+    _shipTo = value;
+    notifyListeners();
+    _generatePreview();
+  }
+
+  void _generatePreview() {
+    // templateBytes check removed or made optional since we use code-based generator
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       _isPreviewLoading = true;
@@ -105,8 +120,9 @@ class InvoiceProvider with ChangeNotifier {
           description: _description,
           total: _total,
           invoiceNumber: _invoiceNumber,
-          templateBytes: _templateBytes!,
           date: _date,
+          billTo: _billTo,
+          shipTo: _shipTo,
           currency: _selectedCurrency,
         );
       } catch (e) {
@@ -143,6 +159,8 @@ class InvoiceProvider with ChangeNotifier {
       date: _date,
       currency: _selectedCurrency,
       isDraft: true,
+      billTo: _billTo,
+      shipTo: _shipTo,
     );
     await _repository.saveDraft(draft);
     _loadHistoryAndDrafts();
@@ -154,6 +172,8 @@ class InvoiceProvider with ChangeNotifier {
     _total = draft.total;
     _date = draft.effectiveDate;
     _selectedCurrency = draft.currency;
+    _billTo = draft.billTo;
+    _shipTo = draft.shipTo;
     notifyListeners();
     _generatePreview();
   }
@@ -171,8 +191,9 @@ class InvoiceProvider with ChangeNotifier {
       description: _description,
       total: _total,
       invoiceNumber: _invoiceNumber,
-      templateBytes: templateBytes,
       date: _date,
+      billTo: _billTo,
+      shipTo: _shipTo,
       currency: _selectedCurrency,
     );
 
@@ -183,6 +204,8 @@ class InvoiceProvider with ChangeNotifier {
       total: _total,
       date: _date,
       currency: _selectedCurrency,
+      billTo: _billTo,
+      shipTo: _shipTo,
     );
 
     // 3. Generate Filename
@@ -207,8 +230,9 @@ class InvoiceProvider with ChangeNotifier {
       description: _description,
       total: _total,
       invoiceNumber: _invoiceNumber,
-      templateBytes: templateBytes,
       date: _date,
+      billTo: _billTo,
+      shipTo: _shipTo,
       currency: _selectedCurrency,
     );
   }

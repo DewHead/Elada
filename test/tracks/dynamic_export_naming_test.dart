@@ -8,6 +8,8 @@ import 'package:elada/domain/services/pdf_service.dart';
 import 'package:elada/domain/services/filename_service.dart';
 import 'package:elada/domain/services/file_export_service.dart';
 import 'package:elada/data/models/invoice.dart';
+import 'package:elada/domain/services/invoice_theme.dart';
+import 'package:elada/domain/services/pdf_code_generator.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:flutter/material.dart';
 
@@ -60,40 +62,15 @@ void main() {
   });
 
   group('PdfService Date Field', () {
-    test('should accept date and fill "Date" field in PDF', () async {
-      final pdfService = PdfService();
-
-      // Create a dummy PDF with fields to test our service
-      final PdfDocument document = PdfDocument();
-      final PdfPage page = document.pages.add();
-      final PdfForm form = document.form;
-
-      form.fields.add(
-        PdfTextBoxField(
-          page,
-          'INVOICE NO.',
-          const Rect.fromLTWH(0, 0, 100, 20),
-        ),
-      );
-      form.fields.add(
-        PdfTextBoxField(
-          page,
-          'Description',
-          const Rect.fromLTWH(0, 30, 100, 20),
-        ),
-      );
-      form.fields.add(
-        PdfTextBoxField(page, 'Date', const Rect.fromLTWH(0, 60, 100, 20)),
-      );
-
-      final Uint8List templateBytes = Uint8List.fromList(await document.save());
-      document.dispose();
+    test('should accept date and generate PDF', () async {
+      final theme = InvoiceTheme();
+      final generator = PdfCodeGenerator(theme);
+      final pdfService = PdfService(generator);
 
       final result = await pdfService.generateInvoice(
         description: 'Test Description',
         total: 1500.0,
         invoiceNumber: '9418',
-        templateBytes: templateBytes,
         date: DateTime(2026, 3, 26),
       );
 
@@ -112,9 +89,11 @@ void main() {
           description: anyNamed('description'),
           total: anyNamed('total'),
           invoiceNumber: anyNamed('invoiceNumber'),
-          templateBytes: anyNamed('templateBytes'),
           date: anyNamed('date'),
+          billTo: anyNamed('billTo'),
+          shipTo: anyNamed('shipTo'),
           currency: anyNamed('currency'),
+          templateBytes: anyNamed('templateBytes'),
         ),
       ).thenAnswer((_) async => pdfBytes);
 

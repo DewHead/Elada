@@ -20,6 +20,8 @@ void main() {
     when(mockProvider.invoiceNumber).thenReturn('9418');
     when(mockProvider.date).thenReturn(DateTime(2026, 3, 26));
     when(mockProvider.selectedCurrency).thenReturn('€');
+    when(mockProvider.billTo).thenReturn('');
+    when(mockProvider.shipTo).thenReturn('');
     when(mockProvider.previewBytes).thenReturn(null);
     when(mockProvider.isPreviewLoading).thenReturn(false);
 
@@ -45,6 +47,8 @@ void main() {
 
       expect(find.text('Invoice Number'), findsOneWidget);
       expect(find.text('Invoice Date'), findsOneWidget);
+      expect(find.text('Bill To'), findsOneWidget);
+      expect(find.text('Ship To'), findsOneWidget);
       expect(find.text('Item Description'), findsOneWidget);
       expect(find.text('Total Amount'), findsOneWidget);
       expect(find.text('Generate PDF'), findsOneWidget);

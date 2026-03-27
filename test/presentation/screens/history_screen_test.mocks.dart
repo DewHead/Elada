@@ -86,6 +86,24 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       ) as String);
 
   @override
+  String get billTo => (super.noSuchMethod(
+        Invocation.getter(#billTo),
+        returnValue: _i3.dummyValue<String>(
+          this,
+          Invocation.getter(#billTo),
+        ),
+      ) as String);
+
+  @override
+  String get shipTo => (super.noSuchMethod(
+        Invocation.getter(#shipTo),
+        returnValue: _i3.dummyValue<String>(
+          this,
+          Invocation.getter(#shipTo),
+        ),
+      ) as String);
+
+  @override
   List<_i4.Invoice> get history => (super.noSuchMethod(
         Invocation.getter(#history),
         returnValue: <_i4.Invoice>[],
@@ -158,6 +176,24 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
   void updateCurrency(String? value) => super.noSuchMethod(
         Invocation.method(
           #updateCurrency,
+          [value],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void updateBillTo(String? value) => super.noSuchMethod(
+        Invocation.method(
+          #updateBillTo,
+          [value],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void updateShipTo(String? value) => super.noSuchMethod(
+        Invocation.method(
+          #updateShipTo,
           [value],
         ),
         returnValueForMissingStub: null,

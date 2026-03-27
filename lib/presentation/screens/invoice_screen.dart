@@ -15,6 +15,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   final _totalController = TextEditingController();
   final _invoiceNumberController = TextEditingController();
   final _dateController = TextEditingController();
+  final _billToController = TextEditingController();
+  final _shipToController = TextEditingController();
   late InvoiceProvider _provider;
 
   @override
@@ -26,6 +28,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     _totalController.text = _provider.total > 0
         ? _provider.total.toString()
         : '';
+    _billToController.text = _provider.billTo;
+    _shipToController.text = _provider.shipTo;
     _updateDateController();
 
     // Listen for external updates (e.g., loading a draft)
@@ -56,6 +60,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       if (_descriptionController.text != _provider.description) {
         _descriptionController.text = _provider.description;
       }
+      if (_billToController.text != _provider.billTo) {
+        _billToController.text = _provider.billTo;
+      }
+      if (_shipToController.text != _provider.shipTo) {
+        _shipToController.text = _provider.shipTo;
+      }
       final totalStr = _provider.total > 0 ? _provider.total.toString() : '';
       if (_totalController.text != totalStr) {
         _totalController.text = totalStr;
@@ -81,6 +91,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     _totalController.dispose();
     _invoiceNumberController.dispose();
     _dateController.dispose();
+    _billToController.dispose();
+    _shipToController.dispose();
     super.dispose();
   }
 
@@ -240,6 +252,22 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         ),
         const SizedBox(height: 16),
         _buildInputField(
+          controller: _billToController,
+          label: 'Bill To',
+          onChanged: (val) =>
+              context.read<InvoiceProvider>().updateBillTo(val),
+          maxLines: 3,
+        ),
+        const SizedBox(height: 16),
+        _buildInputField(
+          controller: _shipToController,
+          label: 'Ship To',
+          onChanged: (val) =>
+              context.read<InvoiceProvider>().updateShipTo(val),
+          maxLines: 3,
+        ),
+        const SizedBox(height: 16),
+        _buildInputField(
           controller: _descriptionController,
           label: 'Item Description',
           onChanged: (val) =>
@@ -328,8 +356,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     provider.updateDescription('');
     provider.updateTotal(0.0);
     provider.updateDate(DateTime.now());
+    provider.updateBillTo('');
+    provider.updateShipTo('');
     _descriptionController.clear();
     _totalController.clear();
+    _billToController.clear();
+    _shipToController.clear();
     _invoiceNumberController.text = provider.invoiceNumber;
     _updateDateController();
   }
