@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +14,7 @@ void main() {
 
   setUp(() {
     mockProvider = MockInvoiceProvider();
-    
+
     when(mockProvider.description).thenReturn('');
     when(mockProvider.total).thenReturn(0.0);
     when(mockProvider.invoiceNumber).thenReturn('9418');
@@ -23,7 +22,7 @@ void main() {
     when(mockProvider.selectedCurrency).thenReturn('€');
     when(mockProvider.previewBytes).thenReturn(null);
     when(mockProvider.isPreviewLoading).thenReturn(false);
-    
+
     // Add dummy listener handling
     when(mockProvider.addListener(any)).thenReturn(null);
     when(mockProvider.removeListener(any)).thenReturn(null);
@@ -39,7 +38,9 @@ void main() {
   }
 
   group('InvoiceScreen', () {
-    testWidgets('should show all input fields and generate button', (WidgetTester tester) async {
+    testWidgets('should show all input fields and generate button', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createWidgetUnderTest());
 
       expect(find.text('Invoice Number'), findsOneWidget);
@@ -49,7 +50,9 @@ void main() {
       expect(find.text('Generate PDF'), findsOneWidget);
     });
 
-    testWidgets('should show currency selector with options', (WidgetTester tester) async {
+    testWidgets('should show currency selector with options', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createWidgetUnderTest());
 
       expect(find.text('Currency'), findsOneWidget);
@@ -58,19 +61,25 @@ void main() {
       expect(find.text('£'), findsOneWidget);
     });
 
-    testWidgets('should show Save as Draft button', (WidgetTester tester) async {
+    testWidgets('should show Save as Draft button', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createWidgetUnderTest());
 
       expect(find.text('Save as Draft'), findsOneWidget);
     });
 
-    testWidgets('should trigger PDF generation when Generate PDF is tapped', (WidgetTester tester) async {
+    testWidgets('should trigger PDF generation when Generate PDF is tapped', (
+      WidgetTester tester,
+    ) async {
       // Set a larger screen size to ensure button is visible
       tester.view.physicalSize = const Size(1200, 1200);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      when(mockProvider.generateAndSaveInvoice(any)).thenAnswer((_) async => '/path/to/invoice.pdf');
+      when(
+        mockProvider.generateAndSaveInvoice(any),
+      ).thenAnswer((_) async => '/path/to/invoice.pdf');
 
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pump(); // Ensure init complete
@@ -80,28 +89,36 @@ void main() {
 
       verify(mockProvider.generateAndSaveInvoice(any)).called(1);
       expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.textContaining('Invoice saved to: /path/to/invoice.pdf'), findsOneWidget);
+      expect(
+        find.textContaining('Invoice saved to: /path/to/invoice.pdf'),
+        findsOneWidget,
+      );
     });
 
-    testWidgets('should show error when Generate PDF is tapped with empty invoice number', (WidgetTester tester) async {
-      when(mockProvider.invoiceNumber).thenReturn('');
+    testWidgets(
+      'should show error when Generate PDF is tapped with empty invoice number',
+      (WidgetTester tester) async {
+        when(mockProvider.invoiceNumber).thenReturn('');
 
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.tap(find.text('Generate PDF'));
-      await tester.pump();
+        await tester.pumpWidget(createWidgetUnderTest());
+        await tester.tap(find.text('Generate PDF'));
+        await tester.pump();
 
-      expect(find.text('Please enter an Invoice Number'), findsOneWidget);
-      verifyNever(mockProvider.generateAndSaveInvoice(any));
-    });
+        expect(find.text('Please enter an Invoice Number'), findsOneWidget);
+        verifyNever(mockProvider.generateAndSaveInvoice(any));
+      },
+    );
 
-    testWidgets('should show date picker when Invoice Date is tapped', (WidgetTester tester) async {
+    testWidgets('should show date picker when Invoice Date is tapped', (
+      WidgetTester tester,
+    ) async {
       tester.view.physicalSize = const Size(1200, 1200);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pump();
-      
+
       await tester.tap(find.text('Invoice Date'));
       await tester.pumpAndSettle();
 

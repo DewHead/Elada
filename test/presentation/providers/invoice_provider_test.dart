@@ -8,7 +8,12 @@ import 'package:elada/domain/services/pdf_service.dart';
 import 'package:elada/domain/services/filename_service.dart';
 import 'package:elada/domain/services/file_export_service.dart';
 
-@GenerateMocks([InvoiceRepository, PdfService, FilenameService, FileExportService])
+@GenerateMocks([
+  InvoiceRepository,
+  PdfService,
+  FilenameService,
+  FileExportService,
+])
 import 'invoice_provider_test.mocks.dart';
 
 void main() {
@@ -23,11 +28,11 @@ void main() {
     mockPdfService = MockPdfService();
     mockFilenameService = MockFilenameService();
     mockFileExportService = MockFileExportService();
-    
+
     when(mockRepository.getLastInvoiceNumber()).thenReturn('9417');
     when(mockRepository.getInvoices()).thenReturn([]);
     when(mockRepository.getDrafts()).thenReturn([]);
-    
+
     provider = InvoiceProvider(
       mockRepository,
       mockPdfService,
@@ -53,7 +58,7 @@ void main() {
 
     test('should increment invoice number correctly', () {
       expect(provider.invoiceNumber, '9418');
-      
+
       when(mockRepository.getLastInvoiceNumber()).thenReturn('9418');
       provider.incrementInvoiceNumber();
       expect(provider.invoiceNumber, '9419');
@@ -63,24 +68,30 @@ void main() {
       final templateBytes = Uint8List(10);
       final pdfBytes = Uint8List(20);
 
-      when(mockPdfService.generateInvoice(
-        description: anyNamed('description'),
-        total: anyNamed('total'),
-        invoiceNumber: anyNamed('invoiceNumber'),
-        templateBytes: anyNamed('templateBytes'),
-        date: anyNamed('date'),
-        currency: anyNamed('currency'),
-      )).thenAnswer((_) async => pdfBytes);
-      
-      when(mockFilenameService.generateFileName(any)).thenReturn('9418_26-03-2026.pdf');
-      when(mockFileExportService.saveFile(
-        bytes: anyNamed('bytes'),
-        fileName: anyNamed('fileName'),
-      )).thenAnswer((_) async => 'path/to/9418_26-03-2026.pdf');
+      when(
+        mockPdfService.generateInvoice(
+          description: anyNamed('description'),
+          total: anyNamed('total'),
+          invoiceNumber: anyNamed('invoiceNumber'),
+          templateBytes: anyNamed('templateBytes'),
+          date: anyNamed('date'),
+          currency: anyNamed('currency'),
+        ),
+      ).thenAnswer((_) async => pdfBytes);
+
+      when(
+        mockFilenameService.generateFileName(any),
+      ).thenReturn('9418_26-03-2026.pdf');
+      when(
+        mockFileExportService.saveFile(
+          bytes: anyNamed('bytes'),
+          fileName: anyNamed('fileName'),
+        ),
+      ).thenAnswer((_) async => 'path/to/9418_26-03-2026.pdf');
 
       provider.updateDescription('Work');
       provider.updateTotal(500.0);
-      
+
       final result = await provider.generateAndSaveInvoice(templateBytes);
 
       expect(result, 'path/to/9418_26-03-2026.pdf');

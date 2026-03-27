@@ -28,7 +28,7 @@ This track implements a dynamic naming convention for exported PDF invoices, ens
 - [x] Task: Conductor - User Manual Verification 'UI Integration & Validation' (Protocol in workflow.md) [e9d041b]
 
 ## Phase 3: Final Polishing & Verification
-- [ ] Task: Final project-wide check and code cleanup.
-    - [ ] Run `dart_fix` and `dart_format`.
-    - [ ] Ensure test coverage for new logic is >80%.
+- [x] Task: Final project-wide check and code cleanup. [ab01588]
+    - [x] Run `dart_fix` and `dart_format`.
+    - [x] Ensure test coverage for new logic is >80%.
 - [ ] Task: Conductor - User Manual Verification 'Final Polishing' (Protocol in workflow.md)

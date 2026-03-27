@@ -13,23 +13,23 @@ class FileExportService {
   }) async {
     final String baseDir = directoryPath ?? await getDownloadsDirectoryPath();
     final String filePath = p.join(baseDir, fileName);
-    
+
     final File file = File(filePath);
     await file.writeAsBytes(bytes);
-    
+
     return filePath;
   }
 
   /// Finds the downloads directory for the current platform.
   Future<String> getDownloadsDirectoryPath() async {
     Directory? downloadsDir;
-    
+
     if (Platform.isAndroid || Platform.isIOS) {
       downloadsDir = await getApplicationDocumentsDirectory();
     } else {
       downloadsDir = await getDownloadsDirectory();
     }
-    
+
     return downloadsDir?.path ?? (await getTemporaryDirectory()).path;
   }
 }

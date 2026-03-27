@@ -15,7 +15,7 @@ void main() {
 
   setUp(() {
     mockProvider = MockInvoiceProvider();
-    
+
     when(mockProvider.history).thenReturn([]);
     when(mockProvider.drafts).thenReturn([]);
   });
@@ -30,18 +30,33 @@ void main() {
   }
 
   group('HistoryScreen UI', () {
-    testWidgets('should show empty state when no history or drafts', (WidgetTester tester) async {
+    testWidgets('should show empty state when no history or drafts', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createWidgetUnderTest());
 
       expect(find.text('No history yet'), findsOneWidget);
     });
 
-    testWidgets('should show lists when history and drafts exist', (WidgetTester tester) async {
+    testWidgets('should show lists when history and drafts exist', (
+      WidgetTester tester,
+    ) async {
       final history = [
-        Invoice(invoiceNumber: '1', description: 'History 1', total: 100, date: DateTime.now())
+        Invoice(
+          invoiceNumber: '1',
+          description: 'History 1',
+          total: 100,
+          date: DateTime.now(),
+        ),
       ];
       final drafts = [
-        Invoice(invoiceNumber: 'D1', description: 'Draft 1', total: 50, date: DateTime.now(), isDraft: true)
+        Invoice(
+          invoiceNumber: 'D1',
+          description: 'Draft 1',
+          total: 50,
+          date: DateTime.now(),
+          isDraft: true,
+        ),
       ];
 
       when(mockProvider.history).thenReturn(history);

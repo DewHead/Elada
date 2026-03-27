@@ -9,8 +9,11 @@ class InvoiceRepository {
   static const String _lastInvoiceNumberKey = 'last_invoice_number';
   static const String _defaultInvoiceNumber = '9417';
 
-  InvoiceRepository(this._invoiceBox, this._settingsBox, {Box<Invoice>? draftBox})
-      : _draftBox = draftBox;
+  InvoiceRepository(
+    this._invoiceBox,
+    this._settingsBox, {
+    Box<Invoice>? draftBox,
+  }) : _draftBox = draftBox;
 
   Future<void> saveInvoice(Invoice invoice) async {
     await _invoiceBox.add(invoice);
@@ -23,7 +26,7 @@ class InvoiceRepository {
 
   Future<void> saveDraft(Invoice draft) async {
     if (_draftBox != null) {
-      await _draftBox!.add(draft);
+      await _draftBox.add(draft);
     }
   }
 
@@ -33,18 +36,21 @@ class InvoiceRepository {
 
   Future<void> deleteDraft(int index) async {
     if (_draftBox != null) {
-      await _draftBox!.deleteAt(index);
+      await _draftBox.deleteAt(index);
     }
   }
 
   Future<void> updateDraft(int index, Invoice draft) async {
     if (_draftBox != null) {
-      await _draftBox!.putAt(index, draft);
+      await _draftBox.putAt(index, draft);
     }
   }
 
   String getLastInvoiceNumber() {
-    return _settingsBox.get(_lastInvoiceNumberKey, defaultValue: _defaultInvoiceNumber);
+    return _settingsBox.get(
+      _lastInvoiceNumberKey,
+      defaultValue: _defaultInvoiceNumber,
+    );
   }
 
   Future<void> saveLastInvoiceNumber(String number) async {

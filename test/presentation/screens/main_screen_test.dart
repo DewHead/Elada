@@ -14,7 +14,7 @@ void main() {
 
   setUp(() {
     mockProvider = MockInvoiceProvider();
-    
+
     when(mockProvider.invoiceNumber).thenReturn('9418');
     when(mockProvider.date).thenReturn(DateTime(2026, 3, 26));
     when(mockProvider.description).thenReturn('');
@@ -34,7 +34,9 @@ void main() {
   }
 
   group('MainScreen Navigation', () {
-    testWidgets('should show NavigationBar with Generate and History', (WidgetTester tester) async {
+    testWidgets('should show NavigationBar with Generate and History', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createWidgetUnderTest());
 
       expect(find.byType(NavigationBar), findsOneWidget);
@@ -42,7 +44,9 @@ void main() {
       expect(find.text('History'), findsOneWidget);
     });
 
-    testWidgets('should switch between Generate and History tabs', (WidgetTester tester) async {
+    testWidgets('should switch between Generate and History tabs', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(createWidgetUnderTest());
 
       // Initial tab should be Generate (which contains InvoiceScreen parts)

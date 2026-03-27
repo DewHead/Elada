@@ -12,7 +12,12 @@ import 'package:elada/domain/services/file_export_service.dart';
 import 'package:mockito/annotations.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-@GenerateMocks([InvoiceRepository, PdfService, FilenameService, FileExportService])
+@GenerateMocks([
+  InvoiceRepository,
+  PdfService,
+  FilenameService,
+  FileExportService,
+])
 import 'invoice_preview_integration_test.mocks.dart';
 
 void main() {
@@ -50,7 +55,9 @@ void main() {
   }
 
   group('InvoiceScreen Preview Integration', () {
-    testWidgets('should show preview widget when on desktop (wide screen)', (tester) async {
+    testWidgets('should show preview widget when on desktop (wide screen)', (
+      tester,
+    ) async {
       // Set a wide screen size
       tester.view.physicalSize = const Size(1200, 800);
       tester.view.devicePixelRatio = 1.0;
@@ -65,14 +72,16 @@ void main() {
       final templateBytes = Uint8List(10);
       final previewBytes = Uint8List(20);
 
-      when(mockPdfService.generateInvoice(
-        description: anyNamed('description'),
-        total: anyNamed('total'),
-        invoiceNumber: anyNamed('invoiceNumber'),
-        templateBytes: anyNamed('templateBytes'),
-        date: anyNamed('date'),
-        currency: anyNamed('currency'),
-      )).thenAnswer((_) async => previewBytes);
+      when(
+        mockPdfService.generateInvoice(
+          description: anyNamed('description'),
+          total: anyNamed('total'),
+          invoiceNumber: anyNamed('invoiceNumber'),
+          templateBytes: anyNamed('templateBytes'),
+          date: anyNamed('date'),
+          currency: anyNamed('currency'),
+        ),
+      ).thenAnswer((_) async => previewBytes);
 
       provider.updateTemplateBytes(templateBytes);
       provider.updateDescription('Test');
@@ -82,7 +91,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(SfPdfViewer), findsOneWidget);
-      
+
       provider.dispose();
       await tester.pumpAndSettle(const Duration(seconds: 1));
     });
@@ -98,14 +107,14 @@ void main() {
       // Should find Preview FAB
       expect(find.text('Preview'), findsOneWidget);
       expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
-      
+
       // Should NOT find InvoicePreview directly in the body
       expect(find.text('Enter details to see preview'), findsNothing);
 
       // We still need to wait for the initial template loading timer to finish
       await tester.pump(const Duration(milliseconds: 600));
       await tester.pumpAndSettle(const Duration(seconds: 1));
-      
+
       provider.dispose();
       await tester.pumpAndSettle(const Duration(seconds: 1));
     });

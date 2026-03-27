@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/domain/services/pdf_service.dart';
@@ -201,10 +200,10 @@ class InvoiceProvider with ChangeNotifier {
 
     return savedPath;
   }
-  
+
   @Deprecated('Use generateAndSaveInvoice instead')
   Future<Uint8List> generateInvoice(Uint8List templateBytes) async {
-     return await _pdfService.generateInvoice(
+    return await _pdfService.generateInvoice(
       description: _description,
       total: _total,
       invoiceNumber: _invoiceNumber,

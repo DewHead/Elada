@@ -9,7 +9,12 @@ import 'package:elada/domain/services/pdf_service.dart';
 import 'package:elada/domain/services/filename_service.dart';
 import 'package:elada/domain/services/file_export_service.dart';
 
-@GenerateMocks([InvoiceRepository, PdfService, FilenameService, FileExportService])
+@GenerateMocks([
+  InvoiceRepository,
+  PdfService,
+  FilenameService,
+  FileExportService,
+])
 import 'widget_test.mocks.dart';
 
 void main() {
@@ -23,7 +28,7 @@ void main() {
     mockPdfService = MockPdfService();
     mockFilenameService = MockFilenameService();
     mockFileExportService = MockFileExportService();
-    
+
     when(mockRepository.getLastInvoiceNumber()).thenReturn('9417');
     when(mockRepository.getInvoices()).thenReturn([]);
     when(mockRepository.getDrafts()).thenReturn([]);

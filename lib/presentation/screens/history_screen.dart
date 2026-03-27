@@ -12,10 +12,7 @@ class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Invoice History'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Invoice History'), centerTitle: true),
       body: Consumer<InvoiceProvider>(
         builder: (context, provider, child) {
           final history = provider.history;
@@ -34,7 +31,12 @@ class HistoryScreen extends StatelessWidget {
                   ...drafts.asMap().entries.map((entry) {
                     return _buildAnimatedItem(
                       index: entry.key,
-                      child: _buildDraftItem(context, provider, entry.value, entry.key),
+                      child: _buildDraftItem(
+                        context,
+                        provider,
+                        entry.value,
+                        entry.key,
+                      ),
                     );
                   }),
                   const SizedBox(height: 24),
@@ -88,8 +90,8 @@ class HistoryScreen extends StatelessWidget {
           Text(
             'No history yet',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+              color: Theme.of(context).colorScheme.outline,
+            ),
           ),
           const SizedBox(height: 8),
           const Text('Your generated invoices and drafts will appear here.'),
@@ -104,9 +106,9 @@ class HistoryScreen extends StatelessWidget {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-            ),
+          color: Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -118,7 +120,10 @@ class HistoryScreen extends StatelessWidget {
       color: Theme.of(context).colorScheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant, width: 0.5),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outlineVariant,
+          width: 0.5,
+        ),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -134,22 +139,30 @@ class HistoryScreen extends StatelessWidget {
         trailing: Text(
           '${invoice.currency} ${invoice.total.toStringAsFixed(2)}',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildDraftItem(BuildContext context, InvoiceProvider provider, Invoice draft, int index) {
+  Widget _buildDraftItem(
+    BuildContext context,
+    InvoiceProvider provider,
+    Invoice draft,
+    int index,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 0,
       color: Theme.of(context).colorScheme.secondaryContainer.withAlpha(50),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Theme.of(context).colorScheme.secondary.withAlpha(100), width: 0.5),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.secondary.withAlpha(100),
+          width: 0.5,
+        ),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -186,7 +199,11 @@ class HistoryScreen extends StatelessWidget {
     );
   }
 
-  void _confirmDelete(BuildContext context, InvoiceProvider provider, int index) {
+  void _confirmDelete(
+    BuildContext context,
+    InvoiceProvider provider,
+    int index,
+  ) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

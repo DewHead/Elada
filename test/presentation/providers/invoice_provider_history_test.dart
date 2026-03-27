@@ -9,7 +9,12 @@ import 'package:elada/domain/services/filename_service.dart';
 import 'package:elada/domain/services/file_export_service.dart';
 import 'package:elada/data/models/invoice.dart';
 
-@GenerateMocks([InvoiceRepository, PdfService, FilenameService, FileExportService])
+@GenerateMocks([
+  InvoiceRepository,
+  PdfService,
+  FilenameService,
+  FileExportService,
+])
 import 'invoice_provider_history_test.mocks.dart';
 
 void main() {
@@ -24,11 +29,11 @@ void main() {
     mockPdfService = MockPdfService();
     mockFilenameService = MockFilenameService();
     mockFileExportService = MockFileExportService();
-    
+
     when(mockRepository.getLastInvoiceNumber()).thenReturn('9417');
     when(mockRepository.getInvoices()).thenReturn([]);
     when(mockRepository.getDrafts()).thenReturn([]);
-    
+
     provider = InvoiceProvider(
       mockRepository,
       mockPdfService,
@@ -40,10 +45,21 @@ void main() {
   group('InvoiceProvider History & Drafts', () {
     test('should load history and drafts on initialization', () {
       final history = [
-        Invoice(invoiceNumber: '1', description: 'Test 1', total: 100, date: DateTime.now())
+        Invoice(
+          invoiceNumber: '1',
+          description: 'Test 1',
+          total: 100,
+          date: DateTime.now(),
+        ),
       ];
       final drafts = [
-        Invoice(invoiceNumber: 'D1', description: 'Draft 1', total: 50, date: DateTime.now(), isDraft: true)
+        Invoice(
+          invoiceNumber: 'D1',
+          description: 'Draft 1',
+          total: 50,
+          date: DateTime.now(),
+          isDraft: true,
+        ),
       ];
 
       when(mockRepository.getInvoices()).thenReturn(history);
@@ -63,22 +79,33 @@ void main() {
     test('should save and refresh history after generation', () async {
       final templateBytes = Uint8List(10);
       final pdfBytes = Uint8List(20);
-      when(mockPdfService.generateInvoice(
-        description: anyNamed('description'),
-        total: anyNamed('total'),
-        invoiceNumber: anyNamed('invoiceNumber'),
-        templateBytes: anyNamed('templateBytes'),
-        date: anyNamed('date'),
-        currency: anyNamed('currency'),
-      )).thenAnswer((_) async => pdfBytes);
-      
-      when(mockFilenameService.generateFileName(any)).thenReturn('9418_26-03-2026.pdf');
-      when(mockFileExportService.saveFile(
-        bytes: anyNamed('bytes'),
-        fileName: anyNamed('fileName'),
-      )).thenAnswer((_) async => 'path/to/9418_26-03-2026.pdf');
+      when(
+        mockPdfService.generateInvoice(
+          description: anyNamed('description'),
+          total: anyNamed('total'),
+          invoiceNumber: anyNamed('invoiceNumber'),
+          templateBytes: anyNamed('templateBytes'),
+          date: anyNamed('date'),
+          currency: anyNamed('currency'),
+        ),
+      ).thenAnswer((_) async => pdfBytes);
 
-      final invoice = Invoice(invoiceNumber: '9418', description: 'Test', total: 100, date: DateTime.now());
+      when(
+        mockFilenameService.generateFileName(any),
+      ).thenReturn('9418_26-03-2026.pdf');
+      when(
+        mockFileExportService.saveFile(
+          bytes: anyNamed('bytes'),
+          fileName: anyNamed('fileName'),
+        ),
+      ).thenAnswer((_) async => 'path/to/9418_26-03-2026.pdf');
+
+      final invoice = Invoice(
+        invoiceNumber: '9418',
+        description: 'Test',
+        total: 100,
+        date: DateTime.now(),
+      );
       when(mockRepository.getInvoices()).thenReturn([invoice]);
 
       await provider.generateAndSaveInvoice(templateBytes);
@@ -89,7 +116,13 @@ void main() {
     });
 
     test('should save draft and refresh drafts list', () async {
-      final draft = Invoice(invoiceNumber: 'DRAFT-1', description: 'Draft', total: 100, date: DateTime.now(), isDraft: true);
+      final draft = Invoice(
+        invoiceNumber: 'DRAFT-1',
+        description: 'Draft',
+        total: 100,
+        date: DateTime.now(),
+        isDraft: true,
+      );
       when(mockRepository.getDrafts()).thenReturn([draft]);
 
       provider.updateDescription('Draft');
@@ -123,7 +156,7 @@ void main() {
 
     test('should toggle currency', () {
       expect(provider.selectedCurrency, '€');
-      
+
       provider.updateCurrency('\$');
       expect(provider.selectedCurrency, '\$');
 

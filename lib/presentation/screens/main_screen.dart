@@ -16,18 +16,17 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       const InvoiceScreen(),
-      HistoryScreen(onEditDraft: () {
-        setState(() {
-          _currentIndex = 0;
-        });
-      }),
+      HistoryScreen(
+        onEditDraft: () {
+          setState(() {
+            _currentIndex = 0;
+          });
+        },
+      ),
     ];
 
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: screens,
-      ),
+      body: IndexedStack(index: _currentIndex, children: screens),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (index) {

@@ -8,7 +8,12 @@ import 'package:elada/domain/services/filename_service.dart';
 import 'package:elada/domain/services/file_export_service.dart';
 import 'package:mockito/annotations.dart';
 
-@GenerateMocks([InvoiceRepository, PdfService, FilenameService, FileExportService])
+@GenerateMocks([
+  InvoiceRepository,
+  PdfService,
+  FilenameService,
+  FileExportService,
+])
 import 'invoice_preview_test.mocks.dart';
 
 void main() {
@@ -41,14 +46,16 @@ void main() {
       final templateBytes = Uint8List(10);
       final previewBytes = Uint8List(20);
 
-      when(mockPdfService.generateInvoice(
-        description: anyNamed('description'),
-        total: anyNamed('total'),
-        invoiceNumber: anyNamed('invoiceNumber'),
-        templateBytes: anyNamed('templateBytes'),
-        date: anyNamed('date'),
-        currency: anyNamed('currency'),
-      )).thenAnswer((_) async => previewBytes);
+      when(
+        mockPdfService.generateInvoice(
+          description: anyNamed('description'),
+          total: anyNamed('total'),
+          invoiceNumber: anyNamed('invoiceNumber'),
+          templateBytes: anyNamed('templateBytes'),
+          date: anyNamed('date'),
+          currency: anyNamed('currency'),
+        ),
+      ).thenAnswer((_) async => previewBytes);
 
       provider.updateTemplateBytes(templateBytes);
       provider.updateDescription('Test Description');
@@ -62,46 +69,55 @@ void main() {
 
       expect(provider.previewBytes, equals(previewBytes));
       expect(provider.isPreviewLoading, isFalse);
-      verify(mockPdfService.generateInvoice(
-        description: anyNamed('description'),
-        total: anyNamed('total'),
-        invoiceNumber: anyNamed('invoiceNumber'),
-        templateBytes: anyNamed('templateBytes'),
-        date: anyNamed('date'),
-        currency: anyNamed('currency'),
-      )).called(1);
+      verify(
+        mockPdfService.generateInvoice(
+          description: anyNamed('description'),
+          total: anyNamed('total'),
+          invoiceNumber: anyNamed('invoiceNumber'),
+          templateBytes: anyNamed('templateBytes'),
+          date: anyNamed('date'),
+          currency: anyNamed('currency'),
+        ),
+      ).called(1);
     });
 
-    test('should only generate one preview when multiple updates happen rapidly', () async {
-      final templateBytes = Uint8List(10);
-      final previewBytes = Uint8List(20);
+    test(
+      'should only generate one preview when multiple updates happen rapidly',
+      () async {
+        final templateBytes = Uint8List(10);
+        final previewBytes = Uint8List(20);
 
-      when(mockPdfService.generateInvoice(
-        description: anyNamed('description'),
-        total: anyNamed('total'),
-        invoiceNumber: anyNamed('invoiceNumber'),
-        templateBytes: anyNamed('templateBytes'),
-        date: anyNamed('date'),
-        currency: anyNamed('currency'),
-      )).thenAnswer((_) async => previewBytes);
+        when(
+          mockPdfService.generateInvoice(
+            description: anyNamed('description'),
+            total: anyNamed('total'),
+            invoiceNumber: anyNamed('invoiceNumber'),
+            templateBytes: anyNamed('templateBytes'),
+            date: anyNamed('date'),
+            currency: anyNamed('currency'),
+          ),
+        ).thenAnswer((_) async => previewBytes);
 
-      provider.updateTemplateBytes(templateBytes);
-      provider.updateDescription('Update 1');
-      provider.updateDescription('Update 2');
-      provider.updateDescription('Update 3');
+        provider.updateTemplateBytes(templateBytes);
+        provider.updateDescription('Update 1');
+        provider.updateDescription('Update 2');
+        provider.updateDescription('Update 3');
 
-      await Future.delayed(const Duration(milliseconds: 600));
+        await Future.delayed(const Duration(milliseconds: 600));
 
-      expect(provider.previewBytes, equals(previewBytes));
-      // Should only be called once for 'Update 3'
-      verify(mockPdfService.generateInvoice(
-        description: anyNamed('description'),
-        total: anyNamed('total'),
-        invoiceNumber: anyNamed('invoiceNumber'),
-        templateBytes: anyNamed('templateBytes'),
-        date: anyNamed('date'),
-        currency: anyNamed('currency'),
-      )).called(1);
-    });
+        expect(provider.previewBytes, equals(previewBytes));
+        // Should only be called once for 'Update 3'
+        verify(
+          mockPdfService.generateInvoice(
+            description: anyNamed('description'),
+            total: anyNamed('total'),
+            invoiceNumber: anyNamed('invoiceNumber'),
+            templateBytes: anyNamed('templateBytes'),
+            date: anyNamed('date'),
+            currency: anyNamed('currency'),
+          ),
+        ).called(1);
+      },
+    );
   });
 }

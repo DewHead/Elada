@@ -8,17 +8,37 @@ void main() {
   group('PdfService', () {
     test('should inject data into PDF document', () async {
       final pdfService = PdfService();
-      
+
       // Create a dummy PDF with fields to test our service
       final PdfDocument document = PdfDocument();
       final PdfPage page = document.pages.add();
       final PdfForm form = document.form;
-      
-      form.fields.add(PdfTextBoxField(page, 'INVOICE NO.', const Rect.fromLTWH(0, 0, 100, 20)));
-      form.fields.add(PdfTextBoxField(page, 'Description', const Rect.fromLTWH(0, 30, 100, 20)));
-      form.fields.add(PdfTextBoxField(page, 'Total', const Rect.fromLTWH(0, 60, 100, 20)));
-      form.fields.add(PdfTextBoxField(page, 'Balance Due', const Rect.fromLTWH(0, 90, 100, 20)));
-      
+
+      form.fields.add(
+        PdfTextBoxField(
+          page,
+          'INVOICE NO.',
+          const Rect.fromLTWH(0, 0, 100, 20),
+        ),
+      );
+      form.fields.add(
+        PdfTextBoxField(
+          page,
+          'Description',
+          const Rect.fromLTWH(0, 30, 100, 20),
+        ),
+      );
+      form.fields.add(
+        PdfTextBoxField(page, 'Total', const Rect.fromLTWH(0, 60, 100, 20)),
+      );
+      form.fields.add(
+        PdfTextBoxField(
+          page,
+          'Balance Due',
+          const Rect.fromLTWH(0, 90, 100, 20),
+        ),
+      );
+
       final Uint8List templateBytes = Uint8List.fromList(await document.save());
       document.dispose();
 

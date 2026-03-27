@@ -23,16 +23,20 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     _provider = Provider.of<InvoiceProvider>(context, listen: false);
     _invoiceNumberController.text = _provider.invoiceNumber;
     _descriptionController.text = _provider.description;
-    _totalController.text = _provider.total > 0 ? _provider.total.toString() : '';
+    _totalController.text = _provider.total > 0
+        ? _provider.total.toString()
+        : '';
     _updateDateController();
-    
+
     // Listen for external updates (e.g., loading a draft)
     _provider.addListener(_onProviderUpdate);
 
     // Load template for previews
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        final templateData = await DefaultAssetBundle.of(context).load('assets/templates/invoice_template.pdf');
+        final templateData = await DefaultAssetBundle.of(
+          context,
+        ).load('assets/templates/invoice_template.pdf');
         final templateBytes = templateData.buffer.asUint8List();
         _provider.updateTemplateBytes(templateBytes);
       } catch (e) {
@@ -43,7 +47,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   void _onProviderUpdate() {
     if (!mounted) return;
-    
+
     setState(() {
       // Only update if controllers are different from provider state to avoid cursor jumping
       if (_invoiceNumberController.text != _provider.invoiceNumber) {
@@ -62,7 +66,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   void _updateDateController() {
     final date = _provider.date;
-    final formattedDate = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+    final formattedDate =
+        '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
     if (_dateController.text != formattedDate) {
       _dateController.text = formattedDate;
     }
@@ -82,10 +87,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Elada Invoice'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Elada Invoice'), centerTitle: true),
       body: LayoutBuilder(
         builder: (context, constraints) {
           if (constraints.maxWidth > 800) {
@@ -176,7 +178,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   Widget _buildForm(BuildContext context) {
     final provider = context.watch<InvoiceProvider>();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -184,30 +186,29 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         Icon(
           Icons.receipt_long_rounded,
           size: 80,
-          color: Theme.of(context).colorScheme.primary.withAlpha(204), // ~0.8 opacity
+          color: Theme.of(
+            context,
+          ).colorScheme.primary.withAlpha(204), // ~0.8 opacity
         ),
         const SizedBox(height: 24),
         Text(
           'Generate New Invoice',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                letterSpacing: -0.5,
-              ),
+            fontWeight: FontWeight.bold,
+            letterSpacing: -0.5,
+          ),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
         Text(
           'Fill in the details for your professional invoice',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 48),
-        Text(
-          'Currency',
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
+        Text('Currency', style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 8),
         SegmentedButton<String>(
           segments: const [
@@ -224,7 +225,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         _buildInputField(
           controller: _invoiceNumberController,
           label: 'Invoice Number',
-          onChanged: (val) => context.read<InvoiceProvider>().updateInvoiceNumber(val),
+          onChanged: (val) =>
+              context.read<InvoiceProvider>().updateInvoiceNumber(val),
           keyboardType: TextInputType.number,
         ),
         const SizedBox(height: 16),
@@ -240,7 +242,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         _buildInputField(
           controller: _descriptionController,
           label: 'Item Description',
-          onChanged: (val) => context.read<InvoiceProvider>().updateDescription(val),
+          onChanged: (val) =>
+              context.read<InvoiceProvider>().updateDescription(val),
           maxLines: 3,
         ),
         const SizedBox(height: 16),
@@ -280,7 +283,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).colorScheme.primary.withAlpha(77),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withAlpha(77),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -370,7 +375,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   Future<void> _generatePdf(BuildContext context) async {
     final provider = context.read<InvoiceProvider>();
-    
+
     // Validation
     if (provider.invoiceNumber.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -384,7 +389,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
     try {
       // 1. Load template from assets
-      final templateData = await DefaultAssetBundle.of(context).load('assets/templates/invoice_template.pdf');
+      final templateData = await DefaultAssetBundle.of(
+        context,
+      ).load('assets/templates/invoice_template.pdf');
       final templateBytes = templateData.buffer.asUint8List();
 
       // 2. Generate and Save PDF
@@ -392,7 +399,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
       // 3. Success message
       if (!context.mounted) return;
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Invoice saved to: $savedPath'),
@@ -407,7 +414,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       );
     } catch (e) {
       if (!context.mounted) return;
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error generating PDF: $e'),
@@ -439,11 +446,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         labelText: label,
         prefixText: prefixText,
         prefixIcon: prefixIcon,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
         filled: true,
-        fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withAlpha(77), // ~0.3 opacity
+        fillColor: Theme.of(
+          context,
+        ).colorScheme.surfaceContainerHighest.withAlpha(77), // ~0.3 opacity
       ),
     );
   }

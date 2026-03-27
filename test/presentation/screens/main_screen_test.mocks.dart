@@ -26,13 +26,8 @@ import 'package:mockito/src/dummies.dart' as _i3;
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeDateTime_0 extends _i1.SmartFake implements DateTime {
-  _FakeDateTime_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
+  _FakeDateTime_0(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
 }
 
 /// A class which mocks [InvoiceProvider].
@@ -44,222 +39,188 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
   }
 
   @override
-  String get description => (super.noSuchMethod(
-        Invocation.getter(#description),
-        returnValue: _i3.dummyValue<String>(
-          this,
-          Invocation.getter(#description),
-        ),
-      ) as String);
+  String get description =>
+      (super.noSuchMethod(
+            Invocation.getter(#description),
+            returnValue: _i3.dummyValue<String>(
+              this,
+              Invocation.getter(#description),
+            ),
+          )
+          as String);
 
   @override
-  double get total => (super.noSuchMethod(
-        Invocation.getter(#total),
-        returnValue: 0.0,
-      ) as double);
+  double get total =>
+      (super.noSuchMethod(Invocation.getter(#total), returnValue: 0.0)
+          as double);
 
   @override
-  String get invoiceNumber => (super.noSuchMethod(
-        Invocation.getter(#invoiceNumber),
-        returnValue: _i3.dummyValue<String>(
-          this,
-          Invocation.getter(#invoiceNumber),
-        ),
-      ) as String);
+  String get invoiceNumber =>
+      (super.noSuchMethod(
+            Invocation.getter(#invoiceNumber),
+            returnValue: _i3.dummyValue<String>(
+              this,
+              Invocation.getter(#invoiceNumber),
+            ),
+          )
+          as String);
 
   @override
-  DateTime get date => (super.noSuchMethod(
-        Invocation.getter(#date),
-        returnValue: _FakeDateTime_0(
-          this,
-          Invocation.getter(#date),
-        ),
-      ) as DateTime);
+  DateTime get date =>
+      (super.noSuchMethod(
+            Invocation.getter(#date),
+            returnValue: _FakeDateTime_0(this, Invocation.getter(#date)),
+          )
+          as DateTime);
 
   @override
-  String get selectedCurrency => (super.noSuchMethod(
-        Invocation.getter(#selectedCurrency),
-        returnValue: _i3.dummyValue<String>(
-          this,
-          Invocation.getter(#selectedCurrency),
-        ),
-      ) as String);
+  String get selectedCurrency =>
+      (super.noSuchMethod(
+            Invocation.getter(#selectedCurrency),
+            returnValue: _i3.dummyValue<String>(
+              this,
+              Invocation.getter(#selectedCurrency),
+            ),
+          )
+          as String);
 
   @override
-  List<_i4.Invoice> get history => (super.noSuchMethod(
-        Invocation.getter(#history),
-        returnValue: <_i4.Invoice>[],
-      ) as List<_i4.Invoice>);
+  List<_i4.Invoice> get history =>
+      (super.noSuchMethod(
+            Invocation.getter(#history),
+            returnValue: <_i4.Invoice>[],
+          )
+          as List<_i4.Invoice>);
 
   @override
-  List<_i4.Invoice> get drafts => (super.noSuchMethod(
-        Invocation.getter(#drafts),
-        returnValue: <_i4.Invoice>[],
-      ) as List<_i4.Invoice>);
+  List<_i4.Invoice> get drafts =>
+      (super.noSuchMethod(
+            Invocation.getter(#drafts),
+            returnValue: <_i4.Invoice>[],
+          )
+          as List<_i4.Invoice>);
 
   @override
-  bool get isPreviewLoading => (super.noSuchMethod(
-        Invocation.getter(#isPreviewLoading),
-        returnValue: false,
-      ) as bool);
+  bool get isPreviewLoading =>
+      (super.noSuchMethod(
+            Invocation.getter(#isPreviewLoading),
+            returnValue: false,
+          )
+          as bool);
 
   @override
-  bool get hasListeners => (super.noSuchMethod(
-        Invocation.getter(#hasListeners),
-        returnValue: false,
-      ) as bool);
+  bool get hasListeners =>
+      (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
+          as bool);
 
   @override
   void updateTemplateBytes(_i5.Uint8List? bytes) => super.noSuchMethod(
-        Invocation.method(
-          #updateTemplateBytes,
-          [bytes],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#updateTemplateBytes, [bytes]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void updateDescription(String? value) => super.noSuchMethod(
-        Invocation.method(
-          #updateDescription,
-          [value],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#updateDescription, [value]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void updateTotal(double? value) => super.noSuchMethod(
-        Invocation.method(
-          #updateTotal,
-          [value],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#updateTotal, [value]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void updateInvoiceNumber(String? value) => super.noSuchMethod(
-        Invocation.method(
-          #updateInvoiceNumber,
-          [value],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#updateInvoiceNumber, [value]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void updateDate(DateTime? value) => super.noSuchMethod(
-        Invocation.method(
-          #updateDate,
-          [value],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#updateDate, [value]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void updateCurrency(String? value) => super.noSuchMethod(
-        Invocation.method(
-          #updateCurrency,
-          [value],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#updateCurrency, [value]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void incrementInvoiceNumber() => super.noSuchMethod(
-        Invocation.method(
-          #incrementInvoiceNumber,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#incrementInvoiceNumber, []),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void dispose() => super.noSuchMethod(
-        Invocation.method(
-          #dispose,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#dispose, []),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  _i6.Future<void> saveDraft() => (super.noSuchMethod(
-        Invocation.method(
-          #saveDraft,
-          [],
-        ),
-        returnValue: _i6.Future<void>.value(),
-        returnValueForMissingStub: _i6.Future<void>.value(),
-      ) as _i6.Future<void>);
+  _i6.Future<void> saveDraft() =>
+      (super.noSuchMethod(
+            Invocation.method(#saveDraft, []),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
 
   @override
   void loadDraft(_i4.Invoice? draft) => super.noSuchMethod(
-        Invocation.method(
-          #loadDraft,
-          [draft],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#loadDraft, [draft]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  _i6.Future<void> deleteDraft(int? index) => (super.noSuchMethod(
-        Invocation.method(
-          #deleteDraft,
-          [index],
-        ),
-        returnValue: _i6.Future<void>.value(),
-        returnValueForMissingStub: _i6.Future<void>.value(),
-      ) as _i6.Future<void>);
+  _i6.Future<void> deleteDraft(int? index) =>
+      (super.noSuchMethod(
+            Invocation.method(#deleteDraft, [index]),
+            returnValue: _i6.Future<void>.value(),
+            returnValueForMissingStub: _i6.Future<void>.value(),
+          )
+          as _i6.Future<void>);
 
   @override
   _i6.Future<String> generateAndSaveInvoice(_i5.Uint8List? templateBytes) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #generateAndSaveInvoice,
-          [templateBytes],
-        ),
-        returnValue: _i6.Future<String>.value(_i3.dummyValue<String>(
-          this,
-          Invocation.method(
-            #generateAndSaveInvoice,
-            [templateBytes],
-          ),
-        )),
-      ) as _i6.Future<String>);
+            Invocation.method(#generateAndSaveInvoice, [templateBytes]),
+            returnValue: _i6.Future<String>.value(
+              _i3.dummyValue<String>(
+                this,
+                Invocation.method(#generateAndSaveInvoice, [templateBytes]),
+              ),
+            ),
+          )
+          as _i6.Future<String>);
 
   @override
   _i6.Future<_i5.Uint8List> generateInvoice(_i5.Uint8List? templateBytes) =>
       (super.noSuchMethod(
-        Invocation.method(
-          #generateInvoice,
-          [templateBytes],
-        ),
-        returnValue: _i6.Future<_i5.Uint8List>.value(_i5.Uint8List(0)),
-      ) as _i6.Future<_i5.Uint8List>);
+            Invocation.method(#generateInvoice, [templateBytes]),
+            returnValue: _i6.Future<_i5.Uint8List>.value(_i5.Uint8List(0)),
+          )
+          as _i6.Future<_i5.Uint8List>);
 
   @override
   void addListener(_i7.VoidCallback? listener) => super.noSuchMethod(
-        Invocation.method(
-          #addListener,
-          [listener],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#addListener, [listener]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void removeListener(_i7.VoidCallback? listener) => super.noSuchMethod(
-        Invocation.method(
-          #removeListener,
-          [listener],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#removeListener, [listener]),
+    returnValueForMissingStub: null,
+  );
 
   @override
   void notifyListeners() => super.noSuchMethod(
-        Invocation.method(
-          #notifyListeners,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
+    Invocation.method(#notifyListeners, []),
+    returnValueForMissingStub: null,
+  );
 }

@@ -6,16 +6,16 @@ part 'invoice.g.dart';
 class Invoice extends HiveObject {
   @HiveField(0)
   final String invoiceNumber;
-  
+
   @HiveField(1)
   final String description;
-  
+
   @HiveField(2)
   final double total;
-  
+
   @HiveField(3)
   final DateTime? date; // Made nullable to handle older data gracefully
-  
+
   @HiveField(4, defaultValue: '€')
   final String currency;
 

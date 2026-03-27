@@ -23,14 +23,16 @@ class InvoicePreview extends StatelessWidget {
             Icon(
               Icons.preview_rounded,
               size: 64,
-              color: Theme.of(context).colorScheme.onSurfaceVariant.withAlpha(128),
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurfaceVariant.withAlpha(128),
             ),
             const SizedBox(height: 16),
             Text(
               'Enter details to see preview',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           ],
         ),

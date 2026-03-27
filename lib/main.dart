@@ -12,7 +12,7 @@ import 'package:elada/presentation/screens/main_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  
+
   if (!Hive.isAdapterRegistered(0)) {
     Hive.registerAdapter(InvoiceAdapter());
   }
@@ -20,8 +20,12 @@ void main() async {
   final invoiceBox = await Hive.openBox<Invoice>('invoices');
   final draftsBox = await Hive.openBox<Invoice>('drafts');
   final settingsBox = await Hive.openBox('settings');
-  
-  final invoiceRepository = InvoiceRepository(invoiceBox, settingsBox, draftBox: draftsBox);
+
+  final invoiceRepository = InvoiceRepository(
+    invoiceBox,
+    settingsBox,
+    draftBox: draftsBox,
+  );
   final pdfService = PdfService();
   final filenameService = FilenameService();
   final fileExportService = FileExportService();
@@ -59,7 +63,10 @@ class EladaApp extends StatelessWidget {
         useMaterial3: true,
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none,
@@ -91,7 +98,10 @@ class EladaApp extends StatelessWidget {
         useMaterial3: true,
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none,
