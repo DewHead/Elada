@@ -20,8 +20,8 @@ This plan addresses the static PDF preview issue and adds end-to-end (E2E) integ
 - [x] Task: Update `lib/presentation/widgets/invoice_preview.dart`: 8d2cf56
     - Refine `ValueKey` for `SfPdfViewer.memory` to ensure reliable refreshes.
     - Ensure the loading indicator is correctly positioned and visible.
-- [ ] Task: Update `lib/presentation/screens/invoice_screen.dart`:
-    - Ensure all `TextField` `onChanged` callbacks correctly call the provider.
+- [x] Task: Update `lib/presentation/screens/invoice_screen.dart`:
+    - Ensure all `TextField` `onChanged` callbacks correctly call the provider. (Verified)
 - [ ] Task: Verify widget tests pass and coverage is >80% for the preview components.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: UI & Widget Integration' (Protocol in workflow.md)
 
