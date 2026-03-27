@@ -22,7 +22,7 @@ This plan addresses the static PDF preview issue and adds end-to-end (E2E) integ
     - Ensure the loading indicator is correctly positioned and visible.
 - [x] Task: Update `lib/presentation/screens/invoice_screen.dart`:
     - Ensure all `TextField` `onChanged` callbacks correctly call the provider. (Verified)
-- [ ] Task: Verify widget tests pass and coverage is >80% for the preview components.
+- [x] Task: Verify widget tests pass and coverage is >80% for the preview components. [100%]
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: UI & Widget Integration' (Protocol in workflow.md)
 
 ## Phase 4: End-to-End (E2E) Verification
