@@ -20,7 +20,7 @@ Implement the core layout sections as isolated, testable components.
 - [x] Task: Implement the `InvoiceHeader` component (Logo, "ב"ה", Company Address, Date/No labels). 51b0911
     - [x] Write unit tests for header text placement and alignment.
     - [x] Implement `InvoiceHeader` drawing logic.
-- [ ] Task: Implement the `InvoiceCustomerInfo` component (Bill To / Ship To headers and data).
+- [~] Task: Implement the `InvoiceCustomerInfo` component (Bill To / Ship To headers and data).
     - [ ] Write unit tests for customer info section layout.
     - [ ] Implement `InvoiceCustomerInfo` drawing logic.
 - [ ] Task: Implement the `InvoiceItemsTable` component (Fixed rows, headers: Description, Qty, Price, Total).
