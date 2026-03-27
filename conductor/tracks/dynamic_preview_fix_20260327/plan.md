@@ -12,7 +12,7 @@ This plan addresses the static PDF preview issue and adds end-to-end (E2E) integ
 - [x] Task: Implement fix in `lib/presentation/providers/invoice_provider.dart`: b418545
     - Move `_isPreviewLoading = true` and `notifyListeners()` outside the `Timer`.
     - Ensure all field update methods trigger `_generatePreview`.
-- [ ] Task: Verify unit tests pass and coverage is >80% for `InvoiceProvider`.
+- [x] Task: Verify unit tests pass and coverage is >80% for `InvoiceProvider`. [86.6%]
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: InvoiceProvider Fix' (Protocol in workflow.md)
 
 ## Phase 3: UI & Widget Integration (TDD)
