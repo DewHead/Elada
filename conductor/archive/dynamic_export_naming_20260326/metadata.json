@@ -1,0 +1,8 @@
+{
+  "track_id": "dynamic_export_naming_20260326",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-03-26T10:30:00Z",
+  "updated_at": "2026-03-26T10:30:00Z",
+  "description": "the name of the exported file should be the invoice number and date."
+}
