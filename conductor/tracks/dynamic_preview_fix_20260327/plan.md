@@ -32,3 +32,7 @@ This plan addresses the static PDF preview issue and adds end-to-end (E2E) integ
 - [x] Task: Complete the E2E test in `integration_test/pdf_preview_e2e_test.dart` as specified. df02e25
 - [x] Task: Run the E2E test suite and verify it passes. a5e948c
 - [x] Task: Conductor - User Manual Verification 'Phase 4: End-to-End (E2E) Verification' (Protocol in workflow.md) aa5d916
+
+## Phase: Review Fixes
+- [x] Task: Apply review suggestions (regenerated mocks and test fix) c6f4a4b
+
