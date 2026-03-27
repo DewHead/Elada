@@ -34,9 +34,9 @@ Implement the core layout sections as isolated, testable components.
 ## Phase 3: Generator Assembly & Integration
 Assemble the components into a functional service and replace the legacy injection logic.
 
-- [~] Task: Create the `PdfCodeGenerator` service to orchestrate the drawing components.
-    - [ ] Write integration tests for the full PDF generation flow.
-    - [ ] Implement `PdfCodeGenerator`.
+- [x] Task: Create the `PdfCodeGenerator` service to orchestrate the drawing components. 4a7a8ed
+    - [x] Write integration tests for the full PDF generation flow.
+    - [x] Implement `PdfCodeGenerator`.
 - [ ] Task: Swap the current template-based PDF service for the new `PdfCodeGenerator` in the application logic.
 - [ ] Task: Verify that the Real-time Preview correctly renders the output from the new code-based generator.
 - [ ] Task: Conductor - User Manual Verification 'Generator Assembly & Integration' (Protocol in workflow.md)
