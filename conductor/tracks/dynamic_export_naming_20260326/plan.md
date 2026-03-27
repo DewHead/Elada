@@ -14,7 +14,7 @@ This track implements a dynamic naming convention for exported PDF invoices, ens
     - [x] Implement sanitization for illegal filesystem characters in the `InvoiceNumber`.
 - [x] Task: Conductor - User Manual Verification 'Domain & Logic' (Protocol in workflow.md) [c1f2694]
 
-## Phase 2: Validation & UI Integration
+## Phase 2: Validation & UI Integration [checkpoint: 9e89264]
 - [x] Task: Add `Date` editor to the UI. [f8f2694]
     - [x] Integrate a Date picker or text input for the "Invoice Date" in `InvoiceScreen`.
     - [x] Ensure the field is integrated with `InvoiceProvider` for real-time preview updates.
