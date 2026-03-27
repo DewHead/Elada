@@ -26,9 +26,9 @@ Implement the core layout sections as isolated, testable components.
 - [x] Task: Implement the `InvoiceItemsTable` component (Fixed rows, headers: Description, Qty, Price, Total). 15b927a
     - [x] Write unit tests for table grid drawing and text overflow handling.
     - [x] Implement `InvoiceItemsTable` drawing logic.
-- [~] Task: Implement the `InvoiceTotals` component (Subtotal, VAT, Balance Due).
-    - [ ] Write unit tests for totals alignment and labeling.
-    - [ ] Implement `InvoiceTotals` drawing logic.
+- [x] Task: Implement the `InvoiceTotals` component (Subtotal, VAT, Balance Due). 5b4fdcf
+    - [x] Write unit tests for totals alignment and labeling.
+    - [x] Implement `InvoiceTotals` drawing logic.
 - [ ] Task: Conductor - User Manual Verification 'Drawing Engine Components' (Protocol in workflow.md)
 
 ## Phase 3: Generator Assembly & Integration
