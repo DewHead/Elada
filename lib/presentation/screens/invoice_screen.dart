@@ -339,6 +339,10 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     );
     if (picked != null && picked != provider.date) {
       provider.updateDate(picked);
+      // Manually trigger update to ensure UI reflects change immediately
+      setState(() {
+        _updateDateController();
+      });
     }
   }
 

@@ -54,6 +54,7 @@ class InvoicePreview extends StatelessWidget {
         children: [
           SfPdfViewer.memory(
             previewBytes,
+            key: ValueKey(previewBytes.hashCode),
             enableDoubleTapZooming: true,
           ),
           if (provider.isPreviewLoading)
