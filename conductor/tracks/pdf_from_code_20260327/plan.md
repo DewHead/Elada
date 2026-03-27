@@ -6,9 +6,9 @@ Transitioning from PDF template modification to a programmatic "PDF-from-Code" e
 Establish the precise visual parameters and create the basic building blocks for the new generator.
 
 - [x] Task: Identify precise HEX colors, font weights, and dimensions (margins, column widths) from the original YONIK PDF. 6c9b5a1
-- [~] Task: Create a base `InvoiceTheme` class to hold branding constants (e.g., brand blue, text styles).
-    - [ ] Write unit tests for `InvoiceTheme` default values.
-    - [ ] Implement `InvoiceTheme`.
+- [x] Task: Create a base `InvoiceTheme` class to hold branding constants (e.g., brand blue, text styles). 72bf812
+    - [x] Write unit tests for `InvoiceTheme` default values.
+    - [x] Implement `InvoiceTheme`.
 - [ ] Task: Implement programmatic drawing for the header and footer blue bars.
     - [ ] Write unit tests to verify bar positioning and color.
     - [ ] Implement drawing logic using `PdfGraphics`.
