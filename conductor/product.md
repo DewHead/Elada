@@ -12,10 +12,11 @@ A system to manage and generate invoices based on a template PDF (YONIK KOSHER L
 - **Brand Integrity:** Maintain the exact visual fidelity and professional aesthetic of the original YONIK KOSHER LIFESTYLE LTD template across all generated documents.
 
 ## Key Features
-- **Dynamic Field Injection:** Directly modify the "Description", "Total", and "Balance Due" fields via a clean user interface.
+- **Dynamic Field Injection:** Directly modify the "Description", "Total", "Balance Due", and "Invoice Date" fields via a clean user interface.
 - **Smart Invoice Numbering:** Automatically track and increment the "INVOICE NO." while allowing for manual overrides when necessary.
 - **PDF Generation Engine:** Generate and save a new, high-quality PDF file upon modification.
-- **Dashboard & History:** A centralized hub to view all previously generated invoices and manage ongoing drafts.
+- **Dashboard & History:** A centralized hub to view all previously generated invoices and manage ongoing drafts, including metadata like the specific date assigned to each invoice.
+- **Dynamic Export Naming:** Automatically generates descriptive filenames for exported PDFs using the `[InvoiceNumber]_[InvoiceDate].pdf` pattern, ensuring filesystem compatibility through automatic sanitization.
 - **Draft Management:** Full CRUD support for invoice drafts, allowing users to save progress and resume editing at any time.
 - **Multi-Currency Support:** Ability to generate invoices in multiple currencies (€, $, £), with automatic formatting and persistence.
 - **Real-time PDF Preview:** A live, debounced visual representation of the invoice as fields are updated, with a responsive side-by-side layout for desktop and toggleable view for mobile.
