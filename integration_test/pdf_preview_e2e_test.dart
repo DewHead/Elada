@@ -17,18 +17,43 @@ void main() {
       // 2. Initial state: verify the app is running and showing the main screen
       expect(find.text('Generate New Invoice'), findsOneWidget);
 
-      // 3. Find the description field and enter text
+      // Wait for initial preview generation to complete
+      // (The initial call in constructor triggers it)
+      await tester.pump(const Duration(milliseconds: 1000));
+      await tester.pumpAndSettle();
+
+      // 3. Find the description field
       final descriptionField = find.widgetWithText(
         TextField,
         'Item Description',
       );
       expect(descriptionField, findsOneWidget);
 
+      // 4. Enter text and verify immediate loading spinner
       await tester.enterText(descriptionField, 'Test Invoice Item');
+      await tester.pump(); // Immediate rebuild
+
+      // Should show CircularProgressIndicator in the preview area
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // 5. Wait for debounce period (500ms)
+      await tester.pump(const Duration(milliseconds: 1000));
       await tester.pumpAndSettle();
 
-      // 4. Verify text was entered
-      expect(find.text('Test Invoice Item'), findsOneWidget);
+      // 6. Verify PDF viewer is present (indicating preview loaded)
+      // Note: SfPdfViewer might take a moment to mount
+      expect(find.byType(SfPdfViewer), findsOneWidget);
+
+      // 7. Change another field (Total) and verify loading again
+      final totalField = find.widgetWithText(TextField, 'Total Amount');
+      await tester.enterText(totalField, '150.50');
+      await tester.pump();
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 1000));
+      await tester.pumpAndSettle();
+      expect(find.byType(SfPdfViewer), findsOneWidget);
     });
   });
 }
