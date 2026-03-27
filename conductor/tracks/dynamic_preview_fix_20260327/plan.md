@@ -28,7 +28,7 @@ This plan addresses the static PDF preview issue and adds end-to-end (E2E) integ
 ## Phase 4: End-to-End (E2E) Verification
 ...
 
-## Phase 4: End-to-End (E2E) Verification
+## Phase 4: End-to-End (E2E) Verification [checkpoint: aa5d916]
 - [x] Task: Complete the E2E test in `integration_test/pdf_preview_e2e_test.dart` as specified. df02e25
 - [x] Task: Run the E2E test suite and verify it passes. a5e948c
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: End-to-End (E2E) Verification' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 4: End-to-End (E2E) Verification' (Protocol in workflow.md) aa5d916
