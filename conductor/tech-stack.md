@@ -20,6 +20,11 @@
 - **Material 3:** Google's latest design system, providing a modern, sleek, and highly customizable set of UI components that align with "bleeding edge" design standards.
 - **Custom Theming:** Leveraging Flutter's `ThemeData` to implement a minimalist, high-end aesthetic with premium visual effects (subtle shadows, elegant transitions).
 
+## Testing & Verification
+- **flutter_test:** The standard Flutter testing framework for unit and widget testing.
+- **integration_test:** Used for end-to-end (E2E) verification of the application's core flows and UI responsiveness.
+- **mockito:** Used for creating reliable mocks and stubs during unit and widget testing.
+
 ## Local Development & Portability
 - **Dart SDK:** The underlying language for Flutter development.
 - **Local Execution:** Optimized for running directly on the user's machine without external server dependencies.
