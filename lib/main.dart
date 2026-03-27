@@ -11,7 +11,7 @@ import 'package:elada/domain/services/file_export_service.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
 import 'package:elada/presentation/screens/main_screen.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
 
