@@ -73,4 +73,22 @@ void main() {
       ),
     ).called(1);
   });
+
+  test('should set isPreviewLoading to true immediately when data changes', () {
+    when(
+      mockPdfService.generateInvoice(
+        description: anyNamed('description'),
+        total: anyNamed('total'),
+        invoiceNumber: anyNamed('invoiceNumber'),
+        date: anyNamed('date'),
+        billTo: anyNamed('billTo'),
+        shipTo: anyNamed('shipTo'),
+        currency: anyNamed('currency'),
+      ),
+    ).thenAnswer((_) async => Uint8List(0));
+
+    provider.updateDescription('Test');
+
+    expect(provider.isPreviewLoading, isTrue);
+  });
 }
