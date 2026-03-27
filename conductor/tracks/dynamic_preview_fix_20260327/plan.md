@@ -17,7 +17,7 @@ This plan addresses the static PDF preview issue and adds end-to-end (E2E) integ
 
 ## Phase 3: UI & Widget Integration (TDD)
 - [x] Task: Write failing widget tests in `test/presentation/widgets/invoice_preview_test.dart` to verify that the loading spinner appears immediately and the PDF viewer updates when `previewBytes` changes. c252a16
-- [ ] Task: Update `lib/presentation/widgets/invoice_preview.dart`:
+- [x] Task: Update `lib/presentation/widgets/invoice_preview.dart`: 8d2cf56
     - Refine `ValueKey` for `SfPdfViewer.memory` to ensure reliable refreshes.
     - Ensure the loading indicator is correctly positioned and visible.
 - [ ] Task: Update `lib/presentation/screens/invoice_screen.dart`:
