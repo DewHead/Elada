@@ -17,9 +17,9 @@ Establish the precise visual parameters and create the basic building blocks for
 ## Phase 2: Drawing Engine Components (TDD)
 Implement the core layout sections as isolated, testable components.
 
-- [~] Task: Implement the `InvoiceHeader` component (Logo, "ב"ה", Company Address, Date/No labels).
-    - [ ] Write unit tests for header text placement and alignment.
-    - [ ] Implement `InvoiceHeader` drawing logic.
+- [x] Task: Implement the `InvoiceHeader` component (Logo, "ב"ה", Company Address, Date/No labels). 51b0911
+    - [x] Write unit tests for header text placement and alignment.
+    - [x] Implement `InvoiceHeader` drawing logic.
 - [ ] Task: Implement the `InvoiceCustomerInfo` component (Bill To / Ship To headers and data).
     - [ ] Write unit tests for customer info section layout.
     - [ ] Implement `InvoiceCustomerInfo` drawing logic.
