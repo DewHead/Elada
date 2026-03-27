@@ -123,7 +123,12 @@ void main() {
       await tester.pumpWidget(createWidgetUnderTest());
       await tester.pump();
 
-      await tester.tap(find.text('Invoice Date'));
+      final dateField = find.ancestor(
+        of: find.text('Invoice Date'),
+        matching: find.byType(TextField),
+      );
+      await tester.ensureVisible(dateField);
+      await tester.tap(dateField);
       await tester.pumpAndSettle();
 
       // Should find the DatePicker (Material 3)

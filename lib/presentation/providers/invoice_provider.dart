@@ -63,44 +63,44 @@ class InvoiceProvider with ChangeNotifier {
 
   void updateDescription(String value) {
     _description = value;
-    notifyListeners();
     _generatePreview();
+    notifyListeners();
   }
 
   void updateTotal(double value) {
     _total = value;
-    notifyListeners();
     _generatePreview();
+    notifyListeners();
   }
 
   void updateInvoiceNumber(String value) {
     _invoiceNumber = value;
-    notifyListeners();
     _generatePreview();
+    notifyListeners();
   }
 
   void updateDate(DateTime value) {
     _date = value;
-    notifyListeners();
     _generatePreview();
+    notifyListeners();
   }
 
   void updateCurrency(String value) {
     _selectedCurrency = value;
-    notifyListeners();
     _generatePreview();
+    notifyListeners();
   }
 
   void updateBillTo(String value) {
     _billTo = value;
-    notifyListeners();
     _generatePreview();
+    notifyListeners();
   }
 
   void updateShipTo(String value) {
     _shipTo = value;
-    notifyListeners();
     _generatePreview();
+    notifyListeners();
   }
 
   void _generatePreview() {
@@ -110,7 +110,7 @@ class InvoiceProvider with ChangeNotifier {
       notifyListeners();
 
       try {
-        _previewBytes = await _pdfService.generateInvoice(
+        final bytes = await _pdfService.generateInvoice(
           description: _description,
           total: _total,
           invoiceNumber: _invoiceNumber,
@@ -119,6 +119,7 @@ class InvoiceProvider with ChangeNotifier {
           shipTo: _shipTo,
           currency: _selectedCurrency,
         );
+        _previewBytes = bytes;
       } catch (e, stack) {
         // Error handling
       } finally {
@@ -130,8 +131,8 @@ class InvoiceProvider with ChangeNotifier {
 
   void incrementInvoiceNumber() {
     _invoiceNumber = _incrementStringNumber(_invoiceNumber);
-    notifyListeners();
     _generatePreview();
+    notifyListeners();
   }
 
   String _incrementStringNumber(String number) {
@@ -168,8 +169,8 @@ class InvoiceProvider with ChangeNotifier {
     _selectedCurrency = draft.currency;
     _billTo = draft.billTo;
     _shipTo = draft.shipTo;
-    notifyListeners();
     _generatePreview();
+    notifyListeners();
   }
 
   Future<void> deleteDraft(int index) async {
