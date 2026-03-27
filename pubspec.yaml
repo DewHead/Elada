@@ -62,6 +62,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
   path: any
+  integration_test:
+    sdk: flutter
 flutter:
 
   # The following line ensures that the Material Icons font is
