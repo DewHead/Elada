@@ -18,14 +18,16 @@ class InvoiceHeader {
     final PdfBrush brush = PdfSolidBrush(theme.black);
     final PdfBrush brandBrush = PdfSolidBrush(theme.brandBlue);
 
-    // 1. "ב\"ה" - Top Right
+    // 1. Removed B"H label to avoid font/rendering issues
+    /*
     graphics.drawString(
-      'ב"ה',
+      'B"H',
       theme.defaultFont,
       brush: brush,
       bounds: Rect.fromLTWH(theme.pageWidth - 60, 50, 40, 20),
       format: PdfStringFormat(alignment: PdfTextAlignment.right),
     );
+    */
 
     // 2. Company Name / Logo - Top Left
     graphics.drawString(

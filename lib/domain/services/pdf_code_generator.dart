@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:elada/domain/services/invoice_theme.dart';
 import 'package:elada/domain/services/pdf_components/decoration_component.dart';
@@ -45,40 +46,39 @@ class PdfCodeGenerator {
     final PdfGraphics graphics = page.graphics;
 
     // 3. Draw Components
-    // 3.1 Decorations (Header and Footer Bars)
-    _decoration.drawHeaderBar(graphics);
-    _decoration.drawFooterBar(graphics);
+    try {
+      _decoration.drawHeaderBar(graphics);
+      _decoration.drawFooterBar(graphics);
 
-    // 3.2 Header
-    _header.draw(
-      graphics: graphics,
-      invoiceNumber: invoiceNumber,
-      date: date,
-    );
+      _header.draw(
+        graphics: graphics,
+        invoiceNumber: invoiceNumber,
+        date: date,
+      );
 
-    // 3.3 Customer Info
-    _customerInfo.draw(
-      graphics: graphics,
-      billTo: billTo,
-      shipTo: shipTo,
-    );
+      _customerInfo.draw(
+        graphics: graphics,
+        billTo: billTo,
+        shipTo: shipTo,
+      );
 
-    // 3.4 Items Table
-    _itemsTable.draw(
-      graphics: graphics,
-      description: description,
-      total: total,
-      currency: currency,
-    );
+      _itemsTable.draw(
+        graphics: graphics,
+        description: description,
+        total: total,
+        currency: currency,
+      );
 
-    // 3.5 Totals
-    _totals.draw(
-      graphics: graphics,
-      subtotal: total, // For now, assume total is subtotal if no taxes/discounts
-      vat: 0.0,
-      total: total,
-      currency: currency,
-    );
+      _totals.draw(
+        graphics: graphics,
+        subtotal: total,
+        vat: 0.0,
+        total: total,
+        currency: currency,
+      );
+    } catch (e, stack) {
+      rethrow;
+    }
 
     // 4. Save and return the document
     final List<int> bytes = await document.save();

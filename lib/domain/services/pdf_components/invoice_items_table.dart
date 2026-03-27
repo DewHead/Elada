@@ -80,8 +80,9 @@ class InvoiceItemsTable {
     currentX += columnWidths[1];
 
     // Unit Price (Same as total for 1 qty)
+    final currencyText = currency == '€' ? 'EUR' : currency;
     graphics.drawString(
-      '$currency ${total.toStringAsFixed(2)}',
+      '$currencyText ${total.toStringAsFixed(2)}',
       dataFont,
       brush: brush,
       bounds: Rect.fromLTWH(currentX + 5, rowY + 5, columnWidths[2] - 10, rowHeight - 10),
@@ -91,7 +92,7 @@ class InvoiceItemsTable {
 
     // Total
     graphics.drawString(
-      '$currency ${total.toStringAsFixed(2)}',
+      '$currencyText ${total.toStringAsFixed(2)}',
       dataFont,
       brush: brush,
       bounds: Rect.fromLTWH(currentX + 5, rowY + 5, columnWidths[3] - 10, rowHeight - 10),

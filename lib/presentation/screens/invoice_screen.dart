@@ -53,9 +53,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
       if (_shipToController.text != _provider.shipTo) {
         _shipToController.text = _provider.shipTo;
       }
-      final totalStr = _provider.total > 0 ? _provider.total.toString() : '';
-      if (_totalController.text != totalStr) {
-        _totalController.text = totalStr;
+      final currentTotal = double.tryParse(_totalController.text) ?? 0.0;
+      if (currentTotal != _provider.total) {
+        _totalController.text = _provider.total > 0 ? _provider.total.toString() : '';
       }
       _updateDateController();
     });

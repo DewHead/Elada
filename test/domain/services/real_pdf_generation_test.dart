@@ -11,12 +11,13 @@ void main() {
     final service = PdfService(generator);
 
     final bytes = await service.generateInvoice(
-      description: 'Test Description',
-      total: 100.0,
-      invoiceNumber: '123',
-      date: DateTime.now(),
-      billTo: 'Bill To Test',
-      shipTo: 'Ship To Test',
+      description: 'Car',
+      total: 10000.0,
+      invoiceNumber: '9421',
+      date: DateTime(2026, 3, 26),
+      billTo: 'Elad Avital',
+      shipTo: '',
+      currency: '€',
     );
 
     expect(bytes, isNotEmpty);

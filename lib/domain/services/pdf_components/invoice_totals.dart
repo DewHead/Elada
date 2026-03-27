@@ -27,14 +27,15 @@ class InvoiceTotals {
     final double rowHeight = 20;
 
     final rightFormat = PdfStringFormat(alignment: PdfTextAlignment.right);
+    final currencyText = currency == '€' ? 'EUR' : currency;
 
     // 1. Subtotal
     graphics.drawString('Subtotal', labelFont, brush: brush, bounds: Rect.fromLTWH(labelX, yOffset, 100, rowHeight));
-    graphics.drawString('$currency ${subtotal.toStringAsFixed(2)}', labelFont, brush: brush, bounds: Rect.fromLTWH(valueX, yOffset, 60, rowHeight), format: rightFormat);
+    graphics.drawString('$currencyText ${subtotal.toStringAsFixed(2)}', labelFont, brush: brush, bounds: Rect.fromLTWH(valueX, yOffset, 60, rowHeight), format: rightFormat);
 
     // 2. VAT (Placeholder 0% for now if not calculated)
     graphics.drawString('VAT (0%)', labelFont, brush: brush, bounds: Rect.fromLTWH(labelX, yOffset + rowHeight, 100, rowHeight));
-    graphics.drawString('$currency ${vat.toStringAsFixed(2)}', labelFont, brush: brush, bounds: Rect.fromLTWH(valueX, yOffset + rowHeight, 60, rowHeight), format: rightFormat);
+    graphics.drawString('$currencyText ${vat.toStringAsFixed(2)}', labelFont, brush: brush, bounds: Rect.fromLTWH(valueX, yOffset + rowHeight, 60, rowHeight), format: rightFormat);
 
     // 3. Horizontal line before Balance Due
     graphics.drawLine(PdfPen(theme.grey, width: 0.5), Offset(labelX, yOffset + (rowHeight * 2) + 5), Offset(theme.pageWidth - theme.margin, yOffset + (rowHeight * 2) + 5));
@@ -42,6 +43,6 @@ class InvoiceTotals {
     // 4. Balance Due (Prominent)
     final double balanceY = yOffset + (rowHeight * 2) + 15;
     graphics.drawString('Balance Due', boldFont, brush: brandBrush, bounds: Rect.fromLTWH(labelX, balanceY, 120, rowHeight));
-    graphics.drawString('$currency ${total.toStringAsFixed(2)}', boldFont, brush: brandBrush, bounds: Rect.fromLTWH(valueX, balanceY, 60, rowHeight), format: rightFormat);
+    graphics.drawString('$currencyText ${total.toStringAsFixed(2)}', boldFont, brush: brandBrush, bounds: Rect.fromLTWH(valueX, balanceY, 60, rowHeight), format: rightFormat);
   }
 }

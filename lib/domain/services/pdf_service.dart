@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:elada/domain/services/pdf_code_generator.dart';
 
 class PdfService {
@@ -16,14 +17,18 @@ class PdfService {
     String currency = '€',
     Uint8List? templateBytes, // Kept for backward compatibility but ignored
   }) async {
-    return await _generator.generate(
-      description: description,
-      total: total,
-      invoiceNumber: invoiceNumber,
-      date: date,
-      billTo: billTo,
-      shipTo: shipTo,
-      currency: currency,
-    );
+    try {
+      return await _generator.generate(
+        description: description,
+        total: total,
+        invoiceNumber: invoiceNumber,
+        date: date,
+        billTo: billTo,
+        shipTo: shipTo,
+        currency: currency,
+      );
+    } catch (e, stack) {
+      rethrow;
+    }
   }
 }

@@ -120,7 +120,7 @@ class InvoiceProvider with ChangeNotifier {
           currency: _selectedCurrency,
         );
       } catch (e, stack) {
-        // Error logged in production or handled appropriately
+        // Error handling
       } finally {
         _isPreviewLoading = false;
         notifyListeners();
