@@ -2,7 +2,7 @@
 
 Transitioning from PDF template modification to a programmatic "PDF-from-Code" engine using `syncfusion_flutter_pdf`.
 
-## Phase 1: Research & Component Foundation
+## Phase 1: Research & Component Foundation [checkpoint: 39dbdce]
 Establish the precise visual parameters and create the basic building blocks for the new generator.
 
 - [x] Task: Identify precise HEX colors, font weights, and dimensions (margins, column widths) from the original YONIK PDF. 6c9b5a1
@@ -12,7 +12,7 @@ Establish the precise visual parameters and create the basic building blocks for
 - [x] Task: Implement programmatic drawing for the header and footer blue bars. 3823a48
     - [x] Write unit tests to verify bar positioning and color.
     - [x] Implement drawing logic using `PdfGraphics`.
-- [~] Task: Conductor - User Manual Verification 'Research & Component Foundation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Research & Component Foundation' (Protocol in workflow.md) 39dbdce
 
 ## Phase 2: Drawing Engine Components (TDD)
 Implement the core layout sections as isolated, testable components.
