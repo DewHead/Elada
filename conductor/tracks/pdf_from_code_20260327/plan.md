@@ -44,7 +44,7 @@ Assemble the components into a functional service and replace the legacy injecti
 ## Phase 4: Validation & Cleanup
 Ensure pixel-perfection and remove legacy artifacts.
 
-- [ ] Task: Perform a side-by-side visual audit of the generated PDF vs. the original template.
-- [ ] Task: Verify that file naming and history saving still work as expected.
-- [ ] Task: Remove the legacy `invoice_template.pdf` asset and related code.
-- [ ] Task: Conductor - User Manual Verification 'Final Validation & Cleanup' (Protocol in workflow.md)
+- [x] Task: Perform a side-by-side visual audit of the generated PDF vs. the original template. 987e084
+- [x] Task: Verify that file naming and history saving still work as expected. 987e084
+- [x] Task: Remove the legacy `invoice_template.pdf` asset and related code. 393cb00 (Final cleanup: latest)
+- [~] Task: Conductor - User Manual Verification 'Final Validation & Cleanup' (Protocol in workflow.md)

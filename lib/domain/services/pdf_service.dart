@@ -15,7 +15,6 @@ class PdfService {
     String billTo = '',
     String shipTo = '',
     String currency = '€',
-    Uint8List? templateBytes, // Kept for backward compatibility but ignored
   }) async {
     try {
       return await _generator.generate(

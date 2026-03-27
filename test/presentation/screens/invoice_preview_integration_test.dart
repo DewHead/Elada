@@ -80,7 +80,6 @@ void main() {
           billTo: anyNamed('billTo'),
           shipTo: anyNamed('shipTo'),
           currency: anyNamed('currency'),
-          templateBytes: anyNamed('templateBytes'),
         ),
       ).thenAnswer((_) async => previewBytes);
 

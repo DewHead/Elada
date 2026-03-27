@@ -4,8 +4,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i5;
-import 'dart:typed_data' as _i6;
-import 'dart:ui' as _i7;
+import 'dart:ui' as _i6;
 
 import 'package:elada/data/models/invoice.dart' as _i4;
 import 'package:elada/presentation/providers/invoice_provider.dart' as _i2;
@@ -253,16 +252,7 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       ) as _i5.Future<String>);
 
   @override
-  _i5.Future<_i6.Uint8List> generateInvoice() => (super.noSuchMethod(
-        Invocation.method(
-          #generateInvoice,
-          [],
-        ),
-        returnValue: _i5.Future<_i6.Uint8List>.value(_i6.Uint8List(0)),
-      ) as _i5.Future<_i6.Uint8List>);
-
-  @override
-  void addListener(_i7.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i6.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -271,7 +261,7 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       );
 
   @override
-  void removeListener(_i7.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i6.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],

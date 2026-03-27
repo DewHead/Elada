@@ -143,7 +143,6 @@ class MockPdfService extends _i1.Mock implements _i6.PdfService {
     String? billTo = r'',
     String? shipTo = r'',
     String? currency = r'€',
-    _i7.Uint8List? templateBytes,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -157,7 +156,6 @@ class MockPdfService extends _i1.Mock implements _i6.PdfService {
             #billTo: billTo,
             #shipTo: shipTo,
             #currency: currency,
-            #templateBytes: templateBytes,
           },
         ),
         returnValue: _i3.Future<_i7.Uint8List>.value(_i7.Uint8List(0)),

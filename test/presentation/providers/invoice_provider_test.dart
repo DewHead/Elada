@@ -73,8 +73,9 @@ void main() {
           description: anyNamed('description'),
           total: anyNamed('total'),
           invoiceNumber: anyNamed('invoiceNumber'),
-          templateBytes: anyNamed('templateBytes'),
           date: anyNamed('date'),
+          billTo: anyNamed('billTo'),
+          shipTo: anyNamed('shipTo'),
           currency: anyNamed('currency'),
         ),
       ).thenAnswer((_) async => pdfBytes);

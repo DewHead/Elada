@@ -218,17 +218,4 @@ class InvoiceProvider with ChangeNotifier {
 
     return savedPath;
   }
-
-  @Deprecated('Use generateAndSaveInvoice instead')
-  Future<Uint8List> generateInvoice() async {
-    return await _pdfService.generateInvoice(
-      description: _description,
-      total: _total,
-      invoiceNumber: _invoiceNumber,
-      date: _date,
-      billTo: _billTo,
-      shipTo: _shipTo,
-      currency: _selectedCurrency,
-    );
-  }
 }
