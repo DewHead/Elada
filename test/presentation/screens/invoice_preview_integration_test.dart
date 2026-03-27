@@ -65,8 +65,8 @@ void main() {
       await tester.pumpWidget(createWidgetUnderTest(provider));
       await tester.pump();
 
-      // Should find InvoicePreview widget
-      expect(find.text('Enter details to see preview'), findsOneWidget);
+      // Should find InvoicePreview widget showing a loading indicator initially
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
 
       // Add some details
       final previewBytes = Uint8List(20);

@@ -39,14 +39,24 @@ import 'package:syncfusion_flutter_pdf/src/pdf/implementation/graphics/pdf_pen.d
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeSize_0 extends _i1.SmartFake implements _i2.Size {
-  _FakeSize_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakeSize_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 class _FakePdfGraphicsState_1 extends _i1.SmartFake
     implements _i3.PdfGraphicsState {
-  _FakePdfGraphicsState_1(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
+  _FakePdfGraphicsState_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
 }
 
 /// A class which mocks [PdfGraphics].
@@ -58,64 +68,86 @@ class MockPdfGraphics extends _i1.Mock implements _i3.PdfGraphics {
   }
 
   @override
-  _i4.PdfColorSpace get colorSpace =>
-      (super.noSuchMethod(
-            Invocation.getter(#colorSpace),
-            returnValue: _i4.PdfColorSpace.rgb,
-          )
-          as _i4.PdfColorSpace);
+  _i4.PdfColorSpace get colorSpace => (super.noSuchMethod(
+        Invocation.getter(#colorSpace),
+        returnValue: _i4.PdfColorSpace.rgb,
+      ) as _i4.PdfColorSpace);
 
   @override
   set colorSpace(_i4.PdfColorSpace? _colorSpace) => super.noSuchMethod(
-    Invocation.setter(#colorSpace, _colorSpace),
-    returnValueForMissingStub: null,
-  );
+        Invocation.setter(
+          #colorSpace,
+          _colorSpace,
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
-  _i2.Size get size =>
-      (super.noSuchMethod(
-            Invocation.getter(#size),
-            returnValue: _FakeSize_0(this, Invocation.getter(#size)),
-          )
-          as _i2.Size);
+  _i2.Size get size => (super.noSuchMethod(
+        Invocation.getter(#size),
+        returnValue: _FakeSize_0(
+          this,
+          Invocation.getter(#size),
+        ),
+      ) as _i2.Size);
 
   @override
-  _i2.Size get clientSize =>
-      (super.noSuchMethod(
-            Invocation.getter(#clientSize),
-            returnValue: _FakeSize_0(this, Invocation.getter(#clientSize)),
-          )
-          as _i2.Size);
+  _i2.Size get clientSize => (super.noSuchMethod(
+        Invocation.getter(#clientSize),
+        returnValue: _FakeSize_0(
+          this,
+          Invocation.getter(#clientSize),
+        ),
+      ) as _i2.Size);
 
   @override
-  void translateTransform(double? offsetX, double? offsetY) =>
+  void translateTransform(
+    double? offsetX,
+    double? offsetY,
+  ) =>
       super.noSuchMethod(
-        Invocation.method(#translateTransform, [offsetX, offsetY]),
+        Invocation.method(
+          #translateTransform,
+          [
+            offsetX,
+            offsetY,
+          ],
+        ),
         returnValueForMissingStub: null,
       );
 
   @override
   void rotateTransform(double? angle) => super.noSuchMethod(
-    Invocation.method(#rotateTransform, [angle]),
-    returnValueForMissingStub: null,
-  );
+        Invocation.method(
+          #rotateTransform,
+          [angle],
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
-  _i3.PdfGraphicsState save() =>
-      (super.noSuchMethod(
-            Invocation.method(#save, []),
-            returnValue: _FakePdfGraphicsState_1(
-              this,
-              Invocation.method(#save, []),
-            ),
-          )
-          as _i3.PdfGraphicsState);
+  _i3.PdfGraphicsState save() => (super.noSuchMethod(
+        Invocation.method(
+          #save,
+          [],
+        ),
+        returnValue: _FakePdfGraphicsState_1(
+          this,
+          Invocation.method(
+            #save,
+            [],
+          ),
+        ),
+      ) as _i3.PdfGraphicsState);
 
   @override
   void restore([_i3.PdfGraphicsState? state]) => super.noSuchMethod(
-    Invocation.method(#restore, [state]),
-    returnValueForMissingStub: null,
-  );
+        Invocation.method(
+          #restore,
+          [state],
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
   void drawString(
@@ -125,19 +157,39 @@ class MockPdfGraphics extends _i1.Mock implements _i3.PdfGraphics {
     _i7.PdfBrush? brush,
     _i2.Rect? bounds,
     _i8.PdfStringFormat? format,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #drawString,
-      [s, font],
-      {#pen: pen, #brush: brush, #bounds: bounds, #format: format},
-    ),
-    returnValueForMissingStub: null,
-  );
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #drawString,
+          [
+            s,
+            font,
+          ],
+          {
+            #pen: pen,
+            #brush: brush,
+            #bounds: bounds,
+            #format: format,
+          },
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
-  void drawLine(_i6.PdfPen? pen, _i2.Offset? point1, _i2.Offset? point2) =>
+  void drawLine(
+    _i6.PdfPen? pen,
+    _i2.Offset? point1,
+    _i2.Offset? point2,
+  ) =>
       super.noSuchMethod(
-        Invocation.method(#drawLine, [pen, point1, point2]),
+        Invocation.method(
+          #drawLine,
+          [
+            pen,
+            point1,
+            point2,
+          ],
+        ),
         returnValueForMissingStub: null,
       );
 
@@ -146,53 +198,88 @@ class MockPdfGraphics extends _i1.Mock implements _i3.PdfGraphics {
     _i6.PdfPen? pen,
     _i7.PdfBrush? brush,
     required _i2.Rect? bounds,
-  }) => super.noSuchMethod(
-    Invocation.method(#drawRectangle, [], {
-      #pen: pen,
-      #brush: brush,
-      #bounds: bounds,
-    }),
-    returnValueForMissingStub: null,
-  );
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #drawRectangle,
+          [],
+          {
+            #pen: pen,
+            #brush: brush,
+            #bounds: bounds,
+          },
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
   void drawPdfTemplate(
     _i9.PdfTemplate? template,
     _i2.Offset? location, [
     _i2.Size? size,
-  ]) => super.noSuchMethod(
-    Invocation.method(#drawPdfTemplate, [template, location, size]),
-    returnValueForMissingStub: null,
-  );
+  ]) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #drawPdfTemplate,
+          [
+            template,
+            location,
+            size,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
-  void drawImage(_i10.PdfImage? image, _i2.Rect? bounds) => super.noSuchMethod(
-    Invocation.method(#drawImage, [image, bounds]),
-    returnValueForMissingStub: null,
-  );
+  void drawImage(
+    _i10.PdfImage? image,
+    _i2.Rect? bounds,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #drawImage,
+          [
+            image,
+            bounds,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
   void setTransparency(
     double? alpha, {
     double? alphaBrush,
     _i4.PdfBlendMode? mode = _i4.PdfBlendMode.normal,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #setTransparency,
-      [alpha],
-      {#alphaBrush: alphaBrush, #mode: mode},
-    ),
-    returnValueForMissingStub: null,
-  );
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #setTransparency,
+          [alpha],
+          {
+            #alphaBrush: alphaBrush,
+            #mode: mode,
+          },
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
-  void setClip({_i2.Rect? bounds, _i11.PdfPath? path, _i4.PdfFillMode? mode}) =>
+  void setClip({
+    _i2.Rect? bounds,
+    _i11.PdfPath? path,
+    _i4.PdfFillMode? mode,
+  }) =>
       super.noSuchMethod(
-        Invocation.method(#setClip, [], {
-          #bounds: bounds,
-          #path: path,
-          #mode: mode,
-        }),
+        Invocation.method(
+          #setClip,
+          [],
+          {
+            #bounds: bounds,
+            #path: path,
+            #mode: mode,
+          },
+        ),
         returnValueForMissingStub: null,
       );
 
@@ -203,19 +290,36 @@ class MockPdfGraphics extends _i1.Mock implements _i3.PdfGraphics {
     _i2.Offset? secondControlPoint,
     _i2.Offset? endPoint, {
     _i6.PdfPen? pen,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #drawBezier,
-      [startPoint, firstControlPoint, secondControlPoint, endPoint],
-      {#pen: pen},
-    ),
-    returnValueForMissingStub: null,
-  );
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #drawBezier,
+          [
+            startPoint,
+            firstControlPoint,
+            secondControlPoint,
+            endPoint,
+          ],
+          {#pen: pen},
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
-  void drawPath(_i11.PdfPath? path, {_i6.PdfPen? pen, _i7.PdfBrush? brush}) =>
+  void drawPath(
+    _i11.PdfPath? path, {
+    _i6.PdfPen? pen,
+    _i7.PdfBrush? brush,
+  }) =>
       super.noSuchMethod(
-        Invocation.method(#drawPath, [path], {#pen: pen, #brush: brush}),
+        Invocation.method(
+          #drawPath,
+          [path],
+          {
+            #pen: pen,
+            #brush: brush,
+          },
+        ),
         returnValueForMissingStub: null,
       );
 
@@ -226,19 +330,38 @@ class MockPdfGraphics extends _i1.Mock implements _i3.PdfGraphics {
     double? sweepAngle, {
     _i6.PdfPen? pen,
     _i7.PdfBrush? brush,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #drawPie,
-      [bounds, startAngle, sweepAngle],
-      {#pen: pen, #brush: brush},
-    ),
-    returnValueForMissingStub: null,
-  );
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #drawPie,
+          [
+            bounds,
+            startAngle,
+            sweepAngle,
+          ],
+          {
+            #pen: pen,
+            #brush: brush,
+          },
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
-  void drawEllipse(_i2.Rect? bounds, {_i6.PdfPen? pen, _i7.PdfBrush? brush}) =>
+  void drawEllipse(
+    _i2.Rect? bounds, {
+    _i6.PdfPen? pen,
+    _i7.PdfBrush? brush,
+  }) =>
       super.noSuchMethod(
-        Invocation.method(#drawEllipse, [bounds], {#pen: pen, #brush: brush}),
+        Invocation.method(
+          #drawEllipse,
+          [bounds],
+          {
+            #pen: pen,
+            #brush: brush,
+          },
+        ),
         returnValueForMissingStub: null,
       );
 
@@ -248,24 +371,51 @@ class MockPdfGraphics extends _i1.Mock implements _i3.PdfGraphics {
     double? startAngle,
     double? sweepAngle, {
     _i6.PdfPen? pen,
-  }) => super.noSuchMethod(
-    Invocation.method(#drawArc, [bounds, startAngle, sweepAngle], {#pen: pen}),
-    returnValueForMissingStub: null,
-  );
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #drawArc,
+          [
+            bounds,
+            startAngle,
+            sweepAngle,
+          ],
+          {#pen: pen},
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
   void drawPolygon(
     List<_i2.Offset>? points, {
     _i6.PdfPen? pen,
     _i7.PdfBrush? brush,
-  }) => super.noSuchMethod(
-    Invocation.method(#drawPolygon, [points], {#pen: pen, #brush: brush}),
-    returnValueForMissingStub: null,
-  );
+  }) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #drawPolygon,
+          [points],
+          {
+            #pen: pen,
+            #brush: brush,
+          },
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
-  void skewTransform(double? angleX, double? angleY) => super.noSuchMethod(
-    Invocation.method(#skewTransform, [angleX, angleY]),
-    returnValueForMissingStub: null,
-  );
+  void skewTransform(
+    double? angleX,
+    double? angleY,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #skewTransform,
+          [
+            angleX,
+            angleY,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
 }
