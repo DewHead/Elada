@@ -64,51 +64,44 @@ class InvoiceProvider with ChangeNotifier {
   void updateDescription(String value) {
     _description = value;
     _generatePreview();
-    notifyListeners();
   }
 
   void updateTotal(double value) {
     _total = value;
     _generatePreview();
-    notifyListeners();
   }
 
   void updateInvoiceNumber(String value) {
     _invoiceNumber = value;
     _generatePreview();
-    notifyListeners();
   }
 
   void updateDate(DateTime value) {
     _date = value;
     _generatePreview();
-    notifyListeners();
   }
 
   void updateCurrency(String value) {
     _selectedCurrency = value;
     _generatePreview();
-    notifyListeners();
   }
 
   void updateBillTo(String value) {
     _billTo = value;
     _generatePreview();
-    notifyListeners();
   }
 
   void updateShipTo(String value) {
     _shipTo = value;
     _generatePreview();
-    notifyListeners();
   }
 
   void _generatePreview() {
+    _isPreviewLoading = true;
+    notifyListeners();
+
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      _isPreviewLoading = true;
-      notifyListeners();
-
       try {
         final bytes = await _pdfService.generateInvoice(
           description: _description,
@@ -132,7 +125,6 @@ class InvoiceProvider with ChangeNotifier {
   void incrementInvoiceNumber() {
     _invoiceNumber = _incrementStringNumber(_invoiceNumber);
     _generatePreview();
-    notifyListeners();
   }
 
   String _incrementStringNumber(String number) {
@@ -170,7 +162,6 @@ class InvoiceProvider with ChangeNotifier {
     _billTo = draft.billTo;
     _shipTo = draft.shipTo;
     _generatePreview();
-    notifyListeners();
   }
 
   Future<void> deleteDraft(int index) async {
