@@ -31,4 +31,4 @@ This track implements a dynamic naming convention for exported PDF invoices, ens
 - [x] Task: Final project-wide check and code cleanup. [ab01588]
     - [x] Run `dart_fix` and `dart_format`.
     - [x] Ensure test coverage for new logic is >80%.
-- [ ] Task: Conductor - User Manual Verification 'Final Polishing' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Final Polishing' (Protocol in workflow.md) [c3da481]
