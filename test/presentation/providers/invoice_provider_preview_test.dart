@@ -57,8 +57,8 @@ void main() {
 
     provider.updateDescription('Test');
 
-    // Wait for debounce timer (500ms)
-    await Future.delayed(const Duration(milliseconds: 600));
+    // Wait for debounce timer (50ms) + generation
+    await Future.delayed(const Duration(milliseconds: 150));
 
     expect(provider.previewBytes, equals(pdfBytes));
     verify(
@@ -74,7 +74,7 @@ void main() {
     ).called(1);
   });
 
-  test('should set isPreviewLoading to true immediately when data changes', () {
+  test('should set isPreviewLoading to true after delay if generation is slow', () async {
     when(
       mockPdfService.generateInvoice(
         description: anyNamed('description'),
@@ -85,10 +85,23 @@ void main() {
         shipTo: anyNamed('shipTo'),
         currency: anyNamed('currency'),
       ),
-    ).thenAnswer((_) async => Uint8List(0));
+    ).thenAnswer((_) async {
+      await Future.delayed(const Duration(milliseconds: 200));
+      return Uint8List(0);
+    });
 
     provider.updateDescription('Test');
+    
+    // Immediately it should be false
+    expect(provider.isPreviewLoading, isFalse);
+
+    // After debounce (50ms) + loading delay (100ms)
+    await Future.delayed(const Duration(milliseconds: 170));
 
     expect(provider.isPreviewLoading, isTrue);
+    
+    // Wait for completion
+    await Future.delayed(const Duration(milliseconds: 100));
+    expect(provider.isPreviewLoading, isFalse);
   });
 }

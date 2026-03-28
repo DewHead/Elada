@@ -32,6 +32,21 @@ void main() {
     when(mockRepository.getLastInvoiceNumber()).thenReturn('9417');
     when(mockRepository.getInvoices()).thenReturn([]);
     when(mockRepository.getDrafts()).thenReturn([]);
+    
+    when(mockPdfService.loadFonts(
+      regularPath: anyNamed('regularPath'),
+      boldPath: anyNamed('boldPath'),
+    )).thenAnswer((_) async {});
+    
+    when(mockPdfService.generateInvoice(
+      description: anyNamed('description'),
+      total: anyNamed('total'),
+      invoiceNumber: anyNamed('invoiceNumber'),
+      date: anyNamed('date'),
+      billTo: anyNamed('billTo'),
+      shipTo: anyNamed('shipTo'),
+      currency: anyNamed('currency'),
+    )).thenAnswer((_) async => Uint8List(0));
   });
 
   testWidgets('Initial screen shows app title', (WidgetTester tester) async {

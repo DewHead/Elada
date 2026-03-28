@@ -117,11 +117,18 @@ class InvoiceProvider with ChangeNotifier {
   void _generatePreview() {
     if (_isGenerating) return; // Don't generate preview if final PDF is being generated
 
-    isPreviewLoadingNotifier.value = true;
-
     _debounceTimer?.cancel();
     _debounceTimer = Timer(const Duration(milliseconds: 50), () async {
       if (_isGenerating) return; // Double check after debounce
+      
+      // Only set loading to true if it takes longer than 100ms to generate
+      // This prevents the loading indicator from flashing for fast generations
+      final loadingTimer = Timer(const Duration(milliseconds: 100), () {
+        if (!isPreviewLoadingNotifier.value) {
+          isPreviewLoadingNotifier.value = true;
+        }
+      });
+
       try {
         final bytes = await _pdfService.generateInvoice(
           description: _description,
@@ -139,6 +146,7 @@ class InvoiceProvider with ChangeNotifier {
         debugPrint(st.toString());
         debugPrint('============================');
       } finally {
+        loadingTimer.cancel();
         isPreviewLoadingNotifier.value = false;
       }
     });

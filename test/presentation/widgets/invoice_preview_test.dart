@@ -17,20 +17,25 @@ void main() {
   setUp(() {
     mockProvider = MockInvoiceProvider();
 
+    final previewBytesNotifier = ValueNotifier<Uint8List?>(null);
+    final isPreviewLoadingNotifier = ValueNotifier<bool>(false);
+
     when(mockProvider.previewBytes).thenReturn(null);
     when(mockProvider.isPreviewLoading).thenReturn(false);
     when(mockProvider.isGenerating).thenReturn(false);
+    when(mockProvider.previewBytesNotifier).thenReturn(previewBytesNotifier);
+    when(mockProvider.isPreviewLoadingNotifier).thenReturn(isPreviewLoadingNotifier);
 
     // Stub addListener/removeListener for ChangeNotifierProvider
-    when(mockProvider.addListener(any)).thenReturn(null);
-    when(mockProvider.removeListener(any)).thenReturn(null);
+    when(mockProvider.addListener(any)).thenAnswer((_) {});
+    when(mockProvider.removeListener(any)).thenAnswer((_) {});
   });
 
   Widget createWidgetUnderTest() {
     return MaterialApp(
       home: ChangeNotifierProvider<InvoiceProvider>.value(
         value: mockProvider,
-        child: const Scaffold(body: InvoicePreview()),
+        child: const Scaffold(body: InvoicePreview(testing: true)),
       ),
     );
   }

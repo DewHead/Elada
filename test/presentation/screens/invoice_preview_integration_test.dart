@@ -37,6 +37,24 @@ void main() {
     when(mockRepository.getInvoices()).thenReturn([]);
     when(mockRepository.getDrafts()).thenReturn([]);
 
+    // Stub PdfService to avoid MissingStubError during initialization
+    when(mockPdfService.loadFonts(
+      regularPath: anyNamed('regularPath'),
+      boldPath: anyNamed('boldPath'),
+    )).thenAnswer((_) async {});
+
+    when(
+      mockPdfService.generateInvoice(
+        description: anyNamed('description'),
+        total: anyNamed('total'),
+        invoiceNumber: anyNamed('invoiceNumber'),
+        date: anyNamed('date'),
+        billTo: anyNamed('billTo'),
+        shipTo: anyNamed('shipTo'),
+        currency: anyNamed('currency'),
+      ),
+    ).thenAnswer((_) async => Uint8List(0));
+
     provider = InvoiceProvider(
       mockRepository,
       mockPdfService,
@@ -49,7 +67,7 @@ void main() {
     return MaterialApp(
       home: ChangeNotifierProvider<InvoiceProvider>.value(
         value: provider,
-        child: const InvoiceScreen(),
+        child: const InvoiceScreen(testing: true),
       ),
     );
   }
@@ -63,12 +81,14 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
 
       await tester.pumpWidget(createWidgetUnderTest(provider));
-      await tester.pump();
 
-      // Should find InvoicePreview widget showing a loading indicator initially
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      // Wait for initial async generation
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump(); // Handle setState from listener
+      await tester.pump(); // microtask for bypass
+      await tester.pump(); // rebuild
 
-      // Add some details
+      // Add some details to trigger a NEW preview
       final previewBytes = Uint8List(20);
 
       when(
@@ -81,18 +101,25 @@ void main() {
           shipTo: anyNamed('shipTo'),
           currency: anyNamed('currency'),
         ),
-      ).thenAnswer((_) async => previewBytes);
+      ).thenAnswer((_) async {
+        await Future.delayed(const Duration(milliseconds: 100));
+        return previewBytes;
+      });
 
       provider.updateDescription('Test');
+      await tester.pump(); // Start debounce
 
-      // Wait for debounce and any other internal timers
-      await tester.pump(const Duration(milliseconds: 600));
-      await tester.pumpAndSettle();
+      // Wait for debounce (50ms) + loading delay (100ms) + mock delay (100ms)
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(); // Handle setState from bytes update
+      await tester.pump(); // microtask for bypass
+      await tester.pump(); // final build
 
+      expect(find.text('Enter details to see preview'), findsNothing);
       expect(find.byType(SfPdfViewer), findsOneWidget);
 
       provider.dispose();
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.pump(const Duration(seconds: 1));
     });
 
     testWidgets('should show preview FAB on mobile', (tester) async {
@@ -107,15 +134,14 @@ void main() {
       expect(find.text('Preview'), findsOneWidget);
       expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
 
-      // Should NOT find InvoicePreview directly in the body
+      // Should NOT find placeholder text directly
       expect(find.text('Enter details to see preview'), findsNothing);
 
-      // We still need to wait for the initial template loading timer to finish
       await tester.pump(const Duration(milliseconds: 600));
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.pump(const Duration(seconds: 1));
 
       provider.dispose();
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.pump(const Duration(seconds: 1));
     });
   });
 }

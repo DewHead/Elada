@@ -25,18 +25,19 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   final _billToFocusNode = FocusNode();
   final _shipToFocusNode = FocusNode();
 
-  final _descriptionKey = GlobalKey();
-  final _totalKey = GlobalKey();
-  final _invoiceNumberKey = GlobalKey();
-  final _billToKey = GlobalKey();
-  final _shipToKey = GlobalKey();
-
   late InvoiceProvider _provider;
+  
+  // Track previous values to detect changes that require UI rebuild (excluding text fields)
+  String? _lastCurrency;
+  bool? _lastIsGenerating;
+  DateTime? _lastDate;
 
   @override
   void initState() {
     super.initState();
     _provider = Provider.of<InvoiceProvider>(context, listen: false);
+    
+    // Initial controller setup
     _invoiceNumberController.text = _provider.invoiceNumber;
     _descriptionController.text = _provider.description;
     _totalController.text = _provider.total > 0
@@ -45,36 +46,61 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     _billToController.text = _provider.billTo;
     _shipToController.text = _provider.shipTo;
     _updateDateController();
+    
+    _lastCurrency = _provider.selectedCurrency;
+    _lastIsGenerating = _provider.isGenerating;
+    _lastDate = _provider.date;
 
-    // Listen for external updates (e.g., loading a draft)
+    // Listen for updates
     _provider.addListener(_onProviderUpdate);
   }
 
   void _onProviderUpdate() {
     if (!mounted) return;
 
-    setState(() {
-      // Only update if controllers are different from provider state to avoid cursor jumping
-      if (_invoiceNumberController.text != _provider.invoiceNumber) {
-        _invoiceNumberController.text = _provider.invoiceNumber;
-      }
-      if (_descriptionController.text != _provider.description) {
-        _descriptionController.text = _provider.description;
-      }
-      if (_billToController.text != _provider.billTo) {
-        _billToController.text = _provider.billTo;
-      }
-      if (_shipToController.text != _provider.shipTo) {
-        _shipToController.text = _provider.shipTo;
-      }
-      final currentTotal = double.tryParse(_totalController.text) ?? 0.0;
-      if (currentTotal != _provider.total) {
-        _totalController.text = _provider.total > 0
-            ? _provider.total.toString()
-            : '';
-      }
-      _updateDateController();
-    });
+    // Update controllers directly WITHOUT setState to avoid rebuild while typing
+    bool controllersUpdated = false;
+    
+    if (_invoiceNumberController.text != _provider.invoiceNumber) {
+      _invoiceNumberController.text = _provider.invoiceNumber;
+      controllersUpdated = true;
+    }
+    if (_descriptionController.text != _provider.description) {
+      _descriptionController.text = _provider.description;
+      controllersUpdated = true;
+    }
+    if (_billToController.text != _provider.billTo) {
+      _billToController.text = _provider.billTo;
+      controllersUpdated = true;
+    }
+    if (_shipToController.text != _provider.shipTo) {
+      _shipToController.text = _provider.shipTo;
+      controllersUpdated = true;
+    }
+    final currentTotal = double.tryParse(_totalController.text) ?? 0.0;
+    if (currentTotal != _provider.total) {
+      _totalController.text = _provider.total > 0
+          ? _provider.total.toString()
+          : '';
+      controllersUpdated = true;
+    }
+    
+    // Check if other UI elements need rebuild
+    final bool currencyChanged = _lastCurrency != _provider.selectedCurrency;
+    final bool isGeneratingChanged = _lastIsGenerating != _provider.isGenerating;
+    final bool dateChanged = _lastDate != _provider.date;
+
+    if (currencyChanged || isGeneratingChanged || dateChanged) {
+      setState(() {
+        _lastCurrency = _provider.selectedCurrency;
+        _lastIsGenerating = _provider.isGenerating;
+        _lastDate = _provider.date;
+        _updateDateController();
+      });
+    } else if (controllersUpdated && !FocusScope.of(context).hasFocus) {
+       // Rebuild only if we are not currently typing and controllers were updated (e.g. loaded draft)
+       setState(() {});
+    }
   }
 
   void _updateDateController() {
@@ -248,7 +274,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         ),
         const SizedBox(height: 16),
         _buildInputField(
-          key: _invoiceNumberKey,
           controller: _invoiceNumberController,
           focusNode: _invoiceNumberFocusNode,
           label: 'Invoice Number',
@@ -267,7 +292,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         ),
         const SizedBox(height: 16),
         _buildInputField(
-          key: _billToKey,
           controller: _billToController,
           focusNode: _billToFocusNode,
           label: 'Bill To',
@@ -276,7 +300,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         ),
         const SizedBox(height: 16),
         _buildInputField(
-          key: _shipToKey,
           controller: _shipToController,
           focusNode: _shipToFocusNode,
           label: 'Ship To',
@@ -285,7 +308,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         ),
         const SizedBox(height: 16),
         _buildInputField(
-          key: _descriptionKey,
           controller: _descriptionController,
           focusNode: _descriptionFocusNode,
           label: 'Item Description',
@@ -295,7 +317,6 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         ),
         const SizedBox(height: 16),
         _buildInputField(
-          key: _totalKey,
           controller: _totalController,
           focusNode: _totalFocusNode,
           label: 'Total Amount',
