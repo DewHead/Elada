@@ -23,6 +23,7 @@
 ## Testing & Verification
 - **flutter_test:** The standard Flutter testing framework for unit and widget testing.
 - **integration_test:** Used for end-to-end (E2E) verification of the application's core flows and UI responsiveness.
+- **compute():** Utilized for offloading heavy PDF generation tasks to background isolates, ensuring a lag-free UI during high-frequency updates.
 - **mockito:** Used for creating reliable mocks and stubs during unit and widget testing.
 
 ## Local Development & Portability

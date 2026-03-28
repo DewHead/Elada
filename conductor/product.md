@@ -19,7 +19,7 @@ A system to manage and programmatically generate professional invoices based on 
 - **Dynamic Export Naming:** Automatically generates descriptive filenames for exported PDFs using the `[InvoiceNumber]_[InvoiceDate].pdf` pattern, ensuring filesystem compatibility through automatic sanitization.
 - **Draft Management:** Full CRUD support for invoice drafts, allowing users to save progress and resume editing at any time.
 - **Multi-Currency Support:** Ability to generate invoices in multiple currencies (€, $, £), with automatic formatting and persistence.
-- **Real-time PDF Preview:** A live, debounced visual representation of the invoice as fields are updated, with a responsive side-by-side layout for desktop and toggleable view for mobile.
+- **Fluid Real-time PDF Preview:** A high-frequency, zero-flicker visual representation of the invoice that updates on every keystroke while maintaining input focus and UI responsiveness.
 - **Main Navigation:** Modern, intuitive navigation to switch seamlessly between the Generator and the Dashboard.
 
 ## Visual Identity
