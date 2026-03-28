@@ -4,7 +4,8 @@ import 'package:elada/presentation/providers/invoice_provider.dart';
 import 'package:elada/presentation/widgets/invoice_preview.dart';
 
 class InvoiceScreen extends StatefulWidget {
-  const InvoiceScreen({super.key});
+  final bool testing;
+  const InvoiceScreen({super.key, this.testing = false});
 
   @override
   State<InvoiceScreen> createState() => _InvoiceScreenState();
@@ -122,11 +123,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   ),
                 ),
                 const VerticalDivider(width: 1),
-                const Expanded(
+                Expanded(
                   flex: 3,
                   child: Padding(
-                    padding: EdgeInsets.all(24.0),
-                    child: InvoicePreview(),
+                    padding: const EdgeInsets.all(24.0),
+                    child: InvoicePreview(testing: widget.testing),
                   ),
                 ),
               ],
@@ -184,10 +185,13 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                 ],
               ),
             ),
-            const Expanded(
+            Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: InvoicePreview(),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: InvoicePreview(testing: widget.testing),
               ),
             ),
           ],

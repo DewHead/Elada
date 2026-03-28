@@ -59,7 +59,7 @@ void main() {
           mockFilenameService,
           mockFileExportService,
         ),
-        child: const InvoiceScreen(),
+        child: const InvoiceScreen(testing: true),
       ),
     );
   }
@@ -128,6 +128,8 @@ void main() {
     
     expect(fieldHasFocus, isTrue, 
         reason: 'Focus lost after typing in Description field and preview generated. Primary focus is on: ${primaryFocus?.context?.widget}');
+    
+    await tester.pump(const Duration(seconds: 1));
   });
 
   testWidgets('SfPdfViewer should NOT be recreated during typing (Zero-Flicker)', (WidgetTester tester) async {
@@ -168,5 +170,7 @@ void main() {
 
     final sfPdfViewerFinderAfter = find.byWidgetPredicate((widget) => widget.runtimeType.toString().contains('SfPdfViewer'));
     expect(sfPdfViewerFinderAfter, findsAtLeastNWidgets(1));
+
+    await tester.pump(const Duration(seconds: 1));
   });
 }

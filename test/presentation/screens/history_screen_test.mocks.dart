@@ -3,13 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
-import 'dart:ui' as _i6;
+import 'dart:async' as _i7;
+import 'dart:typed_data' as _i4;
+import 'dart:ui' as _i8;
 
-import 'package:elada/data/models/invoice.dart' as _i4;
-import 'package:elada/presentation/providers/invoice_provider.dart' as _i2;
+import 'package:elada/data/models/invoice.dart' as _i6;
+import 'package:elada/presentation/providers/invoice_provider.dart' as _i3;
+import 'package:flutter/foundation.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i3;
+import 'package:mockito/src/dummies.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -24,8 +26,19 @@ import 'package:mockito/src/dummies.dart' as _i3;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeDateTime_0 extends _i1.SmartFake implements DateTime {
-  _FakeDateTime_0(
+class _FakeValueNotifier_0<T> extends _i1.SmartFake
+    implements _i2.ValueNotifier<T> {
+  _FakeValueNotifier_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeDateTime_1 extends _i1.SmartFake implements DateTime {
+  _FakeDateTime_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -37,15 +50,34 @@ class _FakeDateTime_0 extends _i1.SmartFake implements DateTime {
 /// A class which mocks [InvoiceProvider].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
+class MockInvoiceProvider extends _i1.Mock implements _i3.InvoiceProvider {
   MockInvoiceProvider() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
+  _i2.ValueNotifier<_i4.Uint8List?> get previewBytesNotifier =>
+      (super.noSuchMethod(
+        Invocation.getter(#previewBytesNotifier),
+        returnValue: _FakeValueNotifier_0<_i4.Uint8List?>(
+          this,
+          Invocation.getter(#previewBytesNotifier),
+        ),
+      ) as _i2.ValueNotifier<_i4.Uint8List?>);
+
+  @override
+  _i2.ValueNotifier<bool> get isPreviewLoadingNotifier => (super.noSuchMethod(
+        Invocation.getter(#isPreviewLoadingNotifier),
+        returnValue: _FakeValueNotifier_0<bool>(
+          this,
+          Invocation.getter(#isPreviewLoadingNotifier),
+        ),
+      ) as _i2.ValueNotifier<bool>);
+
+  @override
   String get description => (super.noSuchMethod(
         Invocation.getter(#description),
-        returnValue: _i3.dummyValue<String>(
+        returnValue: _i5.dummyValue<String>(
           this,
           Invocation.getter(#description),
         ),
@@ -60,7 +92,7 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
   @override
   String get invoiceNumber => (super.noSuchMethod(
         Invocation.getter(#invoiceNumber),
-        returnValue: _i3.dummyValue<String>(
+        returnValue: _i5.dummyValue<String>(
           this,
           Invocation.getter(#invoiceNumber),
         ),
@@ -69,7 +101,7 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
   @override
   DateTime get date => (super.noSuchMethod(
         Invocation.getter(#date),
-        returnValue: _FakeDateTime_0(
+        returnValue: _FakeDateTime_1(
           this,
           Invocation.getter(#date),
         ),
@@ -78,7 +110,7 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
   @override
   String get selectedCurrency => (super.noSuchMethod(
         Invocation.getter(#selectedCurrency),
-        returnValue: _i3.dummyValue<String>(
+        returnValue: _i5.dummyValue<String>(
           this,
           Invocation.getter(#selectedCurrency),
         ),
@@ -87,7 +119,7 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
   @override
   String get billTo => (super.noSuchMethod(
         Invocation.getter(#billTo),
-        returnValue: _i3.dummyValue<String>(
+        returnValue: _i5.dummyValue<String>(
           this,
           Invocation.getter(#billTo),
         ),
@@ -96,23 +128,23 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
   @override
   String get shipTo => (super.noSuchMethod(
         Invocation.getter(#shipTo),
-        returnValue: _i3.dummyValue<String>(
+        returnValue: _i5.dummyValue<String>(
           this,
           Invocation.getter(#shipTo),
         ),
       ) as String);
 
   @override
-  List<_i4.Invoice> get history => (super.noSuchMethod(
+  List<_i6.Invoice> get history => (super.noSuchMethod(
         Invocation.getter(#history),
-        returnValue: <_i4.Invoice>[],
-      ) as List<_i4.Invoice>);
+        returnValue: <_i6.Invoice>[],
+      ) as List<_i6.Invoice>);
 
   @override
-  List<_i4.Invoice> get drafts => (super.noSuchMethod(
+  List<_i6.Invoice> get drafts => (super.noSuchMethod(
         Invocation.getter(#drafts),
-        returnValue: <_i4.Invoice>[],
-      ) as List<_i4.Invoice>);
+        returnValue: <_i6.Invoice>[],
+      ) as List<_i6.Invoice>);
 
   @override
   bool get isPreviewLoading => (super.noSuchMethod(
@@ -214,17 +246,17 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       );
 
   @override
-  _i5.Future<void> saveDraft() => (super.noSuchMethod(
+  _i7.Future<void> saveDraft() => (super.noSuchMethod(
         Invocation.method(
           #saveDraft,
           [],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 
   @override
-  void loadDraft(_i4.Invoice? draft) => super.noSuchMethod(
+  void loadDraft(_i6.Invoice? draft) => super.noSuchMethod(
         Invocation.method(
           #loadDraft,
           [draft],
@@ -233,32 +265,32 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       );
 
   @override
-  _i5.Future<void> deleteDraft(int? index) => (super.noSuchMethod(
+  _i7.Future<void> deleteDraft(int? index) => (super.noSuchMethod(
         Invocation.method(
           #deleteDraft,
           [index],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 
   @override
-  _i5.Future<String> generateAndSaveInvoice() => (super.noSuchMethod(
+  _i7.Future<String> generateAndSaveInvoice() => (super.noSuchMethod(
         Invocation.method(
           #generateAndSaveInvoice,
           [],
         ),
-        returnValue: _i5.Future<String>.value(_i3.dummyValue<String>(
+        returnValue: _i7.Future<String>.value(_i5.dummyValue<String>(
           this,
           Invocation.method(
             #generateAndSaveInvoice,
             [],
           ),
         )),
-      ) as _i5.Future<String>);
+      ) as _i7.Future<String>);
 
   @override
-  void addListener(_i6.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i8.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -267,7 +299,7 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       );
 
   @override
-  void removeListener(_i6.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i8.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],

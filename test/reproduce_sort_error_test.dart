@@ -1,5 +1,6 @@
+import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:elada/data/models/invoice.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
@@ -11,7 +12,9 @@ import 'package:elada/domain/services/file_export_service.dart';
 
 void main() {
   test('reproduce null check error with 2 items', () async {
-    await Hive.initFlutter();
+    TestWidgetsFlutterBinding.ensureInitialized();
+    final tempDir = Directory.systemTemp.createTempSync('elada_test_sort');
+    Hive.init(tempDir.path);
     Hive.registerAdapter(InvoiceAdapter());
 
     final invoiceBox = await Hive.openBox<Invoice>('test_sort_invoices');
