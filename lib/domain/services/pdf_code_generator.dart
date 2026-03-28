@@ -11,18 +11,14 @@ import 'package:elada/domain/services/pdf_components/invoice_totals.dart';
 /// Service responsible for generating the final invoice PDF by coordinating all layout components.
 class PdfCodeGenerator {
   final InvoiceTheme theme;
-  final DecorationComponent _decoration;
-  final InvoiceHeader _header;
-  final InvoiceCustomerInfo _customerInfo;
-  final InvoiceItemsTable _itemsTable;
-  final InvoiceTotals _totals;
+  InvoiceTheme? _cachedTheme;
+  DecorationComponent? _decoration;
+  InvoiceHeader? _header;
+  InvoiceCustomerInfo? _customerInfo;
+  InvoiceItemsTable? _itemsTable;
+  InvoiceTotals? _totals;
 
-  PdfCodeGenerator(this.theme)
-    : _decoration = DecorationComponent(theme),
-      _header = InvoiceHeader(theme),
-      _customerInfo = InvoiceCustomerInfo(theme),
-      _itemsTable = InvoiceItemsTable(theme),
-      _totals = InvoiceTotals(theme);
+  PdfCodeGenerator(this.theme);
 
   /// Generates the complete PDF invoice as bytes.
   Future<Uint8List> generate({
@@ -33,54 +29,65 @@ class PdfCodeGenerator {
     required String billTo,
     required String shipTo,
     String currency = '€',
+    Uint8List? fontData,
+    Uint8List? boldFontData,
   }) async {
     // 1. Create a new PDF document
     final PdfDocument document = PdfDocument();
 
-    // Set Page Settings
-    document.pageSettings.size = PdfPageSize.a4;
-    document.pageSettings.margins.all =
-        0; // Component handle their own internal margins if needed
-
-    // 2. Add a page
-    final PdfPage page = document.pages.add();
-    final PdfGraphics graphics = page.graphics;
-
-    // 3. Draw Components
     try {
-      _decoration.drawHeaderBar(graphics);
-      _decoration.drawFooterBar(graphics);
+      // Set Page Settings
+      document.pageSettings.size = PdfPageSize.a4;
+      document.pageSettings.margins.all = 0;
 
-      _header.draw(
+      // 2. Add a page
+      final PdfPage page = document.pages.add();
+      final PdfGraphics graphics = page.graphics;
+
+      // 3. Create or reuse Components
+      if (_cachedTheme == null || 
+          _cachedTheme!.fontData != fontData || 
+          _cachedTheme!.boldFontData != boldFontData) {
+        _cachedTheme = InvoiceTheme(fontData: fontData, boldFontData: boldFontData);
+        _decoration = DecorationComponent(_cachedTheme!);
+        _header = InvoiceHeader(_cachedTheme!);
+        _customerInfo = InvoiceCustomerInfo(_cachedTheme!);
+        _itemsTable = InvoiceItemsTable(_cachedTheme!);
+        _totals = InvoiceTotals(_cachedTheme!);
+      }
+
+      // 4. Draw Components
+      _decoration!.drawHeaderBar(graphics);
+      _decoration!.drawFooterBar(graphics);
+
+      _header!.draw(
         graphics: graphics,
         invoiceNumber: invoiceNumber,
         date: date,
       );
 
-      _customerInfo.draw(graphics: graphics, billTo: billTo, shipTo: shipTo);
+      _customerInfo!.draw(graphics: graphics, billTo: billTo, shipTo: shipTo);
 
-      _itemsTable.draw(
+      _itemsTable!.draw(
         graphics: graphics,
         description: description,
         total: total,
         currency: currency,
       );
 
-      _totals.draw(
+      _totals!.draw(
         graphics: graphics,
         subtotal: total,
         vat: 0.0,
         total: total,
         currency: currency,
       );
-    } catch (e) {
-      rethrow;
+
+      // 5. Save and return the document
+      final List<int> bytes = await document.save();
+      return Uint8List.fromList(bytes);
+    } finally {
+      document.dispose();
     }
-
-    // 4. Save and return the document
-    final List<int> bytes = await document.save();
-    document.dispose();
-
-    return Uint8List.fromList(bytes);
   }
 }

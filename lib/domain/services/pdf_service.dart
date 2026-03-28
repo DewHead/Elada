@@ -1,11 +1,31 @@
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:elada/domain/services/pdf_code_generator.dart';
 
 class PdfService {
   final PdfCodeGenerator _generator;
+  Uint8List? _fontData;
+  Uint8List? _boldFontData;
 
   PdfService(this._generator);
+
+  Future<void> loadFont(String path) async {
+    try {
+      _fontData = (await rootBundle.load(path)).buffer.asUint8List();
+    } catch (e) {
+      debugPrint('Error loading font: $e');
+    }
+  }
+
+  Future<void> loadFonts({required String regularPath, required String boldPath}) async {
+    try {
+      _fontData = (await rootBundle.load(regularPath)).buffer.asUint8List();
+      _boldFontData = (await rootBundle.load(boldPath)).buffer.asUint8List();
+    } catch (e) {
+      debugPrint('Error loading fonts: $e');
+    }
+  }
 
   Future<Uint8List> generateInvoice({
     required String description,
@@ -16,18 +36,33 @@ class PdfService {
     String shipTo = '',
     String currency = '€',
   }) async {
-    try {
-      return await _generator.generate(
-        description: description,
-        total: total,
-        invoiceNumber: invoiceNumber,
-        date: date,
-        billTo: billTo,
-        shipTo: shipTo,
-        currency: currency,
-      );
-    } catch (e) {
-      rethrow;
-    }
+    return compute(_generateInvoiceInIsolate, {
+      'generator': _generator,
+      'description': description,
+      'total': total,
+      'invoiceNumber': invoiceNumber,
+      'date': date,
+      'billTo': billTo,
+      'shipTo': shipTo,
+      'currency': currency,
+      'fontData': _fontData,
+      'boldFontData': _boldFontData,
+    });
   }
+}
+
+/// Top-level function for compute() to run in a separate isolate.
+Future<Uint8List> _generateInvoiceInIsolate(Map<String, dynamic> params) async {
+  final PdfCodeGenerator generator = params['generator'] as PdfCodeGenerator;
+  return await generator.generate(
+    description: params['description'] as String,
+    total: params['total'] as double,
+    invoiceNumber: params['invoiceNumber'] as String,
+    date: params['date'] as DateTime,
+    billTo: params['billTo'] as String,
+    shipTo: params['shipTo'] as String,
+    currency: params['currency'] as String,
+    fontData: params['fontData'] as Uint8List?,
+    boldFontData: params['boldFontData'] as Uint8List?,
+  );
 }

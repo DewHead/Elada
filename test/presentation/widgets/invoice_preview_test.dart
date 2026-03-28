@@ -19,7 +19,8 @@ void main() {
 
     when(mockProvider.previewBytes).thenReturn(null);
     when(mockProvider.isPreviewLoading).thenReturn(false);
-    
+    when(mockProvider.isGenerating).thenReturn(false);
+
     // Stub addListener/removeListener for ChangeNotifierProvider
     when(mockProvider.addListener(any)).thenReturn(null);
     when(mockProvider.removeListener(any)).thenReturn(null);
@@ -35,8 +36,9 @@ void main() {
   }
 
   group('InvoicePreview Widget', () {
-    testWidgets('should show loading spinner when isPreviewLoading is true',
-        (WidgetTester tester) async {
+    testWidgets('should show loading spinner when isPreviewLoading is true', (
+      WidgetTester tester,
+    ) async {
       when(mockProvider.isPreviewLoading).thenReturn(true);
       when(mockProvider.previewBytes).thenReturn(null);
 
@@ -45,8 +47,9 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
-    testWidgets('should show PDF viewer when previewBytes is available',
-        (WidgetTester tester) async {
+    testWidgets('should show PDF viewer when previewBytes is available', (
+      WidgetTester tester,
+    ) async {
       final bytes = Uint8List(10);
       when(mockProvider.previewBytes).thenReturn(bytes);
       when(mockProvider.isPreviewLoading).thenReturn(false);
@@ -57,8 +60,9 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
     });
 
-    testWidgets('should show overlay spinner when loading and preview exists',
-        (WidgetTester tester) async {
+    testWidgets('should show overlay spinner when loading and preview exists', (
+      WidgetTester tester,
+    ) async {
       final bytes = Uint8List(10);
       when(mockProvider.previewBytes).thenReturn(bytes);
       when(mockProvider.isPreviewLoading).thenReturn(true);

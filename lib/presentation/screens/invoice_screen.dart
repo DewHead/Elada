@@ -17,6 +17,19 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   final _dateController = TextEditingController();
   final _billToController = TextEditingController();
   final _shipToController = TextEditingController();
+
+  final _descriptionFocusNode = FocusNode();
+  final _totalFocusNode = FocusNode();
+  final _invoiceNumberFocusNode = FocusNode();
+  final _billToFocusNode = FocusNode();
+  final _shipToFocusNode = FocusNode();
+
+  final _descriptionKey = GlobalKey();
+  final _totalKey = GlobalKey();
+  final _invoiceNumberKey = GlobalKey();
+  final _billToKey = GlobalKey();
+  final _shipToKey = GlobalKey();
+
   late InvoiceProvider _provider;
 
   @override
@@ -82,6 +95,12 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     _dateController.dispose();
     _billToController.dispose();
     _shipToController.dispose();
+
+    _descriptionFocusNode.dispose();
+    _totalFocusNode.dispose();
+    _invoiceNumberFocusNode.dispose();
+    _billToFocusNode.dispose();
+    _shipToFocusNode.dispose();
     super.dispose();
   }
 
@@ -178,7 +197,8 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   }
 
   Widget _buildForm(BuildContext context) {
-    final provider = context.watch<InvoiceProvider>();
+    // Rely on _onProviderUpdate's setState for rebuilds to avoid redundant trigger
+    final provider = _provider;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -224,7 +244,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         ),
         const SizedBox(height: 16),
         _buildInputField(
+          key: _invoiceNumberKey,
           controller: _invoiceNumberController,
+          focusNode: _invoiceNumberFocusNode,
           label: 'Invoice Number',
           onChanged: (val) =>
               context.read<InvoiceProvider>().updateInvoiceNumber(val),
@@ -241,21 +263,27 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         ),
         const SizedBox(height: 16),
         _buildInputField(
+          key: _billToKey,
           controller: _billToController,
+          focusNode: _billToFocusNode,
           label: 'Bill To',
           onChanged: (val) => context.read<InvoiceProvider>().updateBillTo(val),
           maxLines: 3,
         ),
         const SizedBox(height: 16),
         _buildInputField(
+          key: _shipToKey,
           controller: _shipToController,
+          focusNode: _shipToFocusNode,
           label: 'Ship To',
           onChanged: (val) => context.read<InvoiceProvider>().updateShipTo(val),
           maxLines: 3,
         ),
         const SizedBox(height: 16),
         _buildInputField(
+          key: _descriptionKey,
           controller: _descriptionController,
+          focusNode: _descriptionFocusNode,
           label: 'Item Description',
           onChanged: (val) =>
               context.read<InvoiceProvider>().updateDescription(val),
@@ -263,7 +291,9 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         ),
         const SizedBox(height: 16),
         _buildInputField(
+          key: _totalKey,
           controller: _totalController,
+          focusNode: _totalFocusNode,
           label: 'Total Amount',
           onChanged: (val) {
             final doubleValue = double.tryParse(val) ?? 0.0;
@@ -307,9 +337,22 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   ],
                 ),
                 child: ElevatedButton.icon(
-                  onPressed: () => _generatePdf(context),
-                  icon: const Icon(Icons.picture_as_pdf),
-                  label: const Text('Generate PDF'),
+                  onPressed: provider.isGenerating
+                      ? null
+                      : () => _generatePdf(context),
+                  icon: provider.isGenerating
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Icon(Icons.picture_as_pdf),
+                  label: Text(
+                    provider.isGenerating ? 'Generating...' : 'Generate PDF',
+                  ),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     elevation: 0,
@@ -425,7 +468,11 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
           ),
         ),
       );
-    } catch (e) {
+    } catch (e, st) {
+      print('=== PDF GENERATION ERROR ===');
+      print(e);
+      print(st);
+      print('============================');
       if (!context.mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -438,6 +485,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   }
 
   Widget _buildInputField({
+    Key? key,
     required TextEditingController controller,
     required String label,
     required Function(String) onChanged,
@@ -447,14 +495,17 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     bool readOnly = false,
     VoidCallback? onTap,
     Widget? prefixIcon,
+    FocusNode? focusNode,
   }) {
     return TextField(
+      key: key,
       controller: controller,
       onChanged: onChanged,
       keyboardType: keyboardType,
       maxLines: maxLines,
       readOnly: readOnly,
       onTap: onTap,
+      focusNode: focusNode,
       decoration: InputDecoration(
         labelText: label,
         prefixText: prefixText,

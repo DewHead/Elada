@@ -24,6 +24,13 @@ void main() {
     when(mockProvider.selectedCurrency).thenReturn('€');
     when(mockProvider.history).thenReturn([]);
     when(mockProvider.drafts).thenReturn([]);
+    when(mockProvider.previewBytes).thenReturn(null);
+    when(mockProvider.isPreviewLoading).thenReturn(false);
+    when(mockProvider.isGenerating).thenReturn(false);
+
+    // Add dummy listener handling
+    when(mockProvider.addListener(any)).thenReturn(null);
+    when(mockProvider.removeListener(any)).thenReturn(null);
   });
 
   Widget createWidgetUnderTest() {

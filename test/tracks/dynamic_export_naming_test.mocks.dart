@@ -135,6 +135,34 @@ class MockPdfService extends _i1.Mock implements _i6.PdfService {
   }
 
   @override
+  _i3.Future<void> loadFont(String? path) => (super.noSuchMethod(
+        Invocation.method(
+          #loadFont,
+          [path],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> loadFonts({
+    required String? regularPath,
+    required String? boldPath,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #loadFonts,
+          [],
+          {
+            #regularPath: regularPath,
+            #boldPath: boldPath,
+          },
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
   _i3.Future<_i7.Uint8List> generateInvoice({
     required String? description,
     required double? total,

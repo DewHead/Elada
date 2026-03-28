@@ -18,41 +18,81 @@ class InvoiceHeader {
     final PdfBrush brush = PdfSolidBrush(theme.black);
     final PdfBrush brandBrush = PdfSolidBrush(theme.brandBlue);
 
-    // 1. "B\"H" - Top Right (Latin characters to avoid font issues)
+    // 1. "ב\"ה" - Top Right (Reversed for correct visual display in LTR)
     graphics.drawString(
-      'B"H',
+      'ה"ב',
       theme.defaultFont,
       brush: brush,
       bounds: Rect.fromLTWH(theme.pageWidth - 60, 50, 40, 20),
       format: PdfStringFormat(alignment: PdfTextAlignment.right),
     );
 
-    // 2. Company Name / Logo - Top Left
-    graphics.drawString(
-      'YONIK KOSHER LIFESTYLE LTD',
-      theme.titleFont,
-      brush: brandBrush,
-      bounds: Rect.fromLTWH(theme.margin, 60, theme.contentWidth, 30),
-    );
+    double currentY = 70;
 
-    // 3. Company Address (Minimalist Placeholder based on typical invoice headers)
-    final addressFont = theme.smallFont;
-    graphics.drawString(
-      '27 Old Gloucester Street, London, WC1N 3AX\nEmail: info@yonik.co.uk | Phone: +44 20 1234 5678',
-      addressFont,
-      brush: PdfSolidBrush(theme.grey),
-      bounds: Rect.fromLTWH(theme.margin, 95, theme.contentWidth, 30),
-    );
+    // 5. "INVOICE" Label
+    final titleLabelFont = theme.boldFontData != null
+        ? PdfTrueTypeFont(theme.boldFontData!, 24)
+        : PdfStandardFont(PdfFontFamily.helvetica, 24, style: PdfFontStyle.bold);
 
-    // 4. "INVOICE" Label
     graphics.drawString(
       'INVOICE',
-      PdfStandardFont(PdfFontFamily.helvetica, 24, style: PdfFontStyle.bold),
+      titleLabelFont,
+      brush: PdfSolidBrush(theme.grey),
+      bounds: Rect.fromLTWH(theme.margin, currentY, 200, 40),
+    );
+    currentY += 45;
+
+    // 2. Company Name - Top Left
+    graphics.drawString(
+      'YONIK KOSHER',
+      theme.titleFont,
+      brush: brandBrush,
+      bounds: Rect.fromLTWH(theme.margin, currentY, theme.contentWidth, 25),
+    );
+    currentY += 22;
+
+    graphics.drawString(
+      'LIFESTYLE LTD',
+      theme.titleFont,
+      brush: brandBrush,
+      bounds: Rect.fromLTWH(theme.margin, currentY, theme.contentWidth, 25),
+    );
+    currentY += 28;
+
+    // 3. Company Address
+    graphics.drawString(
+      'DIMOKRATIAS 36 TALA',
+      theme.defaultFont,
       brush: brush,
-      bounds: Rect.fromLTWH(theme.margin, 150, 200, 40),
+      bounds: Rect.fromLTWH(theme.margin, currentY, theme.contentWidth, 15),
+    );
+    currentY += 14;
+
+    graphics.drawString(
+      'PAPHOS 8577 CYPRUS',
+      theme.defaultFont,
+      brush: brush,
+      bounds: Rect.fromLTWH(theme.margin, currentY, theme.contentWidth, 15),
+    );
+    currentY += 14;
+
+    // 4. Contact Details
+    graphics.drawString(
+      '+357-22009-770',
+      theme.boldFont,
+      brush: brush,
+      bounds: Rect.fromLTWH(theme.margin, currentY, theme.contentWidth, 15),
+    );
+    currentY += 14;
+
+    graphics.drawString(
+      'www.yonik.style',
+      theme.boldFont,
+      brush: brush,
+      bounds: Rect.fromLTWH(theme.margin, currentY, theme.contentWidth, 15),
     );
 
-    // 5. Date and Invoice Number (Using approximate coordinates from template research)
+    // 6. Date and Invoice Number (Using adjusted coordinates)
     final labelFont = theme.boldFont;
     final valueFont = theme.defaultFont;
     final formattedDate = DateFormat('dd.MM.yyyy').format(date);
@@ -62,13 +102,13 @@ class InvoiceHeader {
       'Date:',
       labelFont,
       brush: brush,
-      bounds: const Rect.fromLTWH(380, 139, 50, 20),
+      bounds: const Rect.fromLTWH(380, 155, 50, 20),
     );
     graphics.drawString(
       formattedDate,
       valueFont,
       brush: brush,
-      bounds: const Rect.fromLTWH(427, 139, 100, 20),
+      bounds: const Rect.fromLTWH(427, 155, 100, 20),
     );
 
     // Invoice No Label & Value
@@ -76,13 +116,13 @@ class InvoiceHeader {
       'Invoice No:',
       labelFont,
       brush: brush,
-      bounds: const Rect.fromLTWH(380, 210, 60, 20),
+      bounds: const Rect.fromLTWH(380, 205, 60, 20),
     );
     graphics.drawString(
       invoiceNumber,
       valueFont,
       brush: brush,
-      bounds: const Rect.fromLTWH(440, 210, 100, 20),
+      bounds: const Rect.fromLTWH(440, 205, 100, 20),
     );
 
     // Horizontal Separator after header

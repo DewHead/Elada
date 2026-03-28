@@ -121,6 +121,12 @@ class MockInvoiceProvider extends _i1.Mock implements _i2.InvoiceProvider {
       ) as bool);
 
   @override
+  bool get isGenerating => (super.noSuchMethod(
+        Invocation.getter(#isGenerating),
+        returnValue: false,
+      ) as bool);
+
+  @override
   bool get hasListeners => (super.noSuchMethod(
         Invocation.getter(#hasListeners),
         returnValue: false,

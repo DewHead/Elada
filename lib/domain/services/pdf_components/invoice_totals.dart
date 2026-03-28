@@ -23,11 +23,12 @@ class InvoiceTotals {
     final PdfFont boldFont = theme.boldFont;
 
     final double labelX = theme.pageWidth - 250;
-    final double valueX = theme.pageWidth - 100;
+    final double valueX = theme.pageWidth - 160;
     final double rowHeight = 20;
+    final double valueWidth = 120; // Increased width to fit large amounts
 
     final rightFormat = PdfStringFormat(alignment: PdfTextAlignment.right);
-    final currencyText = currency == '€' ? 'EUR' : currency;
+    final currencyText = currency;
 
     // 1. Subtotal
     graphics.drawString(
@@ -40,7 +41,7 @@ class InvoiceTotals {
       '$currencyText ${subtotal.toStringAsFixed(2)}',
       labelFont,
       brush: brush,
-      bounds: Rect.fromLTWH(valueX, yOffset, 60, rowHeight),
+      bounds: Rect.fromLTWH(valueX, yOffset, valueWidth, rowHeight),
       format: rightFormat,
     );
 
@@ -55,7 +56,7 @@ class InvoiceTotals {
       '$currencyText ${vat.toStringAsFixed(2)}',
       labelFont,
       brush: brush,
-      bounds: Rect.fromLTWH(valueX, yOffset + rowHeight, 60, rowHeight),
+      bounds: Rect.fromLTWH(valueX, yOffset + rowHeight, valueWidth, rowHeight),
       format: rightFormat,
     );
 
@@ -72,13 +73,13 @@ class InvoiceTotals {
       'Balance Due',
       boldFont,
       brush: brandBrush,
-      bounds: Rect.fromLTWH(labelX, balanceY, 120, rowHeight),
+      bounds: Rect.fromLTWH(labelX, balanceY, 100, rowHeight),
     );
     graphics.drawString(
       '$currencyText ${total.toStringAsFixed(2)}',
       boldFont,
       brush: brandBrush,
-      bounds: Rect.fromLTWH(valueX, balanceY, 60, rowHeight),
+      bounds: Rect.fromLTWH(valueX, balanceY, valueWidth, rowHeight),
       format: rightFormat,
     );
   }

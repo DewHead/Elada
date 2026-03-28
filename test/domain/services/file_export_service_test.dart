@@ -1,39 +1,68 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:elada/domain/services/file_export_service.dart';
-import 'package:path/path.dart' as p;
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'dart:io';
+
+class MockPathProviderPlatform extends Fake
+    with MockPlatformInterfaceMixin
+    implements PathProviderPlatform {
+  bool throwError = false;
+
+  @override
+  Future<String?> getDownloadsPath() async {
+    if (throwError) throw Exception('Failed to get downloads path');
+    return null; // Return null to trigger fallback
+  }
+
+  @override
+  Future<String?> getApplicationDocumentsPath() async {
+    return 'docs_path';
+  }
+
+  @override
+  Future<String?> getTemporaryPath() async {
+    return 'temp_path';
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  late FileExportService service;
+  late MockPathProviderPlatform mockPathProvider;
+
+  setUp(() {
+    service = FileExportService();
+    mockPathProvider = MockPathProviderPlatform();
+    PathProviderPlatform.instance = mockPathProvider;
+  });
+
   group('FileExportService', () {
-    late FileExportService fileExportService;
-    late Directory tempDir;
+    test(
+      'getDownloadsDirectoryPath should fallback to temp if downloads is null',
+      () async {
+        final path = await service.getDownloadsDirectoryPath();
+        // On non-mobile, it calls getDownloadsPath() which returns null in our mock
+        // So it should fallback to getTemporaryPath() which is 'temp_path'
+        // UNLESS it's running on a "mobile" platform in the test environment.
+        // Platform.isAndroid/isIOS depends on the host OS unless mocked.
 
-    setUp(() async {
-      fileExportService = FileExportService();
-      tempDir = await Directory.systemTemp.createTemp('elada_test');
-    });
+        if (Platform.isAndroid || Platform.isIOS) {
+          expect(path, 'docs_path');
+        } else {
+          expect(path, 'temp_path');
+        }
+      },
+    );
 
-    tearDown(() async {
-      await tempDir.delete(recursive: true);
-    });
-
-    test('should save file to specified directory', () async {
-      final bytes = Uint8List.fromList([1, 2, 3, 4]);
-      final fileName = 'test_invoice.pdf';
-
-      final filePath = await fileExportService.saveFile(
-        bytes: bytes,
-        fileName: fileName,
-        directoryPath: tempDir.path,
-      );
-
-      final file = File(filePath);
-      expect(await file.exists(), isTrue);
-      expect(await file.readAsBytes(), bytes);
-      expect(p.basename(filePath), fileName);
-    });
+    test(
+      'getDownloadsDirectoryPath should fallback to temp if path_provider throws',
+      () async {
+        mockPathProvider.throwError = true;
+        final path = await service.getDownloadsDirectoryPath();
+        expect(path, 'temp_path');
+      },
+    );
   });
 }

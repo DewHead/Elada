@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: Fluid Real-time Preview Update**
+- [x] **Track: Fluid Real-time Preview Update**
 *Link: [./tracks/fluid_preview_update_20260328/](./tracks/fluid_preview_update_20260328/)*

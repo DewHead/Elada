@@ -102,7 +102,7 @@ class InvoiceItemsTable {
     currentX += columnWidths[1];
 
     // Unit Price (Same as total for 1 qty)
-    final currencyText = currency == '€' ? 'EUR' : currency;
+    final currencyText = currency;
     graphics.drawString(
       '$currencyText ${total.toStringAsFixed(2)}',
       dataFont,

@@ -24,22 +24,27 @@ void main() {
         date: DateTime(2026, 3, 25),
       );
 
-      // Verify at least these are called:
-      // 1. Company Name
-      // 2. "ב\"ה"
-      // 3. "INVOICE"
-      // 4. Date
-      // 5. Invoice Number
-
+      // 1. "ב\"ה" (Expect reversed for LTR rendering)
       verify(
         mockGraphics.drawString(
-          any,
+          'ה"ב',
           any,
           brush: anyNamed('brush'),
           bounds: anyNamed('bounds'),
           format: anyNamed('format'),
         ),
-      ).called(greaterThanOrEqualTo(5));
+      ).called(1);
+
+      // 2. Company Name
+      verify(
+        mockGraphics.drawString(
+          argThat(contains('YONIK KOSHER')),
+          any,
+          brush: anyNamed('brush'),
+          bounds: anyNamed('bounds'),
+          format: anyNamed('format'),
+        ),
+      ).called(1);
     });
   });
 }

@@ -24,6 +24,7 @@ void main() {
     when(mockProvider.shipTo).thenReturn('');
     when(mockProvider.previewBytes).thenReturn(null);
     when(mockProvider.isPreviewLoading).thenReturn(false);
+    when(mockProvider.isGenerating).thenReturn(false);
 
     // Add dummy listener handling
     when(mockProvider.addListener(any)).thenReturn(null);
