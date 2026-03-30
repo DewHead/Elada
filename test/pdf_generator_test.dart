@@ -10,8 +10,6 @@ void main() {
       total: 100,
       invoiceNumber: '123',
       date: DateTime.now(),
-      billTo: '',
-      shipTo: '',
       currency: '€',
     );
   });

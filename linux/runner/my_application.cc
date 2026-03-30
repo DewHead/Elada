@@ -25,6 +25,38 @@ static void my_application_activate(GApplication* application) {
   GtkWindow* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
+  // Set the icon
+  g_autoptr(GdkPixbuf) icon = nullptr;
+
+  // Try path relative to executable
+  g_autofree gchar* exe_path = g_file_read_link("/proc/self/exe", nullptr);
+  if (exe_path != nullptr) {
+    g_autofree gchar* exe_dir = g_path_get_dirname(exe_path);
+    g_autofree gchar* bundle_icon_path = g_build_filename(exe_dir, "data", "flutter_assets", "assets", "app_icon.png", nullptr);
+    icon = gdk_pixbuf_new_from_file(bundle_icon_path, nullptr);
+  }
+
+  // Fallback to relative paths
+  if (icon == nullptr) {
+    const char* icon_paths[] = {
+      "data/flutter_assets/assets/app_icon.png", // Relative to bundle
+      "assets/app_icon.png",                     // Relative to project root (for flutter run)
+      "/usr/share/elada/data/flutter_assets/assets/app_icon.png" // System install
+    };
+
+    for (size_t i = 0; i < G_N_ELEMENTS(icon_paths); i++) {
+      icon = gdk_pixbuf_new_from_file(icon_paths[i], nullptr);
+      if (icon != nullptr) break;
+    }
+  }
+
+  if (icon != nullptr) {
+    gtk_window_set_icon(window, icon);
+    gtk_window_set_default_icon(icon);
+  } else {
+    g_warning("Failed to load icon from any path");
+  }
+
   // Use a header bar when running in GNOME as this is the common style used
   // by applications and is the setup most users will be using (e.g. Ubuntu
   // desktop).
@@ -45,11 +77,11 @@ static void my_application_activate(GApplication* application) {
   if (use_header_bar) {
     GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
     gtk_widget_show(GTK_WIDGET(header_bar));
-    gtk_header_bar_set_title(header_bar, "elada");
+    gtk_header_bar_set_title(header_bar, "Elada");
     gtk_header_bar_set_show_close_button(header_bar, TRUE);
     gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
   } else {
-    gtk_window_set_title(window, "elada");
+    gtk_window_set_title(window, "Elada");
   }
 
   gtk_window_set_default_size(window, 1280, 720);

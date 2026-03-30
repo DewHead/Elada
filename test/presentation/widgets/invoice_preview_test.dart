@@ -24,7 +24,9 @@ void main() {
     when(mockProvider.isPreviewLoading).thenReturn(false);
     when(mockProvider.isGenerating).thenReturn(false);
     when(mockProvider.previewBytesNotifier).thenReturn(previewBytesNotifier);
-    when(mockProvider.isPreviewLoadingNotifier).thenReturn(isPreviewLoadingNotifier);
+    when(
+      mockProvider.isPreviewLoadingNotifier,
+    ).thenReturn(isPreviewLoadingNotifier);
 
     // Stub addListener/removeListener for ChangeNotifierProvider
     when(mockProvider.addListener(any)).thenAnswer((_) {});

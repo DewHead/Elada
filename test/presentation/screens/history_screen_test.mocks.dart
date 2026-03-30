@@ -3,11 +3,12 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i7;
+import 'dart:async' as _i8;
 import 'dart:typed_data' as _i4;
-import 'dart:ui' as _i8;
+import 'dart:ui' as _i9;
 
-import 'package:elada/data/models/invoice.dart' as _i6;
+import 'package:elada/data/models/invoice.dart' as _i7;
+import 'package:elada/data/models/invoice_item.dart' as _i6;
 import 'package:elada/presentation/providers/invoice_provider.dart' as _i3;
 import 'package:flutter/foundation.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
@@ -90,6 +91,18 @@ class MockInvoiceProvider extends _i1.Mock implements _i3.InvoiceProvider {
       ) as double);
 
   @override
+  bool get hasItems => (super.noSuchMethod(
+        Invocation.getter(#hasItems),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  List<_i6.InvoiceItem> get items => (super.noSuchMethod(
+        Invocation.getter(#items),
+        returnValue: <_i6.InvoiceItem>[],
+      ) as List<_i6.InvoiceItem>);
+
+  @override
   String get invoiceNumber => (super.noSuchMethod(
         Invocation.getter(#invoiceNumber),
         returnValue: _i5.dummyValue<String>(
@@ -117,34 +130,16 @@ class MockInvoiceProvider extends _i1.Mock implements _i3.InvoiceProvider {
       ) as String);
 
   @override
-  String get billTo => (super.noSuchMethod(
-        Invocation.getter(#billTo),
-        returnValue: _i5.dummyValue<String>(
-          this,
-          Invocation.getter(#billTo),
-        ),
-      ) as String);
-
-  @override
-  String get shipTo => (super.noSuchMethod(
-        Invocation.getter(#shipTo),
-        returnValue: _i5.dummyValue<String>(
-          this,
-          Invocation.getter(#shipTo),
-        ),
-      ) as String);
-
-  @override
-  List<_i6.Invoice> get history => (super.noSuchMethod(
+  List<_i7.Invoice> get history => (super.noSuchMethod(
         Invocation.getter(#history),
-        returnValue: <_i6.Invoice>[],
-      ) as List<_i6.Invoice>);
+        returnValue: <_i7.Invoice>[],
+      ) as List<_i7.Invoice>);
 
   @override
-  List<_i6.Invoice> get drafts => (super.noSuchMethod(
+  List<_i7.Invoice> get drafts => (super.noSuchMethod(
         Invocation.getter(#drafts),
-        returnValue: <_i6.Invoice>[],
-      ) as List<_i6.Invoice>);
+        returnValue: <_i7.Invoice>[],
+      ) as List<_i7.Invoice>);
 
   @override
   bool get isPreviewLoading => (super.noSuchMethod(
@@ -183,6 +178,47 @@ class MockInvoiceProvider extends _i1.Mock implements _i3.InvoiceProvider {
       );
 
   @override
+  void clearItems() => super.noSuchMethod(
+        Invocation.method(
+          #clearItems,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void updateItemDescription(
+    int? index,
+    String? value,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #updateItemDescription,
+          [
+            index,
+            value,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void updateItemPrice(
+    int? index,
+    double? value,
+  ) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #updateItemPrice,
+          [
+            index,
+            value,
+          ],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   void updateInvoiceNumber(String? value) => super.noSuchMethod(
         Invocation.method(
           #updateInvoiceNumber,
@@ -210,24 +246,6 @@ class MockInvoiceProvider extends _i1.Mock implements _i3.InvoiceProvider {
       );
 
   @override
-  void updateBillTo(String? value) => super.noSuchMethod(
-        Invocation.method(
-          #updateBillTo,
-          [value],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void updateShipTo(String? value) => super.noSuchMethod(
-        Invocation.method(
-          #updateShipTo,
-          [value],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
   void incrementInvoiceNumber() => super.noSuchMethod(
         Invocation.method(
           #incrementInvoiceNumber,
@@ -246,51 +264,72 @@ class MockInvoiceProvider extends _i1.Mock implements _i3.InvoiceProvider {
       );
 
   @override
-  _i7.Future<void> saveDraft() => (super.noSuchMethod(
+  _i8.Future<void> saveDraft() => (super.noSuchMethod(
         Invocation.method(
           #saveDraft,
           [],
         ),
-        returnValue: _i7.Future<void>.value(),
-        returnValueForMissingStub: _i7.Future<void>.value(),
-      ) as _i7.Future<void>);
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
 
   @override
-  void loadDraft(_i6.Invoice? draft) => super.noSuchMethod(
+  void loadInvoice(_i7.Invoice? invoice) => super.noSuchMethod(
         Invocation.method(
-          #loadDraft,
-          [draft],
+          #loadInvoice,
+          [invoice],
         ),
         returnValueForMissingStub: null,
       );
 
   @override
-  _i7.Future<void> deleteDraft(int? index) => (super.noSuchMethod(
+  _i8.Future<void> deleteDraft(_i7.Invoice? draft) => (super.noSuchMethod(
         Invocation.method(
           #deleteDraft,
-          [index],
+          [draft],
         ),
-        returnValue: _i7.Future<void>.value(),
-        returnValueForMissingStub: _i7.Future<void>.value(),
-      ) as _i7.Future<void>);
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
 
   @override
-  _i7.Future<String> generateAndSaveInvoice() => (super.noSuchMethod(
+  _i8.Future<void> deleteHistoryEntry(_i7.Invoice? invoice) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteHistoryEntry,
+          [invoice],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<void> clearAllHistoryAndDrafts() => (super.noSuchMethod(
+        Invocation.method(
+          #clearAllHistoryAndDrafts,
+          [],
+        ),
+        returnValue: _i8.Future<void>.value(),
+        returnValueForMissingStub: _i8.Future<void>.value(),
+      ) as _i8.Future<void>);
+
+  @override
+  _i8.Future<String> generateAndSaveInvoice() => (super.noSuchMethod(
         Invocation.method(
           #generateAndSaveInvoice,
           [],
         ),
-        returnValue: _i7.Future<String>.value(_i5.dummyValue<String>(
+        returnValue: _i8.Future<String>.value(_i5.dummyValue<String>(
           this,
           Invocation.method(
             #generateAndSaveInvoice,
             [],
           ),
         )),
-      ) as _i7.Future<String>);
+      ) as _i8.Future<String>);
 
   @override
-  void addListener(_i8.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i9.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -299,7 +338,7 @@ class MockInvoiceProvider extends _i1.Mock implements _i3.InvoiceProvider {
       );
 
   @override
-  void removeListener(_i8.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i9.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],

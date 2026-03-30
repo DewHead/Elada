@@ -5,6 +5,7 @@ import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:elada/presentation/screens/main_screen.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
+import 'package:elada/data/models/invoice_item.dart';
 
 @GenerateMocks([InvoiceProvider])
 import 'main_screen_test.mocks.dart';
@@ -16,14 +17,16 @@ void main() {
     mockProvider = MockInvoiceProvider();
 
     when(mockProvider.invoiceNumber).thenReturn('9418');
-    when(mockProvider.date).thenReturn(DateTime(2026, 3, 26));
+    when(mockProvider.date).thenReturn(DateTime.now());
     when(mockProvider.description).thenReturn('');
     when(mockProvider.total).thenReturn(0.0);
-    when(mockProvider.billTo).thenReturn('');
-    when(mockProvider.shipTo).thenReturn('');
     when(mockProvider.selectedCurrency).thenReturn('€');
     when(mockProvider.history).thenReturn([]);
     when(mockProvider.drafts).thenReturn([]);
+    when(mockProvider.items).thenReturn([
+      InvoiceItem(description: InvoiceProvider.itemPrefix, price: 0.0),
+    ]);
+    when(mockProvider.hasItems).thenReturn(false);
     when(mockProvider.previewBytes).thenReturn(null);
     when(mockProvider.isPreviewLoading).thenReturn(false);
     when(mockProvider.isGenerating).thenReturn(false);

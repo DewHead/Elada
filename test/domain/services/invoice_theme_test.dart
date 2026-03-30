@@ -6,10 +6,10 @@ void main() {
   group('InvoiceTheme', () {
     test('should have correct default branding constants', () {
       final theme = InvoiceTheme();
-      // Brand Blue: 0xFF005696 -> (0, 86, 150)
-      expect(theme.brandBlue.r, equals(0));
-      expect(theme.brandBlue.g, equals(86));
-      expect(theme.brandBlue.b, equals(150));
+      // Brand Blue: #4A7EC0 -> (74, 126, 192)
+      expect(theme.brandBlue.r, equals(74));
+      expect(theme.brandBlue.g, equals(126));
+      expect(theme.brandBlue.b, equals(192));
 
       // Accent Blue: 0xFFE1F5FE -> (225, 245, 254)
       expect(theme.accentBlue.r, equals(225));

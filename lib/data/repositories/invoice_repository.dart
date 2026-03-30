@@ -34,9 +34,20 @@ class InvoiceRepository {
     return _draftBox?.values.toList() ?? [];
   }
 
-  Future<void> deleteDraft(int index) async {
+  Future<void> deleteDraft(dynamic key) async {
     if (_draftBox != null) {
-      await _draftBox.deleteAt(index);
+      await _draftBox.delete(key);
+    }
+  }
+
+  Future<void> deleteInvoice(dynamic key) async {
+    await _invoiceBox.delete(key);
+  }
+
+  Future<void> clearAll() async {
+    await _invoiceBox.clear();
+    if (_draftBox != null) {
+      await _draftBox.clear();
     }
   }
 

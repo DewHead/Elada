@@ -39,7 +39,6 @@ void main() {
     provider.updateDescription('Car');
     provider.updateTotal(100000.0);
     provider.updateInvoiceNumber('9422');
-    provider.updateBillTo('Elad Avital');
 
     try {
       final path = await provider.generateAndSaveInvoice();

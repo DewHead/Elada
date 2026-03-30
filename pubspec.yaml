@@ -43,6 +43,7 @@ dependencies:
 
   intl: any
   path: any
+  web: ^1.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -66,8 +67,22 @@ dev_dependencies:
     sdk: flutter
   path_provider_platform_interface: ^2.1.2
   plugin_platform_interface: ^2.1.8
-flutter:
+  flutter_launcher_icons: ^0.14.4
+  flutter_distributor: ^0.0.2
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  macos:
+    generate: true
+  windows:
+    generate: true
+  web:
+    generate: true
+  image_path: "assets/app_icon_new.png"
+  min_sdk_android: 21
 
+flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -76,6 +91,9 @@ flutter:
   assets:
     - assets/fonts/LiberationSans-Regular.ttf
     - assets/fonts/LiberationSans-Bold.ttf
+    - assets/template.pdf
+    - assets/app_icon.png
+    - assets/app_icon_new.png
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

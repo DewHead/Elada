@@ -14,8 +14,6 @@ void main() {
         total: 250.0,
         invoiceNumber: 'TEST-001',
         date: DateTime(2026, 3, 27),
-        billTo: 'Customer Name\n123 Lane',
-        shipTo: 'Customer Name\n123 Lane',
       );
 
       expect(pdfBytes, isNotEmpty);

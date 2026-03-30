@@ -14,11 +14,13 @@ class InvoiceTheme {
   InvoiceTheme({this.fontData, this.boldFontData});
 
   // Colors
-  PdfColor get brandBlue => PdfColor(0, 86, 150);
+  PdfColor get brandBlue => PdfColor(74, 126, 192); // #4A7EC0
   PdfColor get accentBlue => PdfColor(225, 245, 254);
   PdfColor get black => PdfColor(0, 0, 0);
   PdfColor get white => PdfColor(255, 255, 255);
   PdfColor get grey => PdfColor(128, 128, 128);
+  PdfColor get lightGrey => PdfColor(160, 164, 168); // For "INVOICE" title
+  PdfColor get borderGrey => PdfColor(200, 200, 200); // For table grid
 
   // Fonts
   PdfFont get defaultFont {

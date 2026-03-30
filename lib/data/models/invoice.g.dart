@@ -23,15 +23,14 @@ class InvoiceAdapter extends TypeAdapter<Invoice> {
       date: fields[3] as DateTime?,
       currency: fields[4] == null ? '€' : fields[4] as String,
       isDraft: fields[5] == null ? false : fields[5] as bool,
-      billTo: fields[6] == null ? '' : fields[6] as String,
-      shipTo: fields[7] == null ? '' : fields[7] as String,
+      items: fields[8] == null ? [] : (fields[8] as List?)?.cast<InvoiceItem>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Invoice obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.invoiceNumber)
       ..writeByte(1)
@@ -44,10 +43,8 @@ class InvoiceAdapter extends TypeAdapter<Invoice> {
       ..write(obj.currency)
       ..writeByte(5)
       ..write(obj.isDraft)
-      ..writeByte(6)
-      ..write(obj.billTo)
-      ..writeByte(7)
-      ..write(obj.shipTo);
+      ..writeByte(8)
+      ..write(obj.items);
   }
 
   @override

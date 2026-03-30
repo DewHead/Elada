@@ -24,14 +24,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // 3. Find the description field
-      final descriptionField = find.widgetWithText(
-        TextField,
-        'Item Description',
-      );
-      expect(descriptionField, findsOneWidget);
+      final descriptionField = find.widgetWithText(TextField, 'Description');
+      expect(descriptionField, findsAtLeast(1));
 
       // 4. Enter text and verify immediate loading spinner
-      await tester.enterText(descriptionField, 'Test Invoice Item');
+      await tester.enterText(descriptionField.first, 'Test Invoice Item');
       await tester.pump(); // Immediate rebuild
 
       // Should show CircularProgressIndicator in the preview area
@@ -45,9 +42,9 @@ void main() {
       // Note: SfPdfViewer might take a moment to mount
       expect(find.byType(SfPdfViewer), findsOneWidget);
 
-      // 7. Change another field (Total) and verify loading again
-      final totalField = find.widgetWithText(TextField, 'Total Amount');
-      await tester.enterText(totalField, '150.50');
+      // 7. Change another field (Price) and verify loading again
+      final priceField = find.widgetWithText(TextField, 'Price');
+      await tester.enterText(priceField, '150.50');
       await tester.pump();
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);

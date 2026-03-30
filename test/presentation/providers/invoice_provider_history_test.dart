@@ -33,6 +33,22 @@ void main() {
     when(mockRepository.getLastInvoiceNumber()).thenReturn('9417');
     when(mockRepository.getInvoices()).thenReturn([]);
     when(mockRepository.getDrafts()).thenReturn([]);
+    when(
+      mockPdfService.loadFonts(
+        regularPath: anyNamed('regularPath'),
+        boldPath: anyNamed('boldPath'),
+      ),
+    ).thenAnswer((_) async {});
+    when(
+      mockPdfService.generateInvoice(
+        description: anyNamed('description'),
+        total: anyNamed('total'),
+        invoiceNumber: anyNamed('invoiceNumber'),
+        date: anyNamed('date'),
+        items: anyNamed('items'),
+        currency: anyNamed('currency'),
+      ),
+    ).thenAnswer((_) async => Uint8List(0));
 
     provider = InvoiceProvider(
       mockRepository,
@@ -84,8 +100,7 @@ void main() {
           total: anyNamed('total'),
           invoiceNumber: anyNamed('invoiceNumber'),
           date: anyNamed('date'),
-          billTo: anyNamed('billTo'),
-          shipTo: anyNamed('shipTo'),
+          items: anyNamed('items'),
           currency: anyNamed('currency'),
         ),
       ).thenAnswer((_) async => pdfBytes);
@@ -146,7 +161,7 @@ void main() {
         isDraft: true,
       );
 
-      provider.loadDraft(draft);
+      provider.loadInvoice(draft);
 
       expect(provider.description, 'Loaded Draft');
       expect(provider.total, 250);
@@ -165,11 +180,41 @@ void main() {
     });
 
     test('should delete draft and refresh list', () async {
+      final draft = Invoice(
+        invoiceNumber: 'D1',
+        description: 'Draft 1',
+        total: 50,
+      );
       when(mockRepository.getDrafts()).thenReturn([]);
 
-      await provider.deleteDraft(0);
+      await provider.deleteDraft(draft);
 
-      verify(mockRepository.deleteDraft(0)).called(1);
+      verify(mockRepository.deleteDraft(any)).called(1);
+      expect(provider.drafts.length, 0);
+    });
+
+    test('should delete history entry and refresh list', () async {
+      final invoice = Invoice(
+        invoiceNumber: '1',
+        description: 'Test 1',
+        total: 100,
+      );
+      when(mockRepository.getInvoices()).thenReturn([]);
+
+      await provider.deleteHistoryEntry(invoice);
+
+      verify(mockRepository.deleteInvoice(any)).called(1);
+      expect(provider.history.length, 0);
+    });
+
+    test('should clear all and refresh lists', () async {
+      when(mockRepository.getInvoices()).thenReturn([]);
+      when(mockRepository.getDrafts()).thenReturn([]);
+
+      await provider.clearAllHistoryAndDrafts();
+
+      verify(mockRepository.clearAll()).called(1);
+      expect(provider.history.length, 0);
       expect(provider.drafts.length, 0);
     });
   });

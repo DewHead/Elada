@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'invoice_item.dart';
 
 part 'invoice.g.dart';
 
@@ -22,11 +23,8 @@ class Invoice extends HiveObject {
   @HiveField(5, defaultValue: false)
   final bool isDraft;
 
-  @HiveField(6, defaultValue: '')
-  final String billTo;
-
-  @HiveField(7, defaultValue: '')
-  final String shipTo;
+  @HiveField(8, defaultValue: [])
+  final List<InvoiceItem>? items;
 
   Invoice({
     required this.invoiceNumber,
@@ -35,8 +33,7 @@ class Invoice extends HiveObject {
     DateTime? date,
     this.currency = '€',
     this.isDraft = false,
-    this.billTo = '',
-    this.shipTo = '',
+    this.items = const [],
   }) : date = date ?? DateTime.now();
 
   // Helper getter to ensure non-null date in app logic
@@ -50,8 +47,7 @@ class Invoice extends HiveObject {
       'date': effectiveDate.toIso8601String(),
       'currency': currency,
       'is_draft': isDraft,
-      'bill_to': billTo,
-      'ship_to': shipTo,
+      'items': items?.map((item) => item.toJson()).toList() ?? [],
     };
   }
 
@@ -63,8 +59,9 @@ class Invoice extends HiveObject {
       date: DateTime.tryParse(json['date'] ?? ''),
       currency: json['currency'] ?? '€',
       isDraft: json['is_draft'] ?? false,
-      billTo: json['bill_to'] ?? '',
-      shipTo: json['ship_to'] ?? '',
+      items: (json['items'] as List?)
+          ?.map((item) => InvoiceItem.fromJson(item as Map<String, dynamic>))
+          .toList(),
     );
   }
 }

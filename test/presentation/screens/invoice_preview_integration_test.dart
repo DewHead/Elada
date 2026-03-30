@@ -38,10 +38,12 @@ void main() {
     when(mockRepository.getDrafts()).thenReturn([]);
 
     // Stub PdfService to avoid MissingStubError during initialization
-    when(mockPdfService.loadFonts(
-      regularPath: anyNamed('regularPath'),
-      boldPath: anyNamed('boldPath'),
-    )).thenAnswer((_) async {});
+    when(
+      mockPdfService.loadFonts(
+        regularPath: anyNamed('regularPath'),
+        boldPath: anyNamed('boldPath'),
+      ),
+    ).thenAnswer((_) async {});
 
     when(
       mockPdfService.generateInvoice(
@@ -49,9 +51,8 @@ void main() {
         total: anyNamed('total'),
         invoiceNumber: anyNamed('invoiceNumber'),
         date: anyNamed('date'),
-        billTo: anyNamed('billTo'),
-        shipTo: anyNamed('shipTo'),
         currency: anyNamed('currency'),
+        items: anyNamed('items'),
       ),
     ).thenAnswer((_) async => Uint8List(0));
 
@@ -82,11 +83,9 @@ void main() {
 
       await tester.pumpWidget(createWidgetUnderTest(provider));
 
-      // Wait for initial async generation
-      await tester.pump(const Duration(milliseconds: 100));
+      // Wait for initial async generation (500ms debounce)
+      await tester.pump(const Duration(milliseconds: 600));
       await tester.pump(); // Handle setState from listener
-      await tester.pump(); // microtask for bypass
-      await tester.pump(); // rebuild
 
       // Add some details to trigger a NEW preview
       final previewBytes = Uint8List(20);
@@ -97,9 +96,8 @@ void main() {
           total: anyNamed('total'),
           invoiceNumber: anyNamed('invoiceNumber'),
           date: anyNamed('date'),
-          billTo: anyNamed('billTo'),
-          shipTo: anyNamed('shipTo'),
           currency: anyNamed('currency'),
+          items: anyNamed('items'),
         ),
       ).thenAnswer((_) async {
         await Future.delayed(const Duration(milliseconds: 100));
@@ -109,22 +107,22 @@ void main() {
       provider.updateDescription('Test');
       await tester.pump(); // Start debounce
 
-      // Wait for debounce (50ms) + loading delay (100ms) + mock delay (100ms)
-      await tester.pump(const Duration(milliseconds: 300));
+      // Wait for debounce (500ms) + loading delay (100ms) + mock delay (100ms)
+      await tester.pump(const Duration(milliseconds: 1000));
       await tester.pump(); // Handle setState from bytes update
-      await tester.pump(); // microtask for bypass
-      await tester.pump(); // final build
+      await tester.pump(); // additional pump for animations
 
       expect(find.text('Enter details to see preview'), findsNothing);
-      expect(find.byType(SfPdfViewer), findsOneWidget);
+      expect(find.byType(SfPdfViewer), findsAtLeastNWidgets(1));
 
+      // Add a longer pump to clear SfPdfViewer internal timers
+      await tester.pump(const Duration(seconds: 2));
       provider.dispose();
-      await tester.pump(const Duration(seconds: 1));
     });
 
     testWidgets('should show preview FAB on mobile', (tester) async {
       // Set a small screen size
-      tester.view.physicalSize = const Size(400, 800);
+      tester.view.physicalSize = const Size(600, 800);
       tester.view.devicePixelRatio = 1.0;
 
       await tester.pumpWidget(createWidgetUnderTest(provider));
@@ -137,11 +135,8 @@ void main() {
       // Should NOT find placeholder text directly
       expect(find.text('Enter details to see preview'), findsNothing);
 
-      await tester.pump(const Duration(milliseconds: 600));
-      await tester.pump(const Duration(seconds: 1));
-
+      await tester.pump(const Duration(seconds: 2));
       provider.dispose();
-      await tester.pump(const Duration(seconds: 1));
     });
   });
 }

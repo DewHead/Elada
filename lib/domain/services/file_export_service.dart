@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:elada/domain/services/web_download.dart';
 
 class FileExportService {
   /// Saves the PDF bytes to the given filename in the specified directory.
@@ -12,6 +12,11 @@ class FileExportService {
     required String fileName,
     String? directoryPath,
   }) async {
+    if (kIsWeb) {
+      downloadFile(bytes, fileName);
+      return "web_download";
+    }
+
     final String baseDir = directoryPath ?? await getDownloadsDirectoryPath();
     final String filePath = p.join(baseDir, fileName);
 
@@ -27,13 +32,15 @@ class FileExportService {
 
   /// Finds the downloads directory for the current platform.
   Future<String> getDownloadsDirectoryPath() async {
+    if (kIsWeb) return '';
+
     Directory? downloadsDir;
 
     try {
-      if (Platform.isAndroid || Platform.isIOS) {
+      if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
         downloadsDir = await getApplicationDocumentsDirectory();
-      } else if (Platform.isLinux) {
-        final home = Platform.environment['HOME'];
+      } else if (!kIsWeb && Platform.isLinux) {
+        final home = !kIsWeb ? Platform.environment['HOME'] : null;
         if (home != null) {
           final linuxDownloads = Directory('$home/Downloads');
           if (linuxDownloads.existsSync()) {
@@ -41,7 +48,7 @@ class FileExportService {
           }
         }
         return '/tmp';
-      } else {
+      } else if (!kIsWeb) {
         downloadsDir = await getDownloadsDirectory();
       }
     } catch (e) {
@@ -54,10 +61,12 @@ class FileExportService {
 
     try {
       // Fallback to temporary directory
+      if (kIsWeb) return '';
       final Directory tempDir = await getTemporaryDirectory();
       return tempDir.path;
     } catch (e) {
       // Last resort fallback to current directory or a safe path on Linux
+      if (kIsWeb) return '';
       try {
         final currentDir = Directory.current;
         return currentDir.path;

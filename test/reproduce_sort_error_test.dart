@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:elada/data/models/invoice.dart';
+import 'package:elada/data/models/invoice_item.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
 import 'package:elada/domain/services/pdf_service.dart';
@@ -16,6 +17,7 @@ void main() {
     final tempDir = Directory.systemTemp.createTempSync('elada_test_sort');
     Hive.init(tempDir.path);
     Hive.registerAdapter(InvoiceAdapter());
+    Hive.registerAdapter(InvoiceItemAdapter());
 
     final invoiceBox = await Hive.openBox<Invoice>('test_sort_invoices');
     final draftsBox = await Hive.openBox<Invoice>('test_sort_drafts');

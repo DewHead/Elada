@@ -14,12 +14,16 @@ void main() {
     final textFields = find.byType(TextField);
     expect(textFields, findsWidgets);
 
-    // Bill To is the 3rd field (index 2)
-    await tester.enterText(textFields.at(2), 'Elad Avital');
-    // Item Description is the 5th field (index 4)
-    await tester.enterText(textFields.at(4), 'Car');
-    // Total Amount is the 6th field (index 5)
-    await tester.enterText(textFields.at(5), '100000');
+    // Description (Items)
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Item Description'),
+      'Car',
+    );
+    // Price (Items)
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Total Amount'),
+      '100000',
+    );
 
     await tester.pumpAndSettle();
 

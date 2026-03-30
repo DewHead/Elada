@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.elada" "\0"
-            VALUE "FileDescription", "elada" "\0"
+            VALUE "FileDescription", "Elada" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "elada" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.elada. All rights reserved." "\0"
             VALUE "OriginalFilename", "elada.exe" "\0"
-            VALUE "ProductName", "elada" "\0"
+            VALUE "ProductName", "Elada" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

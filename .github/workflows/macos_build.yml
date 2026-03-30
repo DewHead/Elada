@@ -1,0 +1,40 @@
+name: MacOS Build & Package
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate App Icons
+        run: dart run flutter_launcher_icons
+
+      - name: Build MacOS App
+        run: flutter build macos --release
+
+      - name: Package DMG
+        run: |
+          dart run flutter_distributor release --name macos --target dmg
+
+      - name: Upload DMG Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Elada-MacOS-DMG
+          path: dist/macos/release/*.dmg
+          if-no-files-found: error

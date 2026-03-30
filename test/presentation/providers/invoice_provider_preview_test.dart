@@ -32,6 +32,16 @@ void main() {
     when(mockRepository.getLastInvoiceNumber()).thenReturn('9417');
     when(mockRepository.getInvoices()).thenReturn([]);
     when(mockRepository.getDrafts()).thenReturn([]);
+    when(
+      mockPdfService.generateInvoice(
+        description: anyNamed('description'),
+        total: anyNamed('total'),
+        invoiceNumber: anyNamed('invoiceNumber'),
+        date: anyNamed('date'),
+        currency: anyNamed('currency'),
+        items: anyNamed('items'),
+      ),
+    ).thenAnswer((_) async => Uint8List(0));
 
     provider = InvoiceProvider(
       mockRepository,
@@ -49,59 +59,59 @@ void main() {
         total: anyNamed('total'),
         invoiceNumber: anyNamed('invoiceNumber'),
         date: anyNamed('date'),
-        billTo: anyNamed('billTo'),
-        shipTo: anyNamed('shipTo'),
         currency: anyNamed('currency'),
+        items: anyNamed('items'),
       ),
     ).thenAnswer((_) async => pdfBytes);
 
     provider.updateDescription('Test');
 
-    // Wait for debounce timer (50ms) + generation
-    await Future.delayed(const Duration(milliseconds: 150));
+    // Wait for debounce timer (500ms) + generation
+    await Future.delayed(const Duration(milliseconds: 600));
 
     expect(provider.previewBytes, equals(pdfBytes));
     verify(
       mockPdfService.generateInvoice(
-        description: 'Test',
+        description: '${InvoiceProvider.itemPrefix}Test',
         total: 0.0,
         invoiceNumber: '9418',
         date: anyNamed('date'),
-        billTo: '',
-        shipTo: '',
+        items: anyNamed('items'),
         currency: '€',
       ),
     ).called(1);
   });
 
-  test('should set isPreviewLoading to true after delay if generation is slow', () async {
-    when(
-      mockPdfService.generateInvoice(
-        description: anyNamed('description'),
-        total: anyNamed('total'),
-        invoiceNumber: anyNamed('invoiceNumber'),
-        date: anyNamed('date'),
-        billTo: anyNamed('billTo'),
-        shipTo: anyNamed('shipTo'),
-        currency: anyNamed('currency'),
-      ),
-    ).thenAnswer((_) async {
+  test(
+    'should set isPreviewLoading to true after delay if generation is slow',
+    () async {
+      when(
+        mockPdfService.generateInvoice(
+          description: anyNamed('description'),
+          total: anyNamed('total'),
+          invoiceNumber: anyNamed('invoiceNumber'),
+          date: anyNamed('date'),
+          currency: anyNamed('currency'),
+          items: anyNamed('items'),
+        ),
+      ).thenAnswer((_) async {
+        await Future.delayed(const Duration(milliseconds: 200));
+        return Uint8List(0);
+      });
+
+      provider.updateDescription('Test');
+
+      // Immediately it should be false
+      expect(provider.isPreviewLoading, isFalse);
+
+      // After debounce (500ms) + loading delay (100ms)
+      await Future.delayed(const Duration(milliseconds: 650));
+
+      expect(provider.isPreviewLoading, isTrue);
+
+      // Wait for completion
       await Future.delayed(const Duration(milliseconds: 200));
-      return Uint8List(0);
-    });
-
-    provider.updateDescription('Test');
-    
-    // Immediately it should be false
-    expect(provider.isPreviewLoading, isFalse);
-
-    // After debounce (50ms) + loading delay (100ms)
-    await Future.delayed(const Duration(milliseconds: 170));
-
-    expect(provider.isPreviewLoading, isTrue);
-    
-    // Wait for completion
-    await Future.delayed(const Duration(milliseconds: 100));
-    expect(provider.isPreviewLoading, isFalse);
-  });
+      expect(provider.isPreviewLoading, isFalse);
+    },
+  );
 }

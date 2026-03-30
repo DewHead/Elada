@@ -10,7 +10,7 @@ The system prioritizes a clean, uncluttered interface to facilitate rapid and ac
 ## Visual Identity & Polish
 - **Minimalist Aesthetic:** Leverage generous white space and refined typography to create a premium, high-end feel.
 - **Interactive Elements:** Employ subtle shadows, elegant transitions, and a "glow" effect on active buttons and inputs to provide a sense of depth and tactile quality.
-- **Real-time Preview:** A live, debounced visual representation of the invoice fields as the user updates them, instilling confidence before generation.
+- **On-Blur Preview:** A live, debounced visual representation of the invoice fields that updates when the user clicks out of a field, instilling confidence while ensuring a smooth typing experience.
 
 ## Functional Patterns & Rules
 - **Smart Defaults:** The system MUST automatically calculate and suggest the next logical "INVOICE NO." based on the project's history, while always allowing for a manual override.

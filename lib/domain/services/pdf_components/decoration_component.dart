@@ -10,17 +10,27 @@ class DecorationComponent {
 
   /// Draws the blue brand bar at the top of the page.
   void drawHeaderBar(PdfGraphics graphics) {
+    final double x = theme.margin;
+    final double width = theme.contentWidth;
+    const double height = 15;
+    const double y = 0; // Exactly at the top edge within horizontal margins
+
     graphics.drawRectangle(
       brush: PdfSolidBrush(theme.brandBlue),
-      bounds: Rect.fromLTWH(0, 0, theme.pageWidth, 45),
+      bounds: Rect.fromLTWH(x, y, width, height),
     );
   }
 
   /// Draws the blue brand bar at the bottom of the page.
   void drawFooterBar(PdfGraphics graphics) {
+    final double x = theme.margin;
+    final double width = theme.contentWidth;
+    const double height = 15;
+    final double y = theme.pageHeight - height; // Exactly at the bottom edge
+
     graphics.drawRectangle(
       brush: PdfSolidBrush(theme.brandBlue),
-      bounds: Rect.fromLTWH(0, theme.pageHeight - 25, theme.pageWidth, 25),
+      bounds: Rect.fromLTWH(x, y, width, height),
     );
   }
 }

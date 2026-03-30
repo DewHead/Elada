@@ -24,10 +24,10 @@ void main() {
         date: DateTime(2026, 3, 25),
       );
 
-      // 1. "ב\"ה" (Expect reversed for LTR rendering)
+      // 1. "ב\"ה"
       verify(
         mockGraphics.drawString(
-          'ה"ב',
+          'ב"ה',
           any,
           brush: anyNamed('brush'),
           bounds: anyNamed('bounds'),

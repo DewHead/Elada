@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:provider/provider.dart';
@@ -29,30 +29,31 @@ class _InvoicePreviewState extends State<InvoicePreview> {
     _currentDisplayBytes = _provider.previewBytes;
     _lastValidBytes = _currentDisplayBytes;
     _isPreviewLoading = _provider.isPreviewLoading;
-    
+
     if (_currentDisplayBytes != null) {
       _newDocumentOpacity = 1.0;
     }
 
-    _provider.previewBytesNotifier.addListener(_onPreviewBytesChanged);
+    _provider.previewBytesNotifier.addListener(_onPreviewChanged);
     _provider.isPreviewLoadingNotifier.addListener(_onLoadingChanged);
   }
 
   @override
   void dispose() {
-    _provider.previewBytesNotifier.removeListener(_onPreviewBytesChanged);
+    _provider.previewBytesNotifier.removeListener(_onPreviewChanged);
     _provider.isPreviewLoadingNotifier.removeListener(_onLoadingChanged);
     super.dispose();
   }
 
-  void _onPreviewBytesChanged() {
+  void _onPreviewChanged() {
     if (!mounted) return;
     final newBytes = _provider.previewBytesNotifier.value;
-    
+
     if (newBytes != null && newBytes != _currentDisplayBytes) {
       setState(() {
-        _isNewDocumentLoading = true;
-        _newDocumentOpacity = 0.0;
+        _isNewDocumentLoading = !kIsWeb;
+        // On web, onDocumentLoaded can be unreliable or not fire if the native viewer takes over
+        _newDocumentOpacity = kIsWeb ? 1.0 : 0.0;
         _currentDisplayBytes = newBytes;
       });
     }
@@ -67,10 +68,13 @@ class _InvoicePreviewState extends State<InvoicePreview> {
 
   @override
   Widget build(BuildContext context) {
-    final bool bypassViewer =
-        Platform.environment.containsKey('FLUTTER_TEST') && !widget.testing;
+    final bool bypassViewer = !kIsWeb &&
+        Platform.environment.containsKey('FLUTTER_TEST') &&
+        !widget.testing;
 
-    if (_isPreviewLoading && _currentDisplayBytes == null && _lastValidBytes == null) {
+    if (_isPreviewLoading &&
+        _currentDisplayBytes == null &&
+        _lastValidBytes == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -100,6 +104,22 @@ class _InvoicePreviewState extends State<InvoicePreview> {
       );
     }
 
+    if (kIsWeb) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: _currentDisplayBytes == null
+            ? const Center(child: CircularProgressIndicator())
+            : SfPdfViewer.memory(
+                _currentDisplayBytes!,
+                key: ValueKey('pdf_web_${_currentDisplayBytes!.hashCode}'),
+              ),
+      );
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
@@ -115,56 +135,74 @@ class _InvoicePreviewState extends State<InvoicePreview> {
       clipBehavior: Clip.antiAlias,
       child: Stack(
         children: [
-          // Previous valid document (Back buffer)
-          if (_lastValidBytes != null && _lastValidBytes != _currentDisplayBytes)
-            IgnorePointer(
-              child: bypassViewer
-                  ? const SizedBox.shrink()
-                  : SfPdfViewer.memory(
-                      _lastValidBytes!,
-                      enableDoubleTapZooming: false,
-                    ),
-            ),
-
-          // Current document (Front buffer)
-          if (_currentDisplayBytes != null)
-            AnimatedOpacity(
-              opacity: _newDocumentOpacity,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeInOut,
-              child: bypassViewer
-                  ? Builder(
-                      builder: (context) {
-                        Future.microtask(() {
-                          if (mounted && _newDocumentOpacity == 0.0) {
-                            setState(() {
-                              _newDocumentOpacity = 1.0;
-                              _isNewDocumentLoading = false;
-                              _lastValidBytes = _currentDisplayBytes;
-                            });
-                          }
-                        });
-                        return const SizedBox.shrink();
-                      },
-                    )
-                  : SfPdfViewer.memory(
-                      _currentDisplayBytes!,
-                      key: ValueKey(
-                        'pdf_viewer_${_currentDisplayBytes!.length}_${_currentDisplayBytes!.hashCode}',
-                      ),
-                      onDocumentLoaded: (details) {
-                        setState(() {
-                          _newDocumentOpacity = 1.0;
-                          _isNewDocumentLoading = false;
-                          _lastValidBytes = _currentDisplayBytes;
-                        });
-                      },
-                      enableDoubleTapZooming: true,
-                      // Prevent stealing focus
-                      canShowPaginationDialog: false,
-                      canShowScrollHead: false,
-                      canShowScrollStatus: false,
-                    ),
+          // Double-buffered PDF viewer to prevent flickering
+          for (final bytes in [
+            if (!kIsWeb &&
+                _lastValidBytes != null &&
+                _lastValidBytes != _currentDisplayBytes)
+              _lastValidBytes!,
+            if (_currentDisplayBytes != null) _currentDisplayBytes!,
+          ])
+            KeyedSubtree(
+              key: ValueKey('pdf_wrapper_${bytes.length}_${bytes.hashCode}'),
+              child: IgnorePointer(
+                ignoring: bytes != _currentDisplayBytes,
+                child: AnimatedOpacity(
+                  opacity: bytes == _currentDisplayBytes
+                      ? _newDocumentOpacity
+                      : 1.0,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeInOut,
+                  child: bypassViewer
+                      ? Builder(
+                          builder: (context) {
+                            if (bytes == _currentDisplayBytes) {
+                              Future.microtask(() {
+                                if (mounted && _newDocumentOpacity == 0.0) {
+                                  setState(() {
+                                    _newDocumentOpacity = 1.0;
+                                    _isNewDocumentLoading = false;
+                                    _lastValidBytes = _currentDisplayBytes;
+                                  });
+                                }
+                              });
+                            }
+                            return const SizedBox.shrink();
+                          },
+                        )
+                      : Focus(
+                          canRequestFocus: false,
+                          descendantsAreFocusable: false,
+                          child: SfPdfViewer.memory(
+                            bytes,
+                            key: ValueKey(
+                              'pdf_viewer_${bytes.length}_${bytes.hashCode}',
+                            ),
+                            onDocumentLoaded: bytes == _currentDisplayBytes
+                                ? (details) {
+                                    setState(() {
+                                      _newDocumentOpacity = 1.0;
+                                      _isNewDocumentLoading = false;
+                                      _lastValidBytes = _currentDisplayBytes;
+                                    });
+                                  }
+                                : null,
+                            onDocumentLoadFailed: (details) {
+                              if (bytes == _currentDisplayBytes) {
+                                setState(() {
+                                  _isNewDocumentLoading = false;
+                                });
+                              }
+                            },
+                            enableDoubleTapZooming: true,
+                            // Prevent stealing focus
+                            canShowPaginationDialog: false,
+                            canShowScrollHead: false,
+                            canShowScrollStatus: false,
+                          ),
+                        ),
+                ),
+              ),
             ),
 
           // Loading indicator overlay
@@ -175,9 +213,7 @@ class _InvoicePreviewState extends State<InvoicePreview> {
               child: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.surface.withAlpha(230),
+                  color: Theme.of(context).colorScheme.surface.withAlpha(230),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
+import 'package:elada/presentation/utils/prefix_formatter.dart';
 import 'package:elada/presentation/widgets/invoice_preview.dart';
+import 'package:elada/presentation/utils/thousands_formatter.dart';
 
 class InvoiceScreen extends StatefulWidget {
   final bool testing;
@@ -12,21 +16,17 @@ class InvoiceScreen extends StatefulWidget {
 }
 
 class _InvoiceScreenState extends State<InvoiceScreen> {
-  final _descriptionController = TextEditingController();
-  final _totalController = TextEditingController();
   final _invoiceNumberController = TextEditingController();
   final _dateController = TextEditingController();
-  final _billToController = TextEditingController();
-  final _shipToController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _totalAmountController = TextEditingController();
 
-  final _descriptionFocusNode = FocusNode();
-  final _totalFocusNode = FocusNode();
   final _invoiceNumberFocusNode = FocusNode();
-  final _billToFocusNode = FocusNode();
-  final _shipToFocusNode = FocusNode();
+  final _descriptionFocusNode = FocusNode();
+  final _totalAmountFocusNode = FocusNode();
 
   late InvoiceProvider _provider;
-  
+
   // Track previous values to detect changes that require UI rebuild (excluding text fields)
   String? _lastCurrency;
   bool? _lastIsGenerating;
@@ -36,17 +36,18 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   void initState() {
     super.initState();
     _provider = Provider.of<InvoiceProvider>(context, listen: false);
-    
+
     // Initial controller setup
     _invoiceNumberController.text = _provider.invoiceNumber;
-    _descriptionController.text = _provider.description;
-    _totalController.text = _provider.total > 0
-        ? _provider.total.toString()
+    _descriptionController.text = _provider.items.isNotEmpty
+        ? _provider.items[0].description
+        : InvoiceProvider.itemPrefix;
+    _totalAmountController.text =
+        _provider.items.isNotEmpty && _provider.items[0].price > 0
+        ? NumberFormat('#,##0.##', 'en_US').format(_provider.items[0].price)
         : '';
-    _billToController.text = _provider.billTo;
-    _shipToController.text = _provider.shipTo;
     _updateDateController();
-    
+
     _lastCurrency = _provider.selectedCurrency;
     _lastIsGenerating = _provider.isGenerating;
     _lastDate = _provider.date;
@@ -58,36 +59,31 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   void _onProviderUpdate() {
     if (!mounted) return;
 
-    // Update controllers directly WITHOUT setState to avoid rebuild while typing
     bool controllersUpdated = false;
-    
-    if (_invoiceNumberController.text != _provider.invoiceNumber) {
+
+    if (!_invoiceNumberFocusNode.hasPrimaryFocus &&
+        _invoiceNumberController.text != _provider.invoiceNumber) {
       _invoiceNumberController.text = _provider.invoiceNumber;
       controllersUpdated = true;
     }
-    if (_descriptionController.text != _provider.description) {
+    if (!_descriptionFocusNode.hasPrimaryFocus &&
+        _descriptionController.text != _provider.description) {
+      // For the description field, be extra careful as it has its own logic
       _descriptionController.text = _provider.description;
       controllersUpdated = true;
     }
-    if (_billToController.text != _provider.billTo) {
-      _billToController.text = _provider.billTo;
+    final formattedPrice = _provider.total > 0
+        ? NumberFormat('#,##0.##', 'en_US').format(_provider.total)
+        : '';
+    if (!_totalAmountFocusNode.hasPrimaryFocus &&
+        _totalAmountController.text != formattedPrice) {
+      _totalAmountController.text = formattedPrice;
       controllersUpdated = true;
     }
-    if (_shipToController.text != _provider.shipTo) {
-      _shipToController.text = _provider.shipTo;
-      controllersUpdated = true;
-    }
-    final currentTotal = double.tryParse(_totalController.text) ?? 0.0;
-    if (currentTotal != _provider.total) {
-      _totalController.text = _provider.total > 0
-          ? _provider.total.toString()
-          : '';
-      controllersUpdated = true;
-    }
-    
-    // Check if other UI elements need rebuild
+
     final bool currencyChanged = _lastCurrency != _provider.selectedCurrency;
-    final bool isGeneratingChanged = _lastIsGenerating != _provider.isGenerating;
+    final bool isGeneratingChanged =
+        _lastIsGenerating != _provider.isGenerating;
     final bool dateChanged = _lastDate != _provider.date;
 
     if (currencyChanged || isGeneratingChanged || dateChanged) {
@@ -98,8 +94,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
         _updateDateController();
       });
     } else if (controllersUpdated && !FocusScope.of(context).hasFocus) {
-       // Rebuild only if we are not currently typing and controllers were updated (e.g. loaded draft)
-       setState(() {});
+      setState(() {});
     }
   }
 
@@ -114,20 +109,15 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
   @override
   void dispose() {
-    // Remove listener using stored reference
     _provider.removeListener(_onProviderUpdate);
-    _descriptionController.dispose();
-    _totalController.dispose();
     _invoiceNumberController.dispose();
     _dateController.dispose();
-    _billToController.dispose();
-    _shipToController.dispose();
+    _descriptionController.dispose();
+    _totalAmountController.dispose();
 
-    _descriptionFocusNode.dispose();
-    _totalFocusNode.dispose();
     _invoiceNumberFocusNode.dispose();
-    _billToFocusNode.dispose();
-    _shipToFocusNode.dispose();
+    _descriptionFocusNode.dispose();
+    _totalAmountFocusNode.dispose();
     super.dispose();
   }
 
@@ -184,150 +174,169 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   }
 
   void _showPreviewModal(BuildContext context) {
+    final provider = context.read<InvoiceProvider>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.9,
-        minChildSize: 0.5,
-        maxChildSize: 0.95,
-        expand: false,
-        builder: (context, scrollController) => Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Invoice Preview',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
+      builder: (context) => ChangeNotifierProvider.value(
+        value: provider,
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.9,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          expand: false,
+          builder: (context, scrollController) => Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Invoice Preview',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close),
+                    ),
+                  ],
                 ),
-                child: InvoicePreview(testing: widget.testing),
               ),
-            ),
-          ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
+                  child: InvoicePreview(testing: widget.testing),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildForm(BuildContext context) {
-    // Rely on _onProviderUpdate's setState for rebuilds to avoid redundant trigger
     final provider = _provider;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(height: 16),
-        Icon(
-          Icons.receipt_long_rounded,
-          size: 80,
-          color: Theme.of(
-            context,
-          ).colorScheme.primary.withAlpha(204), // ~0.8 opacity
+        const SizedBox(height: 8),
+        Image.asset(
+          'assets/app_icon_new.png',
+          height: 80,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 8),
         Text(
           'Generate New Invoice',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
             letterSpacing: -0.5,
           ),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
-        Text(
-          'Fill in the details for your professional invoice',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 48),
-        Text('Currency', style: Theme.of(context).textTheme.titleSmall),
-        const SizedBox(height: 8),
-        SegmentedButton<String>(
-          segments: const [
-            ButtonSegment(value: '€', label: Text('€')),
-            ButtonSegment(value: '\$', label: Text('\$')),
-            ButtonSegment(value: '£', label: Text('£')),
+        Row(
+          children: [
+            Expanded(
+              child: _buildInputField(
+                controller: _dateController,
+                label: 'Invoice Date',
+                onChanged: (_) {},
+                readOnly: true,
+                onTap: () => _selectDate(context),
+                prefixIcon: const Icon(Icons.calendar_today_outlined),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _buildInputField(
+                controller: _invoiceNumberController,
+                focusNode: _invoiceNumberFocusNode,
+                label: 'Invoice Number',
+                onChanged: (val) =>
+                    context.read<InvoiceProvider>().updateInvoiceNumber(val),
+                keyboardType: TextInputType.number,
+                updateOnType: false,
+              ),
+            ),
           ],
-          selected: {provider.selectedCurrency},
-          onSelectionChanged: (Set<String> newSelection) {
-            context.read<InvoiceProvider>().updateCurrency(newSelection.first);
-          },
         ),
-        const SizedBox(height: 16),
-        _buildInputField(
-          controller: _invoiceNumberController,
-          focusNode: _invoiceNumberFocusNode,
-          label: 'Invoice Number',
-          onChanged: (val) =>
-              context.read<InvoiceProvider>().updateInvoiceNumber(val),
-          keyboardType: TextInputType.number,
-        ),
-        const SizedBox(height: 16),
-        _buildInputField(
-          controller: _dateController,
-          label: 'Invoice Date',
-          onChanged: (_) {},
-          readOnly: true,
-          onTap: () => _selectDate(context),
-          prefixIcon: const Icon(Icons.calendar_today_outlined),
-        ),
-        const SizedBox(height: 16),
-        _buildInputField(
-          controller: _billToController,
-          focusNode: _billToFocusNode,
-          label: 'Bill To',
-          onChanged: (val) => context.read<InvoiceProvider>().updateBillTo(val),
-          maxLines: 3,
-        ),
-        const SizedBox(height: 16),
-        _buildInputField(
-          controller: _shipToController,
-          focusNode: _shipToFocusNode,
-          label: 'Ship To',
-          onChanged: (val) => context.read<InvoiceProvider>().updateShipTo(val),
-          maxLines: 3,
-        ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         _buildInputField(
           controller: _descriptionController,
           focusNode: _descriptionFocusNode,
           label: 'Item Description',
-          onChanged: (val) =>
-              context.read<InvoiceProvider>().updateDescription(val),
-          maxLines: 3,
+          onChanged: (val) => provider.updateItemDescription(0, val),
+          maxLines: 2,
+          updateOnType: false,
+          inputFormatters: [
+            PrefixTextInputFormatter(InvoiceProvider.itemPrefix),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Currency',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 4),
+                  SizedBox(
+                    width: double.infinity,
+                    child: SegmentedButton<String>(
+                      showSelectedIcon: false,
+                      segments: const [
+                        ButtonSegment(value: '€', label: Text('€')),
+                        ButtonSegment(value: '\$', label: Text('\$')),
+                        ButtonSegment(value: '£', label: Text('£')),
+                      ],
+                      selected: {provider.selectedCurrency},
+                      onSelectionChanged: (Set<String> newSelection) {
+                        context.read<InvoiceProvider>().updateCurrency(
+                          newSelection.first,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 2,
+              child: _buildInputField(
+                controller: _totalAmountController,
+                focusNode: _totalAmountFocusNode,
+                label: 'Total Amount',
+                onChanged: (val) {
+                  final doubleValue =
+                      double.tryParse(val.replaceAll(',', '')) ?? 0.0;
+                  provider.updateItemPrice(0, doubleValue);
+                },
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                inputFormatters: [ThousandsFormatter()],
+                updateOnType: false,
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 16),
-        _buildInputField(
-          controller: _totalController,
-          focusNode: _totalFocusNode,
-          label: 'Total Amount',
-          onChanged: (val) {
-            final doubleValue = double.tryParse(val) ?? 0.0;
-            context.read<InvoiceProvider>().updateTotal(doubleValue);
-          },
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          prefixText: '${provider.selectedCurrency} ',
-        ),
-        const SizedBox(height: 48),
         Row(
           children: [
             Expanded(
@@ -392,8 +401,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             ),
           ],
         ),
-
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         TextButton.icon(
           onPressed: () => _clearForm(context),
           icon: const Icon(Icons.clear_all),
@@ -402,21 +410,21 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
             foregroundColor: Theme.of(context).colorScheme.error,
           ),
         ),
+        const SizedBox(height: 80),
       ],
     );
   }
 
   void _clearForm(BuildContext context) {
     final provider = context.read<InvoiceProvider>();
-    provider.updateDescription('');
-    provider.updateTotal(0.0);
     provider.updateDate(DateTime.now());
-    provider.updateBillTo('');
-    provider.updateShipTo('');
-    _descriptionController.clear();
-    _totalController.clear();
-    _billToController.clear();
-    _shipToController.clear();
+    provider.clearItems();
+
+    // Increment the invoice number
+    provider.incrementInvoiceNumber();
+
+    _descriptionController.text = InvoiceProvider.itemPrefix;
+    _totalAmountController.clear();
     _invoiceNumberController.text = provider.invoiceNumber;
     _updateDateController();
   }
@@ -483,14 +491,24 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Invoice saved to: $savedPath'),
+          content: Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                ),
+                child: const Text('OK'),
+              ),
+              const SizedBox(width: 8),
+              Expanded(child: Text('Invoice saved to: $savedPath')),
+            ],
+          ),
           backgroundColor: Colors.green,
           duration: const Duration(seconds: 5),
-          action: SnackBarAction(
-            label: 'OK',
-            textColor: Colors.white,
-            onPressed: () {},
-          ),
         ),
       );
     } catch (e, st) {
@@ -521,25 +539,42 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
     VoidCallback? onTap,
     Widget? prefixIcon,
     FocusNode? focusNode,
+    List<TextInputFormatter>? inputFormatters,
+    bool updateOnType = false,
   }) {
-    return TextField(
-      key: key,
-      controller: controller,
-      onChanged: onChanged,
-      keyboardType: keyboardType,
-      maxLines: maxLines,
-      readOnly: readOnly,
-      onTap: onTap,
-      focusNode: focusNode,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixText: prefixText,
-        prefixIcon: prefixIcon,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-        filled: true,
-        fillColor: Theme.of(
-          context,
-        ).colorScheme.surfaceContainerHighest.withAlpha(77), // ~0.3 opacity
+    return Focus(
+      canRequestFocus: !(readOnly && onTap == null),
+      descendantsAreFocusable: !(readOnly && onTap == null),
+      onFocusChange: (hasFocus) {
+        if (!hasFocus) {
+          onChanged(controller.text);
+        }
+      },
+      child: TextField(
+        key: key,
+        controller: controller,
+        onChanged: updateOnType ? onChanged : null,
+        keyboardType: keyboardType,
+        maxLines: maxLines,
+        readOnly: readOnly,
+        onTap: onTap,
+        focusNode: focusNode,
+        inputFormatters: inputFormatters,
+        decoration: InputDecoration(
+          labelText: label,
+          isDense: true,
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 12,
+            horizontal: 12,
+          ),
+          prefixText: prefixText,
+          prefixIcon: prefixIcon,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+          filled: true,
+          fillColor: Theme.of(
+            context,
+          ).colorScheme.surfaceContainerHighest.withAlpha(77), // ~0.3 opacity
+        ),
       ),
     );
   }

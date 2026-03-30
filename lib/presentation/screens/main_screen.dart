@@ -17,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
     final List<Widget> screens = [
       const InvoiceScreen(),
       HistoryScreen(
-        onEditDraft: () {
+        onSelectInvoice: () {
           setState(() {
             _currentIndex = 0;
           });

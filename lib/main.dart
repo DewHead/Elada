@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:elada/data/models/invoice.dart';
+import 'package:elada/data/models/invoice_item.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/domain/services/pdf_service.dart';
 import 'package:elada/domain/services/invoice_theme.dart';
@@ -17,6 +18,9 @@ Future<void> main() async {
 
   if (!Hive.isAdapterRegistered(0)) {
     Hive.registerAdapter(InvoiceAdapter());
+  }
+  if (!Hive.isAdapterRegistered(1)) {
+    Hive.registerAdapter(InvoiceItemAdapter());
   }
 
   final invoiceBox = await Hive.openBox<Invoice>('invoices');

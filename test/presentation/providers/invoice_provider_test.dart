@@ -32,6 +32,23 @@ void main() {
     when(mockRepository.getLastInvoiceNumber()).thenReturn('9417');
     when(mockRepository.getInvoices()).thenReturn([]);
     when(mockRepository.getDrafts()).thenReturn([]);
+    when(
+      mockPdfService.loadFonts(
+        regularPath: anyNamed('regularPath'),
+        boldPath: anyNamed('boldPath'),
+      ),
+    ).thenAnswer((_) async {});
+
+    when(
+      mockPdfService.generateInvoice(
+        description: anyNamed('description'),
+        total: anyNamed('total'),
+        invoiceNumber: anyNamed('invoiceNumber'),
+        date: anyNamed('date'),
+        items: anyNamed('items'),
+        currency: anyNamed('currency'),
+      ),
+    ).thenAnswer((_) async => Uint8List(0));
 
     provider = InvoiceProvider(
       mockRepository,
@@ -44,7 +61,7 @@ void main() {
   group('InvoiceProvider', () {
     test('initial state should be correct', () {
       expect(provider.invoiceNumber, '9418'); // Incremented from 9417
-      expect(provider.description, '');
+      expect(provider.description, InvoiceProvider.itemPrefix);
       expect(provider.total, 0.0);
     });
 
@@ -52,7 +69,7 @@ void main() {
       provider.updateDescription('New Task');
       provider.updateTotal(1200.0);
 
-      expect(provider.description, 'New Task');
+      expect(provider.description, '${InvoiceProvider.itemPrefix}New Task');
       expect(provider.total, 1200.0);
     });
 
@@ -65,7 +82,6 @@ void main() {
     });
 
     test('should generate PDF and save invoice', () async {
-      final templateBytes = Uint8List(10);
       final pdfBytes = Uint8List(20);
 
       when(
@@ -74,8 +90,7 @@ void main() {
           total: anyNamed('total'),
           invoiceNumber: anyNamed('invoiceNumber'),
           date: anyNamed('date'),
-          billTo: anyNamed('billTo'),
-          shipTo: anyNamed('shipTo'),
+          items: anyNamed('items'),
           currency: anyNamed('currency'),
         ),
       ).thenAnswer((_) async => pdfBytes);

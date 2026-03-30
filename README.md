@@ -1,4 +1,4 @@
-# elada
+# Elada
 
 A new Flutter project.
 

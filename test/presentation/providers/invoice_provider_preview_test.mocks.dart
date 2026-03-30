@@ -7,9 +7,10 @@ import 'dart:async' as _i3;
 import 'dart:typed_data' as _i7;
 
 import 'package:elada/data/models/invoice.dart' as _i4;
+import 'package:elada/data/models/invoice_item.dart' as _i8;
 import 'package:elada/data/repositories/invoice_repository.dart' as _i2;
-import 'package:elada/domain/services/file_export_service.dart' as _i9;
-import 'package:elada/domain/services/filename_service.dart' as _i8;
+import 'package:elada/domain/services/file_export_service.dart' as _i10;
+import 'package:elada/domain/services/filename_service.dart' as _i9;
 import 'package:elada/domain/services/pdf_service.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i5;
@@ -74,10 +75,30 @@ class MockInvoiceRepository extends _i1.Mock implements _i2.InvoiceRepository {
       ) as List<_i4.Invoice>);
 
   @override
-  _i3.Future<void> deleteDraft(int? index) => (super.noSuchMethod(
+  _i3.Future<void> deleteDraft(dynamic key) => (super.noSuchMethod(
         Invocation.method(
           #deleteDraft,
-          [index],
+          [key],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> deleteInvoice(dynamic key) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteInvoice,
+          [key],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
+  _i3.Future<void> clearAll() => (super.noSuchMethod(
+        Invocation.method(
+          #clearAll,
+          [],
         ),
         returnValue: _i3.Future<void>.value(),
         returnValueForMissingStub: _i3.Future<void>.value(),
@@ -163,13 +184,22 @@ class MockPdfService extends _i1.Mock implements _i6.PdfService {
       ) as _i3.Future<void>);
 
   @override
+  _i3.Future<void> loadTemplate(String? path) => (super.noSuchMethod(
+        Invocation.method(
+          #loadTemplate,
+          [path],
+        ),
+        returnValue: _i3.Future<void>.value(),
+        returnValueForMissingStub: _i3.Future<void>.value(),
+      ) as _i3.Future<void>);
+
+  @override
   _i3.Future<_i7.Uint8List> generateInvoice({
     required String? description,
     required double? total,
     required String? invoiceNumber,
     required DateTime? date,
-    String? billTo = r'',
-    String? shipTo = r'',
+    List<_i8.InvoiceItem>? items = const [],
     String? currency = r'€',
   }) =>
       (super.noSuchMethod(
@@ -181,8 +211,7 @@ class MockPdfService extends _i1.Mock implements _i6.PdfService {
             #total: total,
             #invoiceNumber: invoiceNumber,
             #date: date,
-            #billTo: billTo,
-            #shipTo: shipTo,
+            #items: items,
             #currency: currency,
           },
         ),
@@ -193,7 +222,7 @@ class MockPdfService extends _i1.Mock implements _i6.PdfService {
 /// A class which mocks [FilenameService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFilenameService extends _i1.Mock implements _i8.FilenameService {
+class MockFilenameService extends _i1.Mock implements _i9.FilenameService {
   MockFilenameService() {
     _i1.throwOnMissingStub(this);
   }
@@ -217,7 +246,7 @@ class MockFilenameService extends _i1.Mock implements _i8.FilenameService {
 /// A class which mocks [FileExportService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFileExportService extends _i1.Mock implements _i9.FileExportService {
+class MockFileExportService extends _i1.Mock implements _i10.FileExportService {
   MockFileExportService() {
     _i1.throwOnMissingStub(this);
   }

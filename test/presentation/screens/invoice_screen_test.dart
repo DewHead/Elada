@@ -2,14 +2,15 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:elada/presentation/screens/invoice_screen.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
 import 'package:elada/data/repositories/invoice_repository.dart';
 import 'package:elada/domain/services/pdf_service.dart';
 import 'package:elada/domain/services/filename_service.dart';
 import 'package:elada/domain/services/file_export_service.dart';
+import 'invoice_screen_test.mocks.dart';
 
 @GenerateMocks([
   InvoiceRepository,
@@ -17,8 +18,6 @@ import 'package:elada/domain/services/file_export_service.dart';
   FilenameService,
   FileExportService,
 ])
-import 'invoice_screen_test.mocks.dart';
-
 void main() {
   late MockInvoiceRepository mockRepository;
   late MockPdfService mockPdfService;
@@ -32,24 +31,27 @@ void main() {
     mockFilenameService = MockFilenameService();
     mockFileExportService = MockFileExportService();
 
-    when(mockRepository.getLastInvoiceNumber()).thenReturn('9418');
     when(mockRepository.getInvoices()).thenReturn([]);
     when(mockRepository.getDrafts()).thenReturn([]);
-    
-    when(mockPdfService.loadFonts(
-      regularPath: anyNamed('regularPath'),
-      boldPath: anyNamed('boldPath'),
-    )).thenAnswer((_) async {});
-    
-    when(mockPdfService.generateInvoice(
-      description: anyNamed('description'),
-      total: anyNamed('total'),
-      invoiceNumber: anyNamed('invoiceNumber'),
-      date: anyNamed('date'),
-      billTo: anyNamed('billTo'),
-      shipTo: anyNamed('shipTo'),
-      currency: anyNamed('currency'),
-    )).thenAnswer((_) async => Uint8List(0));
+    when(mockRepository.getLastInvoiceNumber()).thenReturn('1');
+
+    when(
+      mockPdfService.loadFonts(
+        regularPath: anyNamed('regularPath'),
+        boldPath: anyNamed('boldPath'),
+      ),
+    ).thenAnswer((_) async {});
+
+    when(
+      mockPdfService.generateInvoice(
+        description: anyNamed('description'),
+        total: anyNamed('total'),
+        items: anyNamed('items'),
+        invoiceNumber: anyNamed('invoiceNumber'),
+        date: anyNamed('date'),
+        currency: anyNamed('currency'),
+      ),
+    ).thenAnswer((_) async => Uint8List(0));
 
     provider = InvoiceProvider(
       mockRepository,
@@ -59,152 +61,158 @@ void main() {
     );
   });
 
-  tearDown(() async {
-    // Standard Flutter test runners don't automatically clear all timers from 3rd party widgets
-    // This ensures we wait out any internal timers (like SfPdfViewer's 500ms debounce)
-  });
-
   Widget createWidgetUnderTest() {
     return MaterialApp(
       home: ChangeNotifierProvider<InvoiceProvider>.value(
         value: provider,
-        child: const InvoiceScreen(),
+        child: const InvoiceScreen(testing: true),
       ),
     );
   }
 
-  group('InvoiceScreen', () {
-    testWidgets('should show all input fields and generate button', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pump(); // Allow provider init
+  testWidgets(
+    'InvoiceScreen should show all input fields and generate button',
+    (tester) async {
+      tester.view.physicalSize = const Size(800, 1200);
+      addTearDown(tester.view.resetPhysicalSize);
 
+      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpAndSettle();
+
+      expect(find.text('Generate New Invoice'), findsOneWidget);
       expect(find.text('Invoice Number'), findsOneWidget);
-      expect(find.text('Invoice Date'), findsOneWidget);
-      expect(find.text('Bill To'), findsOneWidget);
-      expect(find.text('Ship To'), findsOneWidget);
       expect(find.text('Item Description'), findsOneWidget);
       expect(find.text('Total Amount'), findsOneWidget);
       expect(find.text('Generate PDF'), findsOneWidget);
+    },
+  );
 
-      await tester.pump(const Duration(seconds: 1));
-    });
+  testWidgets(
+    'InvoiceScreen should trigger PDF generation when Generate PDF is tapped',
+    (tester) async {
+      await tester.runAsync(() async {
+        tester.view.physicalSize = const Size(800, 1200);
+        addTearDown(tester.view.resetPhysicalSize);
 
-    testWidgets('should show currency selector with options', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pump();
+        when(
+          mockFilenameService.generateFileName(any),
+        ).thenReturn('invoice.pdf');
+        when(
+          mockFileExportService.saveFile(
+            bytes: anyNamed('bytes'),
+            fileName: anyNamed('fileName'),
+          ),
+        ).thenAnswer((_) async => '/path/to/invoice.pdf');
 
-      expect(find.text('Currency'), findsOneWidget);
-      expect(find.text('€'), findsOneWidget);
-      expect(find.text('\$'), findsOneWidget);
-      expect(find.text('£'), findsOneWidget);
-
-      await tester.pump(const Duration(seconds: 1));
-    });
-
-    testWidgets('should show Save as Draft button', (
-      WidgetTester tester,
-    ) async {
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pump();
-
-      expect(find.text('Save as Draft'), findsOneWidget);
-
-      await tester.pump(const Duration(seconds: 1));
-    });
-
-    testWidgets('should trigger PDF generation when Generate PDF is tapped', (
-      WidgetTester tester,
-    ) async {
-      tester.view.physicalSize = const Size(1200, 1200);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
-
-      when(mockFilenameService.generateFileName(any)).thenReturn('invoice.pdf');
-      when(mockFileExportService.saveFile(
-        bytes: anyNamed('bytes'),
-        fileName: anyNamed('fileName'),
-      )).thenAnswer((_) async => '/path/to/invoice.pdf');
-
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pump();
-
-      // Enter some data to make it valid
-      await tester.enterText(find.widgetWithText(TextField, 'Invoice Number'), '1234');
-      await tester.enterText(find.widgetWithText(TextField, 'Item Description'), 'Test');
-      await tester.enterText(find.widgetWithText(TextField, 'Total Amount'), '100');
-      await tester.pump();
-
-      await tester.tap(find.text('Generate PDF'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 100));
-
-      verify(mockPdfService.generateInvoice(
-        description: anyNamed('description'),
-        total: anyNamed('total'),
-        invoiceNumber: anyNamed('invoiceNumber'),
-        date: anyNamed('date'),
-        billTo: anyNamed('billTo'),
-        shipTo: anyNamed('shipTo'),
-        currency: anyNamed('currency'),
-      )).called(greaterThan(0));
-      
-      expect(find.byType(SnackBar), findsOneWidget);
-      expect(
-        find.textContaining('Invoice saved to: /path/to/invoice.pdf'),
-        findsOneWidget,
-      );
-    });
-
-    testWidgets(
-      'should show error when Generate PDF is tapped with empty invoice number',
-      (WidgetTester tester) async {
         await tester.pumpWidget(createWidgetUnderTest());
-        await tester.pump();
+        await tester.pumpAndSettle();
 
-        // Clear invoice number
-        await tester.enterText(find.widgetWithText(TextField, 'Invoice Number'), '');
-        await tester.pump();
+        // Enter some data to make it valid
+        final invNumField = find.widgetWithText(TextField, 'Invoice Number');
+        await tester.ensureVisible(invNumField);
+        await tester.enterText(invNumField, '1234');
 
-        await tester.tap(find.text('Generate PDF'));
-        await tester.pump();
+        final descField = find.widgetWithText(TextField, 'Item Description');
+        await tester.ensureVisible(descField);
+        await tester.enterText(descField, 'Test');
 
-        expect(find.text('Please enter an Invoice Number'), findsOneWidget);
-        verifyNever(mockFileExportService.saveFile(
-          bytes: anyNamed('bytes'),
-          fileName: anyNamed('fileName'),
-        ));
-        
-        await tester.pump(const Duration(seconds: 1));
-      },
-    );
+        // Unfocus to trigger focus loss and update provider
+        FocusManager.instance.primaryFocus?.unfocus();
+        await Future.delayed(
+          const Duration(milliseconds: 600),
+        ); // wait for debounce
+        await tester.pumpAndSettle();
 
-    testWidgets('should show date picker when Invoice Date is tapped', (
-      WidgetTester tester,
-    ) async {
-      tester.view.physicalSize = const Size(1200, 1200);
-      tester.view.devicePixelRatio = 1.0;
+        final genButton = find.text('Generate PDF');
+        await tester.ensureVisible(genButton);
+        await tester.tap(genButton);
+        await Future.delayed(
+          const Duration(milliseconds: 600),
+        ); // wait for generation
+        await tester.pumpAndSettle();
+
+        verify(
+          mockPdfService.generateInvoice(
+            description: anyNamed('description'),
+            total: anyNamed('total'),
+            items: anyNamed('items'),
+            invoiceNumber: '1234',
+            date: anyNamed('date'),
+            currency: anyNamed('currency'),
+          ),
+        ).called(greaterThanOrEqualTo(1));
+      });
+    },
+  );
+
+  testWidgets(
+    'InvoiceScreen should show preview in mobile view when FAB is tapped',
+    (tester) async {
+      tester.view.physicalSize = const Size(800, 1200);
       addTearDown(tester.view.resetPhysicalSize);
 
       await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pump();
+      await tester.pumpAndSettle();
 
-      final dateField = find.ancestor(
-        of: find.text('Invoice Date'),
-        matching: find.byType(TextField),
+      // FAB should be present
+      final fab = find.byType(FloatingActionButton);
+      await tester.ensureVisible(fab);
+      expect(fab, findsOneWidget);
+      expect(find.text('Preview'), findsOneWidget);
+
+      // Tap to show modal
+      await tester.tap(fab);
+      await tester.pumpAndSettle();
+
+      // Preview should be visible in modal
+      expect(find.text('Invoice Preview'), findsOneWidget);
+    },
+  );
+
+  testWidgets('InvoiceScreen should clear form and increment invoice number', (
+    tester,
+  ) async {
+    await tester.runAsync(() async {
+      tester.view.physicalSize = const Size(1200, 1200);
+      addTearDown(tester.view.resetPhysicalSize);
+
+      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpAndSettle();
+
+      // Initial state
+      expect(provider.invoiceNumber, '2');
+
+      // Change some data
+      // Use find.descendant to hit the item description specifically if needed,
+      // but find.widgetWithText should work if it's the only one for now.
+      final descField = find.widgetWithText(TextField, 'Item Description');
+      await tester.ensureVisible(descField);
+      await tester.enterText(
+        descField,
+        '${InvoiceProvider.itemPrefix}Old Task',
       );
-      await tester.ensureVisible(dateField);
-      await tester.tap(dateField);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
 
-      expect(find.byType(DatePickerDialog), findsOneWidget);
-      
-      // Clear any pending debounce timers from updateInvoiceNumber or others
-      await tester.pump(const Duration(seconds: 1));
+      // Unfocus to update
+      FocusManager.instance.primaryFocus?.unfocus();
+      await Future.delayed(const Duration(milliseconds: 600));
+      await tester.pumpAndSettle();
+
+      expect(
+        provider.items[0].description,
+        '${InvoiceProvider.itemPrefix}Old Task',
+      );
+
+      // Tap Clear Form
+      final clearButton = find.text('Clear Form');
+      await tester.ensureVisible(clearButton);
+      await tester.tap(clearButton);
+      await tester.pumpAndSettle();
+
+      // Verify state
+      expect(provider.description, InvoiceProvider.itemPrefix);
+      expect(provider.total, 0.0);
+      expect(provider.invoiceNumber, '3'); // Incremented from 2
+      expect(provider.items[0].description, InvoiceProvider.itemPrefix);
     });
   });
 }

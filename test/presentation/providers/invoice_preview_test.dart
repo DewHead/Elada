@@ -51,8 +51,7 @@ void main() {
           total: anyNamed('total'),
           invoiceNumber: anyNamed('invoiceNumber'),
           date: anyNamed('date'),
-          billTo: anyNamed('billTo'),
-          shipTo: anyNamed('shipTo'),
+          items: anyNamed('items'),
           currency: anyNamed('currency'),
         ),
       ).thenAnswer((_) async => previewBytes);
@@ -80,8 +79,7 @@ void main() {
             total: anyNamed('total'),
             invoiceNumber: anyNamed('invoiceNumber'),
             date: anyNamed('date'),
-            billTo: anyNamed('billTo'),
-            shipTo: anyNamed('shipTo'),
+            items: anyNamed('items'),
             currency: anyNamed('currency'),
           ),
         ).thenAnswer((_) async => previewBytes);

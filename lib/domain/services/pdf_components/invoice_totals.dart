@@ -1,6 +1,7 @@
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:elada/domain/services/invoice_theme.dart';
 import 'dart:ui';
+import 'package:intl/intl.dart';
 
 /// Component responsible for drawing the invoice totals.
 class InvoiceTotals {
@@ -15,72 +16,160 @@ class InvoiceTotals {
     required double vat,
     required double total,
     String currency = '€',
-    double yOffset = 550,
+    double yOffset = 620,
+    bool loadAndFill = false,
   }) {
     final PdfBrush brush = PdfSolidBrush(theme.black);
-    final PdfBrush brandBrush = PdfSolidBrush(theme.brandBlue);
-    final PdfFont labelFont = theme.defaultFont;
-    final PdfFont boldFont = theme.boldFont;
+    final PdfFont labelFont = theme.boldFontData != null
+        ? PdfTrueTypeFont(theme.boldFontData!, 9)
+        : PdfStandardFont(PdfFontFamily.helvetica, 9, style: PdfFontStyle.bold);
+    final PdfPen gridPen = PdfPen(theme.borderGrey, width: 0.5);
 
-    final double labelX = theme.pageWidth - 250;
-    final double valueX = theme.pageWidth - 160;
-    final double rowHeight = 20;
-    final double valueWidth = 120; // Increased width to fit large amounts
+    final formatter = NumberFormat('#,##0.00', 'en_US');
+
+    // Align with the last two columns of the items table
+    final double tableContentWidth = theme.contentWidth;
+    final double totalColumnWidth = tableContentWidth * 0.15;
+    final double unitPriceColumnWidth = tableContentWidth * 0.15;
+
+    final double effectiveMargin = theme.margin;
+    final double blockWidth = unitPriceColumnWidth + totalColumnWidth;
+    final double blockX = theme.pageWidth - effectiveMargin - blockWidth;
+
+    final double labelWidth = unitPriceColumnWidth;
+    final double valueWidth = totalColumnWidth;
+
+    double currentY = loadAndFill ? 675 : yOffset;
+    // Spacing for template alignment
+    final double rowHeight = loadAndFill ? 15.5 : 16;
 
     final rightFormat = PdfStringFormat(alignment: PdfTextAlignment.right);
-    final currencyText = currency;
 
-    // 1. Subtotal
-    graphics.drawString(
-      'Subtotal',
-      labelFont,
-      brush: brush,
-      bounds: Rect.fromLTWH(labelX, yOffset, 100, rowHeight),
-    );
-    graphics.drawString(
-      '$currencyText ${subtotal.toStringAsFixed(2)}',
-      labelFont,
-      brush: brush,
-      bounds: Rect.fromLTWH(valueX, yOffset, valueWidth, rowHeight),
-      format: rightFormat,
-    );
+    void drawTotalRow(String label, String value, {bool isMultiLine = false}) {
+      double actualRowHeight = isMultiLine ? rowHeight * 1.7 : rowHeight;
 
-    // 2. VAT (Placeholder 0% for now if not calculated)
-    graphics.drawString(
-      'VAT (0%)',
-      labelFont,
-      brush: brush,
-      bounds: Rect.fromLTWH(labelX, yOffset + rowHeight, 100, rowHeight),
-    );
-    graphics.drawString(
-      '$currencyText ${vat.toStringAsFixed(2)}',
-      labelFont,
-      brush: brush,
-      bounds: Rect.fromLTWH(valueX, yOffset + rowHeight, valueWidth, rowHeight),
-      format: rightFormat,
-    );
+      if (!loadAndFill) {
+        // Label in unit price column
+        graphics.drawString(
+          label,
+          labelFont,
+          brush: brush,
+          bounds: Rect.fromLTWH(
+            blockX,
+            currentY + (actualRowHeight - rowHeight) / 2,
+            labelWidth - 8,
+            actualRowHeight,
+          ),
+          format: rightFormat,
+        );
+      }
 
-    // 3. Horizontal line before Balance Due
-    graphics.drawLine(
-      PdfPen(theme.grey, width: 0.5),
-      Offset(labelX, yOffset + (rowHeight * 2) + 5),
-      Offset(theme.pageWidth - theme.margin, yOffset + (rowHeight * 2) + 5),
-    );
+      // Value in total column
+      bool isStaticZeroField =
+          label == 'DISCOUNT' ||
+          label == 'Vat RATE' ||
+          label == 'TOTAL vat' ||
+          label.startsWith('SHIPPING');
+      bool shouldDrawValue = !loadAndFill || !isStaticZeroField;
 
-    // 4. Balance Due (Prominent)
-    final double balanceY = yOffset + (rowHeight * 2) + 15;
+      if (shouldDrawValue) {
+        graphics.drawString(
+          value,
+          theme.defaultFont,
+          brush: brush,
+          bounds: Rect.fromLTWH(
+            blockX + labelWidth,
+            currentY + (actualRowHeight - rowHeight) / 2,
+            valueWidth - 5,
+            actualRowHeight,
+          ),
+          format: rightFormat,
+        );
+      }
+
+      currentY += actualRowHeight;
+      if (!loadAndFill) {
+        // Line under row
+        graphics.drawLine(
+          gridPen,
+          Offset(blockX, currentY),
+          Offset(theme.pageWidth - theme.margin, currentY),
+        );
+      }
+    }
+
+    // 1. SUBTOTAL removed
+
+    // 2. DISCOUNT
+    drawTotalRow('DISCOUNT', '0.00');
+
+    // 3. SUBTOTAL LESS DISCOUNT removed
+
+    // 4. Vat RATE
+    drawTotalRow('Vat RATE', '0.00%');
+
+    // 5. TOTAL vat
+    drawTotalRow('TOTAL vat', '0');
+
+    // 6. SHIPPING/HANDLING
+    drawTotalRow('SHIPPING/HA\nNDLING', '0.00', isMultiLine: true);
+
+    // 7. Total Value - without "Balance Due" label and box
+    currentY += 44; // Move down 44px (adjusted from 42px)
+
+    final String amountStr = formatter.format(total);
+    final PdfFont balanceValueFont = theme.boldFontData != null
+        ? PdfTrueTypeFont(theme.boldFontData!, 12)
+        : PdfStandardFont(
+            PdfFontFamily.helvetica,
+            12,
+            style: PdfFontStyle.bold,
+          );
+
+    // Thick black line before Total Value
+    if (!loadAndFill) {
+      graphics.drawLine(
+        PdfPen(theme.black, width: 2.0),
+        Offset(blockX - 10, currentY + 10),
+        Offset(theme.pageWidth - theme.margin, currentY + 10),
+      );
+    }
+
+    currentY = loadAndFill ? currentY + 22 : currentY + 25;
+
+    // Position adjustments to match original layout but without the box
+    final double valueX = blockX + labelWidth;
+    final double valueY = loadAndFill ? currentY - 2 : currentY - 5;
+    final double boxHeight = loadAndFill ? 32 : 35;
+
+    // Currency on the left - only if not Euro
+    if (currency != '€') {
+      graphics.drawString(
+        currency,
+        balanceValueFont,
+        brush: brush,
+        bounds: Rect.fromLTWH(
+          valueX - 60,
+          valueY + (boxHeight - 20) / 2 + 1 - 135,
+          valueWidth - 10,
+          25,
+        ),
+        format: PdfStringFormat(alignment: PdfTextAlignment.left),
+      );
+    }
+
+    // Amount on the right
     graphics.drawString(
-      'Balance Due',
-      boldFont,
-      brush: brandBrush,
-      bounds: Rect.fromLTWH(labelX, balanceY, 100, rowHeight),
-    );
-    graphics.drawString(
-      '$currencyText ${total.toStringAsFixed(2)}',
-      boldFont,
-      brush: brandBrush,
-      bounds: Rect.fromLTWH(valueX, balanceY, valueWidth, rowHeight),
-      format: rightFormat,
+      amountStr,
+      balanceValueFont,
+      brush: brush,
+      bounds: Rect.fromLTWH(
+        valueX - 60,
+        valueY + (boxHeight - 20) / 2 + 1 - 135,
+        valueWidth - 10,
+        25,
+      ),
+      format: PdfStringFormat(alignment: PdfTextAlignment.right),
     );
   }
 }

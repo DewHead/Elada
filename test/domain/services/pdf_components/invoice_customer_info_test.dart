@@ -17,31 +17,19 @@ void main() {
   });
 
   group('InvoiceCustomerInfo', () {
-    test('draw should call drawString for Bill To and Ship To headers', () {
-      component.draw(
-        graphics: mockGraphics,
-        billTo: 'John Doe\n123 Street\nLondon',
-        shipTo: 'Jane Doe\n456 Road\nParis',
+    test('draw should not draw anything if Ship To is removed', () {
+      component.draw(graphics: mockGraphics);
+
+      // Verify no drawString is called (since we removed Ship To)
+      verifyNever(
+        mockGraphics.drawString(
+          any,
+          any,
+          brush: anyNamed('brush'),
+          bounds: anyNamed('bounds'),
+          format: anyNamed('format'),
+        ),
       );
-
-      // Verify "Bill To" and "Ship To" labels are drawn
-      verify(
-        mockGraphics.drawString(
-          argThat(contains('Bill To')),
-          any,
-          brush: anyNamed('brush'),
-          bounds: anyNamed('bounds'),
-        ),
-      ).called(1);
-
-      verify(
-        mockGraphics.drawString(
-          argThat(contains('Ship To')),
-          any,
-          brush: anyNamed('brush'),
-          bounds: anyNamed('bounds'),
-        ),
-      ).called(1);
     });
   });
 }

@@ -2,17 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:elada/presentation/providers/invoice_provider.dart';
 import 'package:elada/data/models/invoice.dart';
+import 'package:elada/presentation/utils/currency_utils.dart';
 import 'package:intl/intl.dart';
 
 class HistoryScreen extends StatelessWidget {
-  final VoidCallback? onEditDraft;
+  final VoidCallback? onSelectInvoice;
 
-  const HistoryScreen({super.key, this.onEditDraft});
+  const HistoryScreen({super.key, this.onSelectInvoice});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Invoice History'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('Invoice History'),
+        centerTitle: true,
+        actions: [
+          Consumer<InvoiceProvider>(
+            builder: (context, provider, child) {
+              if (provider.history.isEmpty && provider.drafts.isEmpty) {
+                return const SizedBox.shrink();
+              }
+              return IconButton(
+                icon: const Icon(Icons.delete_sweep_outlined),
+                onPressed: () => _confirmClearAll(context, provider),
+                tooltip: 'Clear All History',
+                color: Theme.of(context).colorScheme.error,
+              );
+            },
+          ),
+        ],
+      ),
       body: Consumer<InvoiceProvider>(
         builder: (context, provider, child) {
           final history = provider.history;
@@ -46,7 +65,12 @@ class HistoryScreen extends StatelessWidget {
                   ...history.asMap().entries.map((entry) {
                     return _buildAnimatedItem(
                       index: drafts.length + entry.key,
-                      child: _buildHistoryItem(context, entry.value),
+                      child: _buildHistoryItem(
+                        context,
+                        provider,
+                        entry.value,
+                        entry.key,
+                      ),
                     );
                   }),
                 ],
@@ -113,7 +137,12 @@ class HistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHistoryItem(BuildContext context, Invoice invoice) {
+  Widget _buildHistoryItem(
+    BuildContext context,
+    InvoiceProvider provider,
+    Invoice invoice,
+    int index,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 0,
@@ -127,21 +156,60 @@ class HistoryScreen extends StatelessWidget {
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        onTap: () {
+          provider.loadInvoice(invoice);
+          onSelectInvoice?.call();
+        },
         title: Text(
-          invoice.description,
+          (invoice.items != null && invoice.items!.isNotEmpty)
+              ? invoice.items!.first.description
+              : invoice.description,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(
-          '#${invoice.invoiceNumber} • ${DateFormat('MMM dd, yyyy').format(invoice.effectiveDate)}',
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '#${invoice.invoiceNumber} • ${DateFormat('MMM dd, yyyy').format(invoice.effectiveDate)}',
+            ),
+            if (invoice.items != null &&
+                invoice.items!.isNotEmpty &&
+                invoice.description.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: Text(
+                  invoice.description,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+                ),
+              ),
+          ],
         ),
-        trailing: Text(
-          '${invoice.currency} ${invoice.total.toStringAsFixed(2)}',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              CurrencyUtils.formatAmount(invoice.total, invoice.currency),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(width: 8),
+            IconButton(
+              icon: const Icon(Icons.delete_outline),
+              onPressed: () =>
+                  _confirmDeleteHistory(context, provider, invoice),
+              tooltip: 'Delete History Entry',
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ],
         ),
       ),
     );
@@ -166,6 +234,10 @@ class HistoryScreen extends StatelessWidget {
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        onTap: () {
+          provider.loadInvoice(draft);
+          onSelectInvoice?.call();
+        },
         title: Text(
           draft.description.isEmpty ? '(No Description)' : draft.description,
           maxLines: 1,
@@ -182,14 +254,14 @@ class HistoryScreen extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit_outlined),
               onPressed: () {
-                provider.loadDraft(draft);
-                onEditDraft?.call();
+                provider.loadInvoice(draft);
+                onSelectInvoice?.call();
               },
               tooltip: 'Edit Draft',
             ),
             IconButton(
               icon: const Icon(Icons.delete_outline),
-              onPressed: () => _confirmDelete(context, provider, index),
+              onPressed: () => _confirmDelete(context, provider, draft),
               tooltip: 'Delete Draft',
               color: Theme.of(context).colorScheme.error,
             ),
@@ -202,7 +274,7 @@ class HistoryScreen extends StatelessWidget {
   void _confirmDelete(
     BuildContext context,
     InvoiceProvider provider,
-    int index,
+    Invoice draft,
   ) {
     showDialog(
       context: context,
@@ -216,11 +288,71 @@ class HistoryScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              provider.deleteDraft(index);
+              provider.deleteDraft(draft);
               Navigator.pop(context);
             },
             child: Text(
               'Delete',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmDeleteHistory(
+    BuildContext context,
+    InvoiceProvider provider,
+    Invoice invoice,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete History Entry'),
+        content: const Text(
+          'Are you sure you want to delete this invoice from history?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              provider.deleteHistoryEntry(invoice);
+              Navigator.pop(context);
+            },
+            child: Text(
+              'Delete',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmClearAll(BuildContext context, InvoiceProvider provider) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Clear All'),
+        content: const Text(
+          'Are you sure you want to delete all history entries and drafts?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              provider.clearAllHistoryAndDrafts();
+              Navigator.pop(context);
+            },
+            child: Text(
+              'Clear All',
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),

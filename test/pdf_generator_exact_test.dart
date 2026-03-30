@@ -11,8 +11,6 @@ void main() {
         total: 100000.0,
         invoiceNumber: '9422',
         date: DateTime(2026, 3, 28),
-        billTo: 'Elad Avital',
-        shipTo: '',
         currency: '€',
       );
     } catch (e, st) {
