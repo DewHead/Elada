@@ -5,16 +5,13 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   build:
     runs-on: macos-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -36,7 +33,7 @@ jobs:
           dart run flutter_distributor release --name macos --target dmg
 
       - name: Upload DMG Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Elada-MacOS-DMG
           path: dist/macos/release/*.dmg
