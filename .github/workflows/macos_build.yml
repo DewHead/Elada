@@ -30,11 +30,11 @@ jobs:
 
       - name: Package DMG
         run: |
-          dart run flutter_distributor release --name macos --target dmg
+          dart run fastforge release --name release
 
       - name: Upload DMG Artifact
         uses: actions/upload-artifact@v7
         with:
           name: Elada-MacOS-DMG
-          path: dist/macos/release/*.dmg
+          path: dist/release/**/*.dmg
           if-no-files-found: error

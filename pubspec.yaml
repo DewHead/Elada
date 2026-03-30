@@ -68,7 +68,7 @@ dev_dependencies:
   path_provider_platform_interface: ^2.1.2
   plugin_platform_interface: ^2.1.8
   flutter_launcher_icons: ^0.14.4
-  flutter_distributor: ^0.0.2
+  fastforge: ^0.0.1
 flutter_launcher_icons:
   android: true
   ios: true
