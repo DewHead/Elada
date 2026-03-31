@@ -1,7 +1,8 @@
-icon_size: 128
+title: "Elada"
+icon-size: 128
 window:
   position: { x: 400, y: 400 }
   size: { width: 540, height: 380 }
 contents:
-  - { x: 448, y: 170, type: link, path: /Applications }
-  - { x: 92, y: 170, type: file }
+  - { x: 448, y: 170, type: link, path: "/Applications" }
+  - { x: 92, y: 170, type: file, path: "Elada.app" }
