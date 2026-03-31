@@ -40,5 +40,5 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: Elada-MacOS-DMG
-          path: dist/release/**/*.dmg
+          path: dist/**/*.dmg
           if-no-files-found: error
