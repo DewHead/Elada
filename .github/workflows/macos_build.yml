@@ -23,6 +23,7 @@ jobs:
         run: |
           flutter pub get
           dart pub global activate fastforge
+          npm install -g appdmg
 
       - name: Generate App Icons
         run: dart run flutter_launcher_icons
