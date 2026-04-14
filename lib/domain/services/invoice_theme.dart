@@ -71,6 +71,27 @@ class InvoiceTheme {
     return _cachedTitleFont!;
   }
 
+  /// Returns a [PdfFont] with the specified [size] and [isBold] style.
+  PdfFont getFont(double size, {bool isBold = false}) {
+    if (isBold) {
+      if (boldFontData != null) {
+        return PdfTrueTypeFont(boldFontData!, size);
+      } else {
+        return fontData != null
+            ? PdfTrueTypeFont(fontData!, size, style: PdfFontStyle.bold)
+            : PdfStandardFont(
+                PdfFontFamily.helvetica,
+                size,
+                style: PdfFontStyle.bold,
+              );
+      }
+    } else {
+      return fontData != null
+          ? PdfTrueTypeFont(fontData!, size)
+          : PdfStandardFont(PdfFontFamily.helvetica, size);
+    }
+  }
+
   // Font Sizes
   final double defaultFontSize = 9.0;
   final double smallFontSize = 8.0;

@@ -62,14 +62,17 @@ class InvoiceItemsTable {
       ];
       double currentX = theme.margin;
       for (int i = 0; i < headers.length; i++) {
+        // DESCRIPTION header needs extra width offset to stay within its column
+        final double headerWidth = i == 0 ? 200.0 : columnWidths[i] - 10;
+        
         graphics.drawString(
           headers[i],
           headerFont,
           brush: headerTextBrush,
           bounds: Rect.fromLTWH(
-            currentX + (i == 3 ? -75 : (i == 0 ? 68 : 5)),
-            startY + (i == 0 ? -96 : (i == 3 ? -75 : 5)),
-            columnWidths[i] - 10,
+            currentX + (i == 3 ? -75 : (i == 0 ? 56 : 5)),
+            startY + (i == 0 ? -105 : (i == 3 ? -75 : 5)),
+            headerWidth,
             headerHeight - 10,
           ),
           format: i > 0
@@ -112,6 +115,8 @@ class InvoiceItemsTable {
         totalVal = '0.00';
       }
 
+      double currentHeight = (i == 0 && !loadAndFill) ? 194.0 : rowHeight;
+
       _drawGridRow(
         graphics: graphics,
         description: desc,
@@ -126,11 +131,11 @@ class InvoiceItemsTable {
         brush: brush,
         gridPen: gridPen,
         isFirstRow: i == 0,
-        actualRowHeight: rowHeight,
+        actualRowHeight: currentHeight,
         loadAndFill: loadAndFill,
         effectiveMargin: effectiveMargin,
       );
-      currentRowY += rowHeight;
+      currentRowY += currentHeight;
     }
   }
 
@@ -177,17 +182,58 @@ class InvoiceItemsTable {
     }
 
     // Description Column
-    final wrappedDescription = _wrapText(description, 42);
+    // Use conservative padding and absolute column boundaries to prevent overflow.
+    const double horizontalPadding = 10.0;
+    const double verticalPadding = 5.0;
+    
+    // The description starts at effectiveMargin, but we apply a 56pt indent for this specific layout.
+    final double textLeft = effectiveMargin + 56 + horizontalPadding;
+    // Ensure the text width is constrained by the actual column width and set to 200pt.
+    final double colRightEdge = effectiveMargin + columnWidths[0];
+    final double maxPossibleWidth = colRightEdge - textLeft - horizontalPadding;
+    final double availableWidth = maxPossibleWidth > 200.0 ? 200.0 : maxPossibleWidth;
+    
+    // Use a larger height constraint for the first row to prevent premature font shrinking,
+    // especially in template mode where the standard row height is small.
+    final double availableHeight = isFirstRow 
+        ? 65.0 
+        : (actualRowHeight - (verticalPadding * 2));
+
+    final Rect descriptionBounds = Rect.fromLTWH(
+      textLeft,
+      y - 99 + verticalPadding, 
+      availableWidth,
+      availableHeight,
+    );
+
+    double currentFontSize = isFirstRow ? 40.0 : theme.defaultFontSize;
+    PdfFont currentFont = theme.getFont(currentFontSize, isBold: isFirstRow);
+
+    if (description.isNotEmpty) {
+      // Scale down font size only if the text truly doesn't fit the box.
+      // This allows it to "enlarge" if we start from a larger size.
+      while (currentFontSize > 4.0) {
+        final Size measuredSize = currentFont.measureString(
+          description,
+          layoutArea: Size(descriptionBounds.width, 0),
+          format: PdfStringFormat(wordWrap: PdfWordWrapType.word),
+        );
+
+        if (measuredSize.height <= descriptionBounds.height) {
+          break;
+        }
+
+        currentFontSize -= 0.5;
+        currentFont = theme.getFont(currentFontSize, isBold: isFirstRow);
+      }
+    }
+
     graphics.drawString(
-      wrappedDescription,
-      isFirstRow ? theme.boldFont : dataFont,
+      description,
+      currentFont,
       brush: brush,
-      bounds: Rect.fromLTWH(
-        effectiveMargin + 68,
-        y + (actualRowHeight - 212) / 2,
-        columnWidths[0] - 10,
-        30, // Increased height for wrapped text
-      ),
+      bounds: descriptionBounds,
+      format: PdfStringFormat(wordWrap: PdfWordWrapType.word),
     );
 
     // QTY Column
@@ -198,7 +244,7 @@ class InvoiceItemsTable {
         brush: brush,
         bounds: Rect.fromLTWH(
           effectiveMargin + columnWidths[0],
-          y + (actualRowHeight - 10) / 2,
+          y + 11, // Maintain original alignment: y + (32 - 10) / 2
           columnWidths[1],
           15,
         ),
@@ -214,7 +260,7 @@ class InvoiceItemsTable {
         brush: brush,
         bounds: Rect.fromLTWH(
           effectiveMargin + columnWidths[0] + columnWidths[1] + 5,
-          y + (actualRowHeight - 10) / 2,
+          y + 11, // Maintain original alignment: y + (32 - 10) / 2
           columnWidths[2] - 10,
           15,
         ),
@@ -235,7 +281,7 @@ class InvoiceItemsTable {
           brush: brush,
           bounds: Rect.fromLTWH(
             totalX - 75,
-            y + (actualRowHeight - 10) / 2 - 80,
+            y - 69, // Maintain original alignment: y + (32 - 10) / 2 - 80
             columnWidths[3] - 10,
             15,
           ),
@@ -251,7 +297,7 @@ class InvoiceItemsTable {
         brush: brush,
         bounds: Rect.fromLTWH(
           totalX - 75,
-          y + (actualRowHeight - 10) / 2 - 80,
+          y - 69, // Maintain original alignment: y + (32 - 10) / 2 - 80
           columnWidths[3] - 10,
           15,
         ),
@@ -265,32 +311,12 @@ class InvoiceItemsTable {
         brush: brush,
         bounds: Rect.fromLTWH(
           totalX - 75,
-          y + (actualRowHeight - 10) / 2 - 80,
+          y - 69, // Maintain original alignment: y + (32 - 10) / 2 - 80
           columnWidths[3] - 10,
           15,
         ),
         format: PdfStringFormat(alignment: PdfTextAlignment.right),
       );
     }
-  }
-
-  String _wrapText(String text, int maxLength) {
-    if (text.length <= maxLength) return text;
-    final List<String> words = text.split(' ');
-    final StringBuffer buffer = StringBuffer();
-    String currentLine = '';
-
-    for (final word in words) {
-      if ((currentLine + word).length <= maxLength) {
-        currentLine += (currentLine.isEmpty ? '' : ' ') + word;
-      } else {
-        if (currentLine.isNotEmpty) {
-          buffer.writeln(currentLine);
-        }
-        currentLine = word;
-      }
-    }
-    buffer.write(currentLine);
-    return buffer.toString();
   }
 }

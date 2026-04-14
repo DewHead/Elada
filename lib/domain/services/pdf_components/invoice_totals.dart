@@ -16,7 +16,7 @@ class InvoiceTotals {
     required double vat,
     required double total,
     String currency = '€',
-    double yOffset = 620,
+    double yOffset = 780,
     bool loadAndFill = false,
   }) {
     final PdfBrush brush = PdfSolidBrush(theme.black);
